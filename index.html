@@ -438,6 +438,7 @@ function handleSpeech(alternatives) {
     return; // keep the question open
   }
   setVoiceStatus(`Heard: “${best.alt}”`);
+  $("answer").value = String(best.n); // show the spoken number in the answer box
   submitAnswer(best.n, "voice", best.alt);
 }
 
