@@ -1,0 +1,624 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#7058ff">
+<title>Math Superstars — 10 Second Tables</title>
+<style>
+* { box-sizing: border-box; }
+:root {
+  color-scheme: light;
+  --ink: #253052;
+  --muted: #66708c;
+  --blue: #5a45f5;
+  --pink: #ff5da2;
+  --yellow: #ffcf4a;
+  --line: #e7e4ff;
+}
+body {
+  margin: 0;
+  min-width: 320px;
+  color: var(--ink);
+  font-family: "Trebuchet MS", "Segoe UI", ui-sans-serif, system-ui, sans-serif;
+  background:
+    radial-gradient(circle at 8% 12%, #ffe2f1 0, transparent 24%),
+    radial-gradient(circle at 92% 10%, #fff0b9 0, transparent 22%),
+    radial-gradient(circle at 90% 90%, #d6f9ff 0, transparent 24%),
+    linear-gradient(135deg, #f7f2ff, #eef8ff 52%, #fff7fb);
+}
+.app { width: min(780px, calc(100% - 30px)); margin: 30px auto; }
+header { text-align: center; margin-bottom: 22px; }
+.eyebrow {
+  display: inline-block; padding: 8px 14px; border-radius: 99px;
+  color: #7641bd; background: #fff; border: 2px solid #e9dcff;
+  font-size: 12px; letter-spacing: .09em; font-weight: 900;
+  box-shadow: 0 5px 0 #e9dcff;
+}
+h1 { margin: 14px 0 5px; font-size: clamp(32px, 7vw, 49px); letter-spacing: -.04em; line-height: 1.1; }
+.title-pop { color: #ff4e98; text-shadow: 2px 3px 0 #ffd7e8; }
+.subtitle { margin: 8px 0 0; color: var(--muted); font-size: 15px; }
+.settings, .card, .stat {
+  background: rgba(255,255,255,.93); border: 2px solid #fff;
+  border-radius: 22px; box-shadow: 0 9px 0 rgba(112,91,204,.10), 0 16px 36px rgba(61,52,124,.08);
+}
+.settings {
+  padding: 15px; display: flex; gap: 12px; align-items: end;
+  justify-content: center; flex-wrap: wrap; margin-bottom: 17px;
+}
+label { display: flex; flex-direction: column; gap: 6px; color: #68708b; font-size: 12px; font-weight: 900; }
+input { font: inherit; }
+.settings input {
+  width: 100px; padding: 10px 11px; border: 2px solid #e8e4ff;
+  border-radius: 12px; color: var(--ink); background: #fbfaff; font-weight: 800;
+}
+button {
+  border: 0; border-radius: 13px; padding: 12px 16px;
+  background: linear-gradient(135deg, #7058ff, #a34bfa); color: white;
+  font: inherit; font-weight: 900; cursor: pointer;
+  box-shadow: 0 5px 0 #4b35c7; transition: transform .12s, box-shadow .12s, filter .12s;
+}
+button:hover:not(:disabled) { transform: translateY(-2px); filter: brightness(1.04); box-shadow: 0 7px 0 #4b35c7; }
+button:active:not(:disabled) { transform: translateY(2px); box-shadow: 0 2px 0 #4b35c7; }
+button:disabled { opacity: .45; cursor: not-allowed; box-shadow: none; }
+button.secondary { color: #4d3d9e; background: #f1edff; box-shadow: 0 4px 0 #d8ceff; }
+button.secondary:hover:not(:disabled) { box-shadow: 0 6px 0 #d8ceff; }
+button.mic-on { color: #fff; background: linear-gradient(135deg, #ff5da2, #ff8a5b); box-shadow: 0 5px 0 #d63c7d; animation: micPulse 1.6s ease-in-out infinite; }
+@keyframes micPulse { 0%,100% { filter: brightness(1); } 50% { filter: brightness(1.15); } }
+@media (prefers-reduced-motion: reduce) { button.mic-on { animation: none; } }
+.card { padding: clamp(18px, 4vw, 30px); text-align: center; border-color: #fff; }
+.topline { display: flex; justify-content: space-between; gap: 12px; color: var(--muted); font-size: 13px; font-weight: 900; }
+#questionCount { color: #7545dc; background: #f2eaff; padding: 7px 11px; border-radius: 99px; }
+#score { color: #168d71; background: #e6fff5; padding: 7px 11px; border-radius: 99px; }
+.timer-wrap { height: 13px; margin-top: 19px; border-radius: 99px; background: #f0edff; overflow: hidden; border: 2px solid #fff; }
+#timerBar { height: 100%; width: 100%; background: linear-gradient(90deg, #27d7a2, #a3e635); border-radius: 99px; transition: width .1s linear, background .2s; }
+.timer-text { margin-top: 8px; font-size: 13px; color: #7b6caa; font-weight: 900; font-variant-numeric: tabular-nums; }
+.question {
+  margin: 18px 0 8px; font-size: clamp(46px, 10vw, 76px); font-weight: 1000;
+  letter-spacing: -.045em; color: #5140df; text-shadow: 3px 4px 0 #e6ddff;
+  white-space: nowrap;
+}
+.feedback { min-height: 29px; color: var(--muted); font-weight: 900; }
+.feedback.good { color: #11976d; }
+.feedback.bad { color: #e34773; }
+.answer-row { display: flex; justify-content: center; gap: 10px; margin: 19px auto; max-width: 410px; }
+.answer-row input {
+  min-width: 0; flex: 1; padding: 13px 15px; border: 2px solid #dcd5ff;
+  border-radius: 14px; font-size: 20px; font-weight: 800; outline: none; background: #fff;
+}
+.answer-row input:focus { border-color: #8a70ff; box-shadow: 0 0 0 4px #8a70ff20; }
+.actions { display: flex; justify-content: center; flex-wrap: wrap; gap: 10px; }
+.small-note { color: var(--muted); font-size: 12px; line-height: 1.5; margin: 17px auto 0; max-width: 500px; }
+.game-summary {
+  margin: 18px auto 0; padding: 18px 14px; max-width: 430px;
+  background: linear-gradient(135deg, #fff7d9, #ffe9f4); border: 2px solid #ffd6ea;
+  border-radius: 18px; box-shadow: 0 6px 0 #ffd6ea;
+}
+.game-summary h2 { margin: 0 0 6px; font-size: 24px; color: #e2407f; }
+.game-summary .big-score { font-size: 40px; font-weight: 1000; color: #5140df; margin: 4px 0; }
+.game-summary .stars { font-size: 30px; letter-spacing: 4px; }
+.game-summary p { margin: 6px 0 0; color: var(--muted); font-weight: 800; }
+.answer-reveal {
+  margin: 18px auto 0; padding: 14px; max-width: 410px;
+  color: #5435ac; background: linear-gradient(120deg, #f4eaff, #fff0f7);
+  border: 2px dashed #d8c5ff; border-radius: 15px; font-size: 18px; font-weight: 1000;
+}
+.stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 13px; margin-top: 17px; }
+.stat { padding: 16px 10px; text-align: center; border: 2px solid white; }
+.stat span { display: block; font-size: 27px; font-weight: 1000; margin-bottom: 3px; }
+.stat small { color: #59617e; font-weight: 800; }
+.stat-one { background: linear-gradient(135deg, #fff, #fff0f6); }
+.stat-two { background: linear-gradient(135deg, #fff, #f0edff); }
+.stat-three { background: linear-gradient(135deg, #fff, #fff7d9); }
+footer { color: #737b96; text-align: center; font-size: 12px; line-height: 1.6; margin: 19px 12px; }
+@media (max-width: 480px) {
+  .app { margin: 20px auto; }
+  .topline { font-size: 10px; }
+  .settings { gap: 9px; }
+  .settings input { width: 82px; }
+  .stats { gap: 7px; }
+  .stat { padding: 12px 5px; }
+  .stat small { font-size: 10px; }
+  .actions button { padding: 11px 12px; font-size: 13px; }
+}
+html { -webkit-text-size-adjust: 100%; }
+body { padding-bottom: env(safe-area-inset-bottom); }
+.app { width: min(780px, calc(100% - 24px)); margin: 18px auto; }
+.settings { gap: 9px; }
+.settings label { flex: 1 1 85px; }
+.settings input { width: 100%; min-width: 0; }
+.answer-row input { font-size: 22px; }
+button { min-height: 44px; touch-action: manipulation; }
+@media (max-width: 600px) {
+  .app { width: calc(100% - 20px); margin: 14px auto; }
+  header { margin-bottom: 16px; }
+  .subtitle { font-size: 14px; line-height: 1.45; }
+  .settings { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); padding: 12px; }
+  .settings label { min-width: 0; font-size: 11px; }
+  .settings input { width: 100%; padding: 10px 7px; font-size: 16px; }
+  #applySettings { grid-column: 1 / -1; width: 100%; }
+  .card { padding: 17px 13px; }
+  .topline { align-items: center; font-size: 10px; }
+  #questionCount, #score { padding: 6px 8px; }
+  .question { font-size: clamp(38px, 12vw, 72px); margin: 22px 0 12px; }
+  .answer-row { margin: 16px auto; gap: 8px; }
+  .answer-row input { width: 50%; min-height: 50px; font-size: 22px; }
+  .answer-row button { padding: 10px 12px; }
+  .actions { display: grid; grid-template-columns: 1fr 1fr; gap: 9px; }
+  .actions button:first-child { grid-column: 1 / -1; }
+  .actions button { width: 100%; padding: 12px 8px; font-size: 14px; }
+  .small-note { font-size: 11px; }
+  .stats { gap: 7px; margin-top: 12px; }
+  .stat { padding: 12px 4px; border-radius: 16px; }
+  .stat span { font-size: 23px; }
+  .stat small { font-size: 10px; }
+  footer { margin: 15px 5px; font-size: 11px; }
+}
+</style>
+</head>
+<body>
+
+  <main class="app">
+    <header>
+      <div class="eyebrow">🌈 PLAY • THINK • SHINE ✨</div>
+      <h1>Math <span class="title-pop">Superstars!</span></h1>
+      <p class="subtitle">Each game has <b>10 questions</b> and you get <b>10 seconds</b> for each one. How many can you get right?</p>
+    </header>
+
+    <section class="settings">
+      <label>Tables from
+        <input id="minTable" type="number" min="1" max="99" value="2">
+      </label>
+      <label>to
+        <input id="maxTable" type="number" min="1" max="99" value="12">
+      </label>
+      <label>Multiply up to
+        <input id="maxFactor" type="number" min="1" max="99" value="12">
+      </label>
+      <button id="applySettings" class="secondary">🎨 Set range</button>
+    </section>
+
+    <section class="quiz card">
+      <div class="topline">
+        <span id="questionCount">Game 1 · Question 1/10</span>
+        <span id="score">Correct 0 · Wrong 0</span>
+      </div>
+      <div class="timer-wrap" aria-label="Time remaining">
+        <div id="timerBar"></div>
+      </div>
+      <div id="timerText" class="timer-text">10.0 seconds</div>
+      <div id="question" class="question">6 × 7 = ?</div>
+      <div id="feedback" class="feedback" aria-live="polite">Ready to become a Math Superstar? 🚀</div>
+
+      <form id="answerForm" class="answer-row">
+        <input id="answer" type="number" inputmode="numeric" autocomplete="off"
+          placeholder="Your answer…" aria-label="Your answer" disabled>
+        <button id="submitAnswer" type="submit" disabled>Check it! ⭐</button>
+      </form>
+
+      <div class="actions">
+        <button id="startBtn">🚀 Let's play!</button>
+        <button id="voiceBtn" class="secondary" disabled aria-pressed="false">🎤 Voice: OFF</button>
+        <button id="nextBtn" class="secondary" disabled>➡️ Next question</button>
+      </div>
+      <p id="voiceStatus" class="small-note" aria-live="polite">💡 Tip: You can type your answer or say it aloud if voice recognition is supported.</p>
+      <div class="answer-reveal" id="answerReveal" hidden></div>
+      <div class="game-summary" id="gameSummary" hidden aria-live="polite">
+        <h2 id="summaryTitle">Game finished!</h2>
+        <div class="stars" id="summaryStars"></div>
+        <div class="big-score" id="summaryScore">0 / 10</div>
+        <p id="summaryMessage"></p>
+        <p id="summaryBest"></p>
+      </div>
+    </section>
+
+    <section class="stats">
+      <div class="stat stat-one"><span id="totalStat">0</span><small>🧩 Questions tried</small></div>
+      <div class="stat stat-two"><span id="accuracyStat">—</span><small>🎯 Accuracy</small></div>
+      <div class="stat stat-three"><span id="streakStat">0</span><small>🔥 Streak</small></div>
+    </section>
+    <footer>🌟 10 questions make one game. One answer per question — when the timer reaches zero, the answer appears and that question counts as wrong. At the end you get your score, then start the next game. Keep practising — every try makes you stronger! 💪</footer>
+  </main>
+
+
+<script>
+const $ = id => document.getElementById(id);
+const FULL_TIME = 10000;
+const TIMER_GRADIENT = "linear-gradient(90deg, #27d7a2, #a3e635)";
+const VOICE_PREF_KEY = "mathSuperstars.voiceOn";
+
+let minTable = 2, maxTable = 12, maxFactor = 12;
+let a = 6, b = 7, correctAnswer = 42;
+const QUESTIONS_PER_GAME = 10;
+let running = false, finished = false, questionNumber = 0;
+let gameNumber = 1, gameCorrect = 0, gameOver = false, bestScore = 0;
+let correctCount = 0, wrongCount = 0, streak = 0;
+let deadline = 0, ticker = null;
+
+/* ---------- Voice: one recognizer, permission asked once, always listening ---------- */
+const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+const voiceAvailable = !!SpeechRecognition;
+let recognition = null;     // created ONCE and reused
+let voiceOn = false;        // user wants the mic on
+let listening = false;      // recognizer currently running
+let restartTimer = null;
+let errorStreak = 0;
+
+function setVoiceStatus(text) { $("voiceStatus").textContent = text; }
+
+function savePref(on) {
+  try { localStorage.setItem(VOICE_PREF_KEY, on ? "1" : "0"); } catch (e) { /* storage blocked */ }
+}
+function loadPref() {
+  try { return localStorage.getItem(VOICE_PREF_KEY) === "1"; } catch (e) { return false; }
+}
+
+function updateVoiceButton() {
+  const btn = $("voiceBtn");
+  btn.disabled = !voiceAvailable;
+  btn.textContent = voiceOn ? "🎤 Voice: ON" : "🎤 Voice: OFF";
+  btn.classList.toggle("mic-on", voiceOn);
+  btn.classList.toggle("secondary", !voiceOn);
+  btn.setAttribute("aria-pressed", String(voiceOn));
+}
+
+// Ask for the microphone a single time. On https/localhost the browser remembers the answer.
+async function ensureMicPermission() {
+  try {
+    if (navigator.permissions && navigator.permissions.query) {
+      const state = await navigator.permissions.query({ name: "microphone" });
+      if (state.state === "granted") return true;
+      if (state.state === "denied") return false;
+    }
+  } catch (e) { /* Permissions API not supported for microphone (e.g. Safari) */ }
+
+  if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) return true; // recognizer will ask itself
+  try {
+    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    stream.getTracks().forEach(t => t.stop()); // permission is kept; release the device
+    return true;
+  } catch (e) {
+    return false;
+  }
+}
+
+function createRecognition() {
+  const rec = new SpeechRecognition();
+  rec.lang = "en-US";
+  rec.continuous = true;        // keep listening across many answers
+  rec.interimResults = false;
+  rec.maxAlternatives = 5;
+
+  rec.onstart = () => {
+    listening = true;
+    setVoiceStatus(running
+      ? "🎤 Listening… just say the answer."
+      : "🎤 Listening… say “start” or “next” to get a question.");
+  };
+
+  rec.onresult = event => {
+    errorStreak = 0;
+    for (let i = event.resultIndex; i < event.results.length; i++) {
+      const result = event.results[i];
+      if (!result.isFinal) continue;
+      const alternatives = Array.from(result).map(alt => alt.transcript.trim()).filter(Boolean);
+      if (alternatives.length) handleSpeech(alternatives);
+    }
+  };
+
+  rec.onerror = event => {
+    if (event.error === "not-allowed" || event.error === "service-not-allowed") {
+      turnVoiceOff("Microphone access is blocked. Allow it in the browser's site settings, then tap Voice again.");
+      return;
+    }
+    if (event.error === "no-speech" || event.error === "aborted") return; // normal pauses, onend will restart
+    errorStreak++;
+    if (errorStreak >= 6) {
+      turnVoiceOff(`Voice keeps failing (${event.error}). Check your connection and tap Voice to try again.`);
+    }
+  };
+
+  // Browsers stop recognition after silence or ~1 minute; restart quietly while Voice is ON.
+  rec.onend = () => {
+    listening = false;
+    if (voiceOn && !document.hidden) {
+      clearTimeout(restartTimer);
+      restartTimer = setTimeout(startListening, errorStreak ? 1500 : 250);
+    }
+  };
+  return rec;
+}
+
+function startListening() {
+  if (!voiceOn || listening || document.hidden) return;
+  if (!recognition) recognition = createRecognition();
+  try {
+    recognition.start();
+  } catch (e) {
+    // InvalidStateError means it is already running - that's fine.
+    if (e.name !== "InvalidStateError") setVoiceStatus("Tap Voice to resume listening.");
+  }
+}
+
+function stopListening() {
+  clearTimeout(restartTimer);
+  if (recognition && listening) recognition.abort();
+  listening = false;
+}
+
+async function turnVoiceOn() {
+  if (!voiceAvailable) return;
+  setVoiceStatus("Asking for the microphone…");
+  const ok = await ensureMicPermission();
+  if (!ok) {
+    turnVoiceOff("Microphone permission was denied. Allow it in the browser's site settings to use voice.");
+    return;
+  }
+  voiceOn = true;
+  savePref(true);
+  updateVoiceButton();
+  startListening();
+}
+
+function turnVoiceOff(message) {
+  voiceOn = false;
+  savePref(false);
+  stopListening();
+  updateVoiceButton();
+  setVoiceStatus(message || "Voice is off. Type your answer, or tap Voice to turn it back on.");
+}
+
+// Pause the mic when the tab is hidden, resume when it comes back.
+document.addEventListener("visibilitychange", () => {
+  if (document.hidden) stopListening();
+  else if (voiceOn) startListening();
+});
+
+/* ---------- Turning speech into a number ---------- */
+const SMALL = { zero:0, oh:0, one:1, two:2, three:3, four:4, five:5, six:6, seven:7, eight:8, nine:9,
+  ten:10, eleven:11, twelve:12, thirteen:13, fourteen:14, fifteen:15, sixteen:16, seventeen:17,
+  eighteen:18, nineteen:19 };
+const TENS = { twenty:20, thirty:30, forty:40, fourty:40, fifty:50, sixty:60, seventy:70, eighty:80, ninety:90 };
+// Sound-alike words, only trusted when they are the whole answer.
+const SOUND_ALIKE = { won:1, to:2, too:2, tu:2, for:4, fore:4, ate:8 };
+
+// Returns the LAST number in the phrase ("six times seven is forty two" -> 42), or null.
+function speechToNumber(text) {
+  const clean = text.toLowerCase().replace(/,/g, "").replace(/-/g, " ");
+  const digits = clean.match(/\d+/g);
+  if (digits) return Number(digits[digits.length - 1]);
+
+  const words = clean.split(/[^a-z]+/).filter(Boolean);
+  if (words.length === 1 && words[0] in SOUND_ALIKE) return SOUND_ALIKE[words[0]];
+
+  const found = [];
+  let total = 0, current = null;
+  const flush = () => { if (current !== null) { found.push(total + current); } total = 0; current = null; };
+  for (const w of words) {
+    if (w in SMALL) current = (current || 0) + SMALL[w];
+    else if (w in TENS) current = (current || 0) + TENS[w];
+    else if (w === "hundred") current = (current || 1) * 100;
+    else if (w === "thousand") { total += (current || 1) * 1000; current = 0; }
+    else if (w === "and" && current !== null) continue;
+    else flush();
+  }
+  flush();
+  return found.length ? found[found.length - 1] : null;
+}
+
+function isCommand(text, words) {
+  const t = text.toLowerCase();
+  return words.some(w => new RegExp(`\\b${w}\\b`).test(t));
+}
+
+function handleSpeech(alternatives) {
+  const heard = alternatives[0];
+
+  // Between questions: listen for "next" / "start".
+  if (!running) {
+    if (isCommand(heard, ["next", "start", "go", "play", "again"])) {
+      if (gameOver) startNextGame(); else newQuestion();
+    } else {
+      setVoiceStatus(`Heard “${heard}”. Say “${gameOver ? "next game" : "next"}” to continue.`);
+    }
+    return;
+  }
+
+  // Prefer an alternative that matches the right answer, otherwise the first one with a number.
+  let best = null;
+  for (const alt of alternatives) {
+    const n = speechToNumber(alt);
+    if (n === null) continue;
+    if (n === correctAnswer) { best = { n, alt }; break; }
+    if (!best) best = { n, alt };
+  }
+  if (!best) {
+    setVoiceStatus(`Heard “${heard}” — no number there. Try again!`);
+    return; // keep the question open
+  }
+  setVoiceStatus(`Heard: “${best.alt}”`);
+  submitAnswer(best.n, "voice", best.alt);
+}
+
+/* ---------- Game ---------- */
+function randomInt(min, max) {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+function updateScore() {
+  $("score").textContent = `Correct ${correctCount} · Wrong ${wrongCount}`;
+  const total = correctCount + wrongCount;
+  $("totalStat").textContent = total;
+  $("accuracyStat").textContent = total ? `${Math.round(correctCount / total * 100)}%` : "—";
+  $("streakStat").textContent = streak;
+}
+function setFeedback(message, kind = "") {
+  $("feedback").textContent = message;
+  $("feedback").className = `feedback ${kind}`;
+}
+function stopTimer() {
+  if (ticker) clearInterval(ticker);
+  ticker = null;
+  running = false;
+}
+function setAnswerEnabled(enabled) {
+  $("answer").disabled = !enabled;
+  $("submitAnswer").disabled = !enabled;
+  // Don't pop up the phone keyboard when the child is answering by voice.
+  if (enabled && !voiceOn) $("answer").focus();
+}
+function resetStats() {
+  correctCount = 0; wrongCount = 0; streak = 0; questionNumber = 0;
+  gameNumber = 1; gameCorrect = 0; gameOver = false;
+  $("gameSummary").hidden = true;
+  updateScore();
+}
+function afterQuestion() {
+  if (questionNumber >= QUESTIONS_PER_GAME) { endGame(); return; }
+  $("nextBtn").textContent = "➡️ Next question";
+  $("nextBtn").disabled = false;
+  if (voiceOn) setVoiceStatus("🎤 Say “next” for the next question.");
+}
+function endGame() {
+  gameOver = true;
+  const isBest = gameCorrect > bestScore;
+  if (isBest) bestScore = gameCorrect;
+  const stars = gameCorrect === QUESTIONS_PER_GAME ? "🏆⭐⭐⭐"
+    : gameCorrect >= 8 ? "⭐⭐⭐"
+    : gameCorrect >= 5 ? "⭐⭐"
+    : gameCorrect >= 1 ? "⭐" : "💪";
+  const message = gameCorrect === QUESTIONS_PER_GAME ? "PERFECT GAME! You're a true Math Superstar!"
+    : gameCorrect >= 8 ? "Amazing work! Almost perfect!"
+    : gameCorrect >= 5 ? "Great job! Keep going to get even more!"
+    : "Good try! Every game makes you faster.";
+  $("summaryTitle").textContent = `🎉 Game ${gameNumber} finished!`;
+  $("summaryStars").textContent = stars;
+  $("summaryScore").textContent = `${gameCorrect} / ${QUESTIONS_PER_GAME}`;
+  $("summaryMessage").textContent = message;
+  $("summaryBest").textContent = isBest && gameNumber > 1 ? `🥇 New best score: ${bestScore}/10!` : `Best score so far: ${bestScore}/10`;
+  $("gameSummary").hidden = false;
+  $("gameSummary").scrollIntoView({ behavior: "smooth", block: "nearest" });
+  $("nextBtn").textContent = "🎮 Next game";
+  $("nextBtn").disabled = false;
+  setFeedback(`Game over — you got ${gameCorrect} out of ${QUESTIONS_PER_GAME}!`, gameCorrect >= 5 ? "good" : "");
+  if (voiceOn) setVoiceStatus("🎤 Say “next game” to play again.");
+}
+function startNextGame() {
+  gameNumber++;
+  questionNumber = 0;
+  gameCorrect = 0;
+  gameOver = false;
+  $("gameSummary").hidden = true;
+  newQuestion();
+}
+function newQuestion() {
+  if (gameOver) { startNextGame(); return; }
+  stopTimer();
+  finished = false;
+  questionNumber++;
+  a = randomInt(minTable, maxTable);
+  b = randomInt(1, maxFactor);
+  correctAnswer = a * b;
+  $("question").textContent = `${a} × ${b} = ?`;
+  $("questionCount").textContent = `Game ${gameNumber} · Question ${questionNumber}/${QUESTIONS_PER_GAME}`;
+  $("timerBar").style.width = "100%";
+  $("timerBar").style.background = TIMER_GRADIENT;
+  $("timerText").textContent = "10.0 seconds";
+  $("answer").value = "";
+  $("answerReveal").hidden = true;
+  $("answerReveal").textContent = "";
+  setFeedback(voiceOn ? "Say your answer out loud! 🎤" : "Type your answer or turn on Voice.");
+  $("startBtn").textContent = "🔄 Restart";
+  $("nextBtn").disabled = true;
+  setAnswerEnabled(true);
+  if (voiceOn) setVoiceStatus("🎤 Listening… just say the answer.");
+  running = true;
+  deadline = Date.now() + FULL_TIME;
+  ticker = setInterval(tick, 50);
+}
+function tick() {
+  const remaining = Math.max(0, deadline - Date.now());
+  $("timerText").textContent = `${(remaining / 1000).toFixed(1)} seconds`;
+  $("timerBar").style.width = `${remaining / FULL_TIME * 100}%`;
+  if (remaining <= 3000) $("timerBar").style.background = "#e34b4b";
+  else if (remaining <= 6000) $("timerBar").style.background = "#f0a52b";
+  if (remaining <= 0) {
+    stopTimer();
+    finished = true;
+    wrongCount++;
+    streak = 0;
+    setFeedback("Time's up! This one is marked wrong.", "bad");
+    revealAnswer();
+    updateScore();
+    setAnswerEnabled(false);
+    afterQuestion();
+  }
+}
+function revealAnswer() {
+  $("answerReveal").textContent = `Correct answer: ${a} × ${b} = ${correctAnswer}`;
+  $("answerReveal").hidden = false;
+}
+function submitAnswer(value, source = "typed", heardText = "") {
+  if (!running || finished) return;
+  const answer = typeof value === "number" ? value : Number(String(value).trim());
+  if (String(value).trim() === "" || !Number.isFinite(answer)) return;
+  finished = true;
+  stopTimer();
+  setAnswerEnabled(false);
+  revealAnswer();
+  if (answer === correctAnswer) {
+    correctCount++;
+    gameCorrect++;
+    streak++;
+    setFeedback(source === "voice" ? `Correct — I heard ${answer}! 🌟` : "Correct! Nice work. 🌟", "good");
+  } else {
+    wrongCount++;
+    streak = 0;
+    setFeedback(source === "voice" ? `Not quite — I heard “${heardText}” (${answer}).` : "Not quite. Marked wrong.", "bad");
+  }
+  updateScore();
+  afterQuestion();
+}
+
+$("answerForm").addEventListener("submit", event => {
+  event.preventDefault();
+  submitAnswer($("answer").value);
+});
+$("startBtn").addEventListener("click", () => {
+  if (questionNumber > 0) resetStats(); // "Restart" really restarts
+  newQuestion();
+  if (voiceOn) startListening(); // user tap: safe moment to (re)start the mic
+});
+$("nextBtn").addEventListener("click", () => { if (gameOver) startNextGame(); else newQuestion(); });
+$("voiceBtn").addEventListener("click", () => {
+  if (voiceOn) turnVoiceOff();
+  else turnVoiceOn();
+});
+$("applySettings").addEventListener("click", () => {
+  const min = Number($("minTable").value);
+  const max = Number($("maxTable").value);
+  const factor = Number($("maxFactor").value);
+  if (![min, max, factor].every(n => Number.isInteger(n) && n >= 1 && n <= 99) || min > max) {
+    alert("Use whole numbers from 1 to 99, and make sure 'Tables from' is not greater than 'to'.");
+    return;
+  }
+  minTable = min; maxTable = max; maxFactor = factor;
+  setFeedback(`Settings applied: tables ${minTable}–${maxTable}, multiplied by 1–${maxFactor}. Applies from the next question.`);
+});
+
+/* ---------- Startup ---------- */
+updateScore();
+updateVoiceButton();
+if (!voiceAvailable) {
+  setVoiceStatus("Voice recognition isn't supported in this browser (try Chrome or Edge). You can always type your answer.");
+  $("voiceBtn").title = "Speech recognition is not supported by this browser.";
+} else if (location.protocol === "file:") {
+  setVoiceStatus("Tip: open this page from a web address (https) — when opened as a file, the browser may ask for the microphone every time.");
+} else if (loadPref()) {
+  // Voice was ON last time: turn it back on without asking again (permission is remembered).
+  turnVoiceOn();
+} else {
+  setVoiceStatus("💡 Tap “Voice” once to answer by speaking — the mic then stays on.");
+}
+</script>
+</body>
+</html>
