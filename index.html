@@ -191,8 +191,9 @@ button { min-height: 44px; touch-action: manipulation; }
       <div id="feedback" class="feedback" aria-live="polite">Ready to become a Math Superstar? 🚀</div>
 
       <form id="answerForm" class="answer-row">
-        <input id="answer" type="number" inputmode="numeric" autocomplete="off"
-          placeholder="Your answer…" aria-label="Your answer" disabled>
+        <input id="answer" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="4"
+       enterkeyhint="go" autocomplete="off" autocorrect="off" spellcheck="false"
+       placeholder="Your answer…" aria-label="Your answer" disabled>
         <button id="submitAnswer" type="submit" disabled>Check it! ⭐</button>
       </form>
 
