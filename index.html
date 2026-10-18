@@ -2,625 +2,100 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#7058ff">
-<title>Math Superstars — 10 Second Tables</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#f7f4ff">
+<title>MathStars — Learn at your pace</title>
 <style>
-* { box-sizing: border-box; }
-:root {
-  color-scheme: light;
-  --ink: #253052;
-  --muted: #66708c;
-  --blue: #5a45f5;
-  --pink: #ff5da2;
-  --yellow: #ffcf4a;
-  --line: #e7e4ff;
-}
-body {
-  margin: 0;
-  min-width: 320px;
-  color: var(--ink);
-  font-family: "Trebuchet MS", "Segoe UI", ui-sans-serif, system-ui, sans-serif;
-  background:
-    radial-gradient(circle at 8% 12%, #ffe2f1 0, transparent 24%),
-    radial-gradient(circle at 92% 10%, #fff0b9 0, transparent 22%),
-    radial-gradient(circle at 90% 90%, #d6f9ff 0, transparent 24%),
-    linear-gradient(135deg, #f7f2ff, #eef8ff 52%, #fff7fb);
-}
-.app { width: min(780px, calc(100% - 30px)); margin: 30px auto; }
-header { text-align: center; margin-bottom: 22px; }
-.eyebrow {
-  display: inline-block; padding: 8px 14px; border-radius: 99px;
-  color: #7641bd; background: #fff; border: 2px solid #e9dcff;
-  font-size: 12px; letter-spacing: .09em; font-weight: 900;
-  box-shadow: 0 5px 0 #e9dcff;
-}
-h1 { margin: 14px 0 5px; font-size: clamp(32px, 7vw, 49px); letter-spacing: -.04em; line-height: 1.1; }
-.title-pop { color: #ff4e98; text-shadow: 2px 3px 0 #ffd7e8; }
-.subtitle { margin: 8px 0 0; color: var(--muted); font-size: 15px; }
-.settings, .card, .stat {
-  background: rgba(255,255,255,.93); border: 2px solid #fff;
-  border-radius: 22px; box-shadow: 0 9px 0 rgba(112,91,204,.10), 0 16px 36px rgba(61,52,124,.08);
-}
-.settings {
-  padding: 15px; display: flex; gap: 12px; align-items: end;
-  justify-content: center; flex-wrap: wrap; margin-bottom: 17px;
-}
-label { display: flex; flex-direction: column; gap: 6px; color: #68708b; font-size: 12px; font-weight: 900; }
-input { font: inherit; }
-.settings input {
-  width: 100px; padding: 10px 11px; border: 2px solid #e8e4ff;
-  border-radius: 12px; color: var(--ink); background: #fbfaff; font-weight: 800;
-}
-button {
-  border: 0; border-radius: 13px; padding: 12px 16px;
-  background: linear-gradient(135deg, #7058ff, #a34bfa); color: white;
-  font: inherit; font-weight: 900; cursor: pointer;
-  box-shadow: 0 5px 0 #4b35c7; transition: transform .12s, box-shadow .12s, filter .12s;
-}
-button:hover:not(:disabled) { transform: translateY(-2px); filter: brightness(1.04); box-shadow: 0 7px 0 #4b35c7; }
-button:active:not(:disabled) { transform: translateY(2px); box-shadow: 0 2px 0 #4b35c7; }
-button:disabled { opacity: .45; cursor: not-allowed; box-shadow: none; }
-button.secondary { color: #4d3d9e; background: #f1edff; box-shadow: 0 4px 0 #d8ceff; }
-button.secondary:hover:not(:disabled) { box-shadow: 0 6px 0 #d8ceff; }
-button.mic-on { color: #fff; background: linear-gradient(135deg, #ff5da2, #ff8a5b); box-shadow: 0 5px 0 #d63c7d; animation: micPulse 1.6s ease-in-out infinite; }
-@keyframes micPulse { 0%,100% { filter: brightness(1); } 50% { filter: brightness(1.15); } }
-@media (prefers-reduced-motion: reduce) { button.mic-on { animation: none; } }
-.card { padding: clamp(18px, 4vw, 30px); text-align: center; border-color: #fff; }
-.topline { display: flex; justify-content: space-between; gap: 12px; color: var(--muted); font-size: 13px; font-weight: 900; }
-#questionCount { color: #7545dc; background: #f2eaff; padding: 7px 11px; border-radius: 99px; }
-#score { color: #168d71; background: #e6fff5; padding: 7px 11px; border-radius: 99px; }
-.timer-wrap { height: 13px; margin-top: 19px; border-radius: 99px; background: #f0edff; overflow: hidden; border: 2px solid #fff; }
-#timerBar { height: 100%; width: 100%; background: linear-gradient(90deg, #27d7a2, #a3e635); border-radius: 99px; transition: width .1s linear, background .2s; }
-.timer-text { margin-top: 8px; font-size: 13px; color: #7b6caa; font-weight: 900; font-variant-numeric: tabular-nums; }
-.question {
-  margin: 18px 0 8px; font-size: clamp(46px, 10vw, 76px); font-weight: 1000;
-  letter-spacing: -.045em; color: #5140df; text-shadow: 3px 4px 0 #e6ddff;
-  white-space: nowrap;
-}
-.feedback { min-height: 29px; color: var(--muted); font-weight: 900; }
-.feedback.good { color: #11976d; }
-.feedback.bad { color: #e34773; }
-.answer-row { display: flex; justify-content: center; gap: 10px; margin: 19px auto; max-width: 410px; }
-.answer-row input {
-  min-width: 0; flex: 1; padding: 13px 15px; border: 2px solid #dcd5ff;
-  border-radius: 14px; font-size: 20px; font-weight: 800; outline: none; background: #fff;
-}
-.answer-row input:focus { border-color: #8a70ff; box-shadow: 0 0 0 4px #8a70ff20; }
-.actions { display: flex; justify-content: center; flex-wrap: wrap; gap: 10px; }
-.small-note { color: var(--muted); font-size: 12px; line-height: 1.5; margin: 17px auto 0; max-width: 500px; }
-.game-summary {
-  margin: 18px auto 0; padding: 18px 14px; max-width: 430px;
-  background: linear-gradient(135deg, #fff7d9, #ffe9f4); border: 2px solid #ffd6ea;
-  border-radius: 18px; box-shadow: 0 6px 0 #ffd6ea;
-}
-.game-summary h2 { margin: 0 0 6px; font-size: 24px; color: #e2407f; }
-.game-summary .big-score { font-size: 40px; font-weight: 1000; color: #5140df; margin: 4px 0; }
-.game-summary .stars { font-size: 30px; letter-spacing: 4px; }
-.game-summary p { margin: 6px 0 0; color: var(--muted); font-weight: 800; }
-.answer-reveal {
-  margin: 18px auto 0; padding: 14px; max-width: 410px;
-  color: #5435ac; background: linear-gradient(120deg, #f4eaff, #fff0f7);
-  border: 2px dashed #d8c5ff; border-radius: 15px; font-size: 18px; font-weight: 1000;
-}
-.stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 13px; margin-top: 17px; }
-.stat { padding: 16px 10px; text-align: center; border: 2px solid white; }
-.stat span { display: block; font-size: 27px; font-weight: 1000; margin-bottom: 3px; }
-.stat small { color: #59617e; font-weight: 800; }
-.stat-one { background: linear-gradient(135deg, #fff, #fff0f6); }
-.stat-two { background: linear-gradient(135deg, #fff, #f0edff); }
-.stat-three { background: linear-gradient(135deg, #fff, #fff7d9); }
-footer { color: #737b96; text-align: center; font-size: 12px; line-height: 1.6; margin: 19px 12px; }
-@media (max-width: 480px) {
-  .app { margin: 20px auto; }
-  .topline { font-size: 10px; }
-  .settings { gap: 9px; }
-  .settings input { width: 82px; }
-  .stats { gap: 7px; }
-  .stat { padding: 12px 5px; }
-  .stat small { font-size: 10px; }
-  .actions button { padding: 11px 12px; font-size: 13px; }
-}
-html { -webkit-text-size-adjust: 100%; }
-body { padding-bottom: env(safe-area-inset-bottom); }
-.app { width: min(780px, calc(100% - 24px)); margin: 18px auto; }
-.settings { gap: 9px; }
-.settings label { flex: 1 1 85px; }
-.settings input { width: 100%; min-width: 0; }
-.answer-row input { font-size: 22px; }
-button { min-height: 44px; touch-action: manipulation; }
-@media (max-width: 600px) {
-  .app { width: calc(100% - 20px); margin: 14px auto; }
-  header { margin-bottom: 16px; }
-  .subtitle { font-size: 14px; line-height: 1.45; }
-  .settings { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); padding: 12px; }
-  .settings label { min-width: 0; font-size: 11px; }
-  .settings input { width: 100%; padding: 10px 7px; font-size: 16px; }
-  #applySettings { grid-column: 1 / -1; width: 100%; }
-  .card { padding: 17px 13px; }
-  .topline { align-items: center; font-size: 10px; }
-  #questionCount, #score { padding: 6px 8px; }
-  .question { font-size: clamp(38px, 12vw, 72px); margin: 22px 0 12px; }
-  .answer-row { margin: 16px auto; gap: 8px; }
-  .answer-row input { width: 50%; min-height: 50px; font-size: 22px; }
-  .answer-row button { padding: 10px 12px; }
-  .actions { display: grid; grid-template-columns: 1fr 1fr; gap: 9px; }
-  .actions button:first-child { grid-column: 1 / -1; }
-  .actions button { width: 100%; padding: 12px 8px; font-size: 14px; }
-  .small-note { font-size: 11px; }
-  .stats { gap: 7px; margin-top: 12px; }
-  .stat { padding: 12px 4px; border-radius: 16px; }
-  .stat span { font-size: 23px; }
-  .stat small { font-size: 10px; }
-  footer { margin: 15px 5px; font-size: 11px; }
-}
+:root{--ink:#302c48;--muted:#716d83;--purple:#6657c8;--lav:#eeeaff;--mint:#dff5eb;--peach:#fff0e5;--sky:#e5f2fb;--pink:#f9e8f0;--line:#e9e5f2;--paper:#faf9fc;--white:#fff;--green:#267b5d}
+*{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font-family:ui-rounded,"Trebuchet MS",system-ui,sans-serif;font-size:15px}button,select{font:inherit}button{cursor:pointer;border:0;touch-action:manipulation}button:focus-visible,select:focus-visible{outline:3px solid #aaa0ef;outline-offset:3px}.app{min-height:100vh;display:grid;grid-template-columns:225px minmax(0,1fr)}aside{background:#fff;border-right:1px solid var(--line);padding:22px 14px;display:flex;flex-direction:column;gap:22px}.brand{display:flex;gap:10px;align-items:center;padding:0 7px}.logo{width:42px;height:42px;border-radius:14px;background:var(--lav);display:grid;place-items:center;font-size:24px}.brand h1{font-size:21px;margin:0;letter-spacing:-.7px}.brand small{display:block;color:var(--muted);font-size:11px;margin-top:2px}.side-label{font-size:10px;text-transform:uppercase;letter-spacing:1.2px;color:#8b879b;font-weight:900;padding:0 10px;margin-bottom:7px}.nav{display:grid;gap:4px}.nav button{display:flex;align-items:center;gap:10px;text-align:left;padding:11px;border-radius:12px;color:#5f5a74;background:transparent;font-weight:750;font-size:13px;min-height:43px}.nav button .ico{font-size:18px;width:24px;text-align:center}.nav button.active{background:var(--lav);color:#4f439d}.nav button:hover{background:#f6f4fb}.side-note{margin-top:auto;padding:14px;border-radius:15px;background:#f5f1ff;font-size:12px;line-height:1.5;color:#5e567c}.main{min-width:0;width:100%;max-width:1200px;margin:0 auto;padding:22px clamp(14px,3.5vw,42px) 40px}.topbar{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:20px}.crumb{font-size:12px;color:var(--muted)}.top-actions{display:flex;gap:7px;align-items:center}.pill,.secondary{background:#fff;border:1px solid var(--line);border-radius:11px;padding:9px 12px;color:#514a6a;font-size:12px;font-weight:800;min-height:40px}.pill:hover,.secondary:hover{border-color:#bcb3e9}.mobile-menu{display:none}.hero{background:var(--lav);border-radius:22px;padding:clamp(22px,4vw,36px);display:flex;justify-content:space-between;align-items:center;gap:15px}.hero-copy{max-width:550px}.eyebrow{font-size:11px;letter-spacing:1px;text-transform:uppercase;color:#5d52a6;font-weight:900}.hero h2{font-size:clamp(29px,4vw,42px);line-height:1.1;letter-spacing:-1px;margin:10px 0}.hero p{color:#625d79;line-height:1.55;margin:0 0 17px;max-width:420px}.mascot{font-size:clamp(65px,9vw,110px);padding:0 10px}.primary{background:var(--purple);color:#fff;border-radius:12px;padding:12px 16px;font-weight:850;min-height:44px}.primary:hover{background:#5546b5}.section-head{display:flex;align-items:end;justify-content:space-between;gap:10px;margin:26px 0 13px}.section-head h3{font-size:19px;margin:0;letter-spacing:-.3px}.section-head p{font-size:12px;color:var(--muted);margin:5px 0 0}.stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:11px;margin-top:14px}.stat{background:#fff;border:1px solid var(--line);border-radius:15px;padding:14px;display:flex;align-items:center;gap:10px}.stat-ico{width:36px;height:36px;border-radius:12px;display:grid;place-items:center;font-size:19px;background:var(--peach)}.stat:nth-child(2) .stat-ico{background:var(--sky)}.stat:nth-child(3) .stat-ico{background:var(--mint)}.stat strong{display:block;font-size:21px}.stat small{display:block;color:var(--muted);font-size:11px;margin-top:2px}.age-grid,.topic-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}.age-card,.topic-card{background:#fff;border:1px solid var(--line);border-radius:15px;padding:14px;text-align:left;min-width:0;transition:border-color .12s}.age-card:hover,.topic-card:hover{border-color:#b8afe6}.age-card.selected{border:2px solid var(--purple);background:#f6f4ff;padding:13px}.age-emoji{display:block;font-size:25px;margin-bottom:8px}.age-card strong,.topic-card strong{font-size:13px;display:block}.age-card small,.topic-card small{display:block;font-size:11px;color:var(--muted);margin-top:4px;line-height:1.4}.topic-grid{grid-template-columns:repeat(4,minmax(0,1fr))}.level-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:9px}.level{background:#fff;border:1px solid var(--line);border-radius:13px;padding:11px 6px;text-align:center;min-height:82px}.level strong{display:block;font-size:13px}.level span{display:block;font-size:20px;margin:5px 0}.level small{font-size:10px;color:var(--muted)}.level.done{background:var(--mint);border-color:#c2e8d6}.level.current{border:2px solid var(--purple);background:#f6f4ff;padding:10px 5px}.level.locked{opacity:.5;cursor:not-allowed}.quiz-wrap{max-width:760px;margin:0 auto}.quiz-top{display:flex;align-items:center;gap:10px;margin-bottom:14px}.progress-track{height:7px;background:#e9e5f4;border-radius:99px;overflow:hidden;flex:1}.progress-fill{height:100%;background:#8a7ddd;width:0;transition:width .2s}.quiz-panel{background:#fff;border:1px solid var(--line);border-radius:22px;padding:clamp(20px,4vw,36px);text-align:center}.quiz-label{font-size:11px;color:#6659ae;font-weight:900;letter-spacing:1px;text-transform:uppercase}.question{font-size:clamp(35px,6vw,58px);font-weight:900;letter-spacing:-1px;margin:23px 0 10px;overflow-wrap:anywhere}.visual{font-size:clamp(22px,4vw,36px);line-height:1.6;min-height:10px}.hintline{font-size:13px;color:var(--muted);min-height:20px;margin:9px 0 20px}.answers{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;max-width:520px;margin:auto}.answer{background:var(--lav);border:1px solid #ded8f8;color:var(--ink);border-radius:14px;min-height:60px;padding:12px;font-size:23px;font-weight:850}.answer:nth-child(2){background:var(--sky);border-color:#d3e8f7}.answer:nth-child(3){background:var(--peach);border-color:#f4dfcf}.answer:nth-child(4){background:var(--mint);border-color:#cfeade}.answer:hover:not(:disabled){border-color:#9a8de1}.answer:disabled{cursor:default}.answer.correct{background:#d4f1e3;border:2px solid #73bf9b}.answer.wrong{background:#fae1e6;border:2px solid #db9ba8}.feedback{font-size:16px;font-weight:850;min-height:25px;margin:18px 0 8px}.quiz-tools,.result-actions{display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin-top:17px}.result-emoji{font-size:60px}.result h3{font-size:28px;margin:8px 0}.result p{color:var(--muted);line-height:1.6}.hidden{display:none!important}.footer{font-size:11px;color:#8a859a;text-align:center;margin-top:30px}.badge-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}.badge-card{border:1px solid var(--line);border-radius:14px;background:white;padding:15px}.badge-card strong{display:block;font-size:13px}.badge-card small{display:block;color:var(--muted);font-size:11px;margin-top:4px}.locked-badge{opacity:.5}.toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:#302c48;color:white;padding:11px 15px;border-radius:12px;font-size:12px;z-index:30}
+@media(max-width:950px){.app{grid-template-columns:195px minmax(0,1fr)}.age-grid,.topic-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.level-grid{grid-template-columns:repeat(4,minmax(0,1fr))}.mascot{font-size:75px}}
+@media(max-width:700px){.app{display:block}aside{position:fixed;z-index:20;inset:0 auto 0 0;width:260px;transform:translateX(-105%);transition:transform .18s;box-shadow:10px 0 30px #25204420}.app.menu-open aside{transform:translateX(0)}.mobile-menu{display:inline-block}.main{padding:14px 12px 30px}.hero{padding:22px 17px}.hero h2{font-size:30px}.hero p{font-size:13px}.mascot{font-size:66px}.stats{gap:7px}.stat{display:block;padding:10px}.stat-ico{margin-bottom:7px}.stat strong{font-size:19px}.stat small{font-size:10px}.age-grid,.topic-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.level-grid{grid-template-columns:repeat(4,minmax(0,1fr));gap:7px}.level{min-height:78px}.section-head h3{font-size:17px}.badge-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:370px){.mascot{display:none}.level-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.quiz-panel{padding:18px 12px}.answer{font-size:20px}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
 </style>
 </head>
 <body>
-
-  <main class="app">
-    <header>
-      <div class="eyebrow">🌈 PLAY • THINK • SHINE ✨</div>
-      <h1>Math <span class="title-pop">Superstars!</span></h1>
-      <p class="subtitle">Each game has <b>10 questions</b> and you get <b>10 seconds</b> for each one. How many can you get right?</p>
-    </header>
-
-    <section class="settings">
-      <label>Tables from
-        <input id="minTable" type="number" min="1" max="99" value="2">
-      </label>
-      <label>to
-        <input id="maxTable" type="number" min="1" max="99" value="12">
-      </label>
-      <label>Multiply up to
-        <input id="maxFactor" type="number" min="1" max="99" value="12">
-      </label>
-      <button id="applySettings" class="secondary">🎨 Set range</button>
-    </section>
-
-    <section class="quiz card">
-      <div class="topline">
-        <span id="questionCount">Game 1 · Question 1/10</span>
-        <span id="score">Correct 0 · Wrong 0</span>
-      </div>
-      <div class="timer-wrap" aria-label="Time remaining">
-        <div id="timerBar"></div>
-      </div>
-      <div id="timerText" class="timer-text">10.0 seconds</div>
-      <div id="question" class="question">6 × 7 = ?</div>
-      <div id="feedback" class="feedback" aria-live="polite">Ready to become a Math Superstar? 🚀</div>
-
-      <form id="answerForm" class="answer-row">
-        <input id="answer" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="4"
-       enterkeyhint="go" autocomplete="off" autocorrect="off" spellcheck="false"
-       placeholder="Your answer…" aria-label="Your answer" disabled>
-        <button id="submitAnswer" type="submit" disabled>Check it! ⭐</button>
-      </form>
-
-      <div class="actions">
-        <button id="startBtn">🚀 Let's play!</button>
-        <button id="voiceBtn" class="secondary" disabled aria-pressed="false">🎤 Voice: OFF</button>
-        <button id="nextBtn" class="secondary" disabled>➡️ Next question</button>
-      </div>
-      <p id="voiceStatus" class="small-note" aria-live="polite">💡 Tip: You can type your answer or say it aloud if voice recognition is supported.</p>
-      <div class="answer-reveal" id="answerReveal" hidden></div>
-      <div class="game-summary" id="gameSummary" hidden aria-live="polite">
-        <h2 id="summaryTitle">Game finished!</h2>
-        <div class="stars" id="summaryStars"></div>
-        <div class="big-score" id="summaryScore">0 / 10</div>
-        <p id="summaryMessage"></p>
-        <p id="summaryBest"></p>
-      </div>
-    </section>
-
-    <section class="stats">
-      <div class="stat stat-one"><span id="totalStat">0</span><small>🧩 Questions tried</small></div>
-      <div class="stat stat-two"><span id="accuracyStat">—</span><small>🎯 Accuracy</small></div>
-      <div class="stat stat-three"><span id="streakStat">0</span><small>🔥 Streak</small></div>
-    </section>
-    <footer>🌟 10 questions make one game. One answer per question — when the timer reaches zero, the answer appears and that question counts as wrong. At the end you get your score, then start the next game. Keep practising — every try makes you stronger! 💪</footer>
-  </main>
-
-
+<div class="app" id="app">
+<aside>
+ <div class="brand"><div class="logo">⭐</div><div><h1>MathStars</h1><small>Maths made friendly</small></div></div>
+ <div><div class="side-label">Choose a game</div><nav class="nav" id="nav">
+  <button class="active" data-page="home"><span class="ico">🏡</span>Home</button>
+  <button data-page="ages"><span class="ico">🎒</span>My age</button>
+  <button data-topic="counting"><span class="ico">🔢</span>Counting</button>
+  <button data-topic="addition"><span class="ico">➕</span>Addition</button>
+  <button data-topic="subtraction"><span class="ico">➖</span>Subtraction</button>
+  <button data-topic="multiplication"><span class="ico">✖️</span>Multiplication</button>
+  <button data-topic="division"><span class="ico">➗</span>Division</button>
+  <button data-topic="fractions"><span class="ico">🍕</span>Fractions</button>
+  <button data-topic="mixed"><span class="ico">🌈</span>Mixed maths</button>
+  <button data-page="progress"><span class="ico">🏆</span>My progress</button>
+ </nav></div>
+ <div class="side-note">🌱 Take your time. Learning is not a race.</div>
+</aside>
+<main class="main">
+ <div class="topbar"><div style="display:flex;align-items:center;gap:8px"><button class="pill mobile-menu" id="menuBtn" aria-label="Open menu">☰</button><span class="crumb" id="breadcrumb">Home</span></div><div class="top-actions"><button class="pill" id="voiceToggle" aria-pressed="false">🔊 Voice off</button></div></div>
+ <section id="homePage">
+  <div class="hero"><div class="hero-copy"><div class="eyebrow">A little practice goes a long way</div><h2>Hello, MathStar! ⭐</h2><p>Choose your age, pick a game, and learn at your own pace.</p><button class="primary" id="startAdventure">Choose a game →</button></div><div class="mascot" aria-hidden="true">🌟</div></div>
+  <div class="stats"><div class="stat"><div class="stat-ico">⭐</div><div><strong id="totalStars">0</strong><small>Stars earned</small></div></div><div class="stat"><div class="stat-ico">📘</div><div><strong id="levelsDone">0</strong><small>Levels passed</small></div></div><div class="stat"><div class="stat-ico">🎯</div><div><strong id="bestScore">—</strong><small>Best score / 10</small></div></div></div>
+  <div class="section-head"><div><h3>Choose your age</h3><p>We’ll match the questions to you.</p></div><button class="secondary" id="allAges">All ages</button></div><div class="age-grid" id="homeAges"></div>
+  <div class="section-head"><div><h3>Choose a game</h3><p id="homeTopicSub">Pick what you want to practise.</p></div></div><div class="topic-grid" id="homeTopics"></div>
+ </section>
+ <section id="agesPage" class="hidden"><div class="section-head"><div><h3>How old are you?</h3><p>Choose an age to see your games.</p></div></div><div class="age-grid" id="allAgeGrid"></div></section>
+ <section id="topicPage" class="hidden"><div class="section-head"><div><h3 id="topicHeading">Choose a game</h3><p id="topicSub">Choose a level.</p></div><button class="secondary" id="backHome">← Home</button></div><div class="topic-grid" id="topicChooser"></div><div class="section-head"><div><h3 id="levelsHeading">Your levels</h3><p>Pass with 8 out of 10 to open the next level.</p></div></div><div class="level-grid" id="levelGrid"></div></section>
+ <section id="quizPage" class="hidden"><div class="quiz-wrap"><div class="quiz-top"><button class="secondary" id="exitQuiz">← Levels</button><div class="progress-track"><div class="progress-fill" id="progressFill"></div></div><strong id="questionCount">1/10</strong></div>
+  <div class="quiz-panel" id="quizPanel"><div class="quiz-label" id="quizLabel">LEVEL 1 · QUESTION 1</div><div class="visual" id="visualCount"></div><div class="question" id="questionText">2 + 1 = ?</div><div class="hintline" id="hintLine">Choose an answer.</div><div class="answers" id="answers"></div><div class="feedback" id="feedback" aria-live="polite"></div><div class="quiz-tools"><button class="secondary" id="repeatQuestion">🔊 Read question</button><button class="secondary" id="hintBtn">💡 Hint</button></div><div class="result-actions hidden" id="nextArea"><button class="primary" id="nextQuestion">Next →</button></div></div>
+  <div class="quiz-panel result hidden" id="resultPanel"><div class="result-emoji" id="resultEmoji">🌟</div><h3 id="resultTitle">Well done!</h3><p id="resultText"></p><div class="result-actions"><button class="primary" id="continueBtn">Next level →</button><button class="secondary" id="retryBtn">Try again</button><button class="secondary" id="resultLevels">All levels</button></div></div>
+ </div></section>
+ <section id="progressPage" class="hidden"><div class="section-head"><div><h3>My progress 🏆</h3><p>See what you have learned on this device.</p></div><button class="secondary" id="resetProgress">Reset</button></div><div class="stats"><div class="stat"><div class="stat-ico">⭐</div><div><strong id="pStars">0</strong><small>Stars earned</small></div></div><div class="stat"><div class="stat-ico">📘</div><div><strong id="pLevels">0</strong><small>Levels passed</small></div></div><div class="stat"><div class="stat-ico">🎯</div><div><strong id="pBest">—</strong><small>Best score</small></div></div></div><div class="section-head"><div><h3>My badges</h3><p>Small steps count.</p></div></div><div class="badge-grid" id="badges"></div></section>
+ <div class="footer">MathStars · Learn at your own pace 💜</div>
+</main></div><div id="toast" class="toast hidden" role="status"></div>
 <script>
-const $ = id => document.getElementById(id);
-const FULL_TIME = 10000;
-const TIMER_GRADIENT = "linear-gradient(90deg, #27d7a2, #a3e635)";
-const VOICE_PREF_KEY = "mathSuperstars.voiceOn";
-
-let minTable = 2, maxTable = 12, maxFactor = 12;
-let a = 6, b = 7, correctAnswer = 42;
-const QUESTIONS_PER_GAME = 10;
-let running = false, finished = false, questionNumber = 0;
-let gameNumber = 1, gameCorrect = 0, gameOver = false, bestScore = 0;
-let correctCount = 0, wrongCount = 0, streak = 0;
-let deadline = 0, ticker = null;
-
-/* ---------- Voice: one recognizer, permission asked once, always listening ---------- */
-const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-const voiceAvailable = !!SpeechRecognition;
-let recognition = null;     // created ONCE and reused
-let voiceOn = false;        // user wants the mic on
-let listening = false;      // recognizer currently running
-let restartTimer = null;
-let errorStreak = 0;
-
-function setVoiceStatus(text) { $("voiceStatus").textContent = text; }
-
-function savePref(on) {
-  try { localStorage.setItem(VOICE_PREF_KEY, on ? "1" : "0"); } catch (e) { /* storage blocked */ }
-}
-function loadPref() {
-  try { return localStorage.getItem(VOICE_PREF_KEY) === "1"; } catch (e) { return false; }
-}
-
-function updateVoiceButton() {
-  const btn = $("voiceBtn");
-  btn.disabled = !voiceAvailable;
-  btn.textContent = voiceOn ? "🎤 Voice: ON" : "🎤 Voice: OFF";
-  btn.classList.toggle("mic-on", voiceOn);
-  btn.classList.toggle("secondary", !voiceOn);
-  btn.setAttribute("aria-pressed", String(voiceOn));
-}
-
-// Ask for the microphone a single time. On https/localhost the browser remembers the answer.
-async function ensureMicPermission() {
-  try {
-    if (navigator.permissions && navigator.permissions.query) {
-      const state = await navigator.permissions.query({ name: "microphone" });
-      if (state.state === "granted") return true;
-      if (state.state === "denied") return false;
-    }
-  } catch (e) { /* Permissions API not supported for microphone (e.g. Safari) */ }
-
-  if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) return true; // recognizer will ask itself
-  try {
-    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-    stream.getTracks().forEach(t => t.stop()); // permission is kept; release the device
-    return true;
-  } catch (e) {
-    return false;
-  }
-}
-
-function createRecognition() {
-  const rec = new SpeechRecognition();
-  rec.lang = "en-US";
-  rec.continuous = true;        // keep listening across many answers
-  rec.interimResults = false;
-  rec.maxAlternatives = 5;
-
-  rec.onstart = () => {
-    listening = true;
-    setVoiceStatus(running
-      ? "🎤 Listening… just say the answer."
-      : "🎤 Listening… say “start” or “next” to get a question.");
-  };
-
-  rec.onresult = event => {
-    errorStreak = 0;
-    for (let i = event.resultIndex; i < event.results.length; i++) {
-      const result = event.results[i];
-      if (!result.isFinal) continue;
-      const alternatives = Array.from(result).map(alt => alt.transcript.trim()).filter(Boolean);
-      if (alternatives.length) handleSpeech(alternatives);
-    }
-  };
-
-  rec.onerror = event => {
-    if (event.error === "not-allowed" || event.error === "service-not-allowed") {
-      turnVoiceOff("Microphone access is blocked. Allow it in the browser's site settings, then tap Voice again.");
-      return;
-    }
-    if (event.error === "no-speech" || event.error === "aborted") return; // normal pauses, onend will restart
-    errorStreak++;
-    if (errorStreak >= 6) {
-      turnVoiceOff(`Voice keeps failing (${event.error}). Check your connection and tap Voice to try again.`);
-    }
-  };
-
-  // Browsers stop recognition after silence or ~1 minute; restart quietly while Voice is ON.
-  rec.onend = () => {
-    listening = false;
-    if (voiceOn && !document.hidden) {
-      clearTimeout(restartTimer);
-      restartTimer = setTimeout(startListening, errorStreak ? 1500 : 250);
-    }
-  };
-  return rec;
-}
-
-function startListening() {
-  if (!voiceOn || listening || document.hidden) return;
-  if (!recognition) recognition = createRecognition();
-  try {
-    recognition.start();
-  } catch (e) {
-    // InvalidStateError means it is already running - that's fine.
-    if (e.name !== "InvalidStateError") setVoiceStatus("Tap Voice to resume listening.");
-  }
-}
-
-function stopListening() {
-  clearTimeout(restartTimer);
-  if (recognition && listening) recognition.abort();
-  listening = false;
-}
-
-async function turnVoiceOn() {
-  if (!voiceAvailable) return;
-  setVoiceStatus("Asking for the microphone…");
-  const ok = await ensureMicPermission();
-  if (!ok) {
-    turnVoiceOff("Microphone permission was denied. Allow it in the browser's site settings to use voice.");
-    return;
-  }
-  voiceOn = true;
-  savePref(true);
-  updateVoiceButton();
-  startListening();
-}
-
-function turnVoiceOff(message) {
-  voiceOn = false;
-  savePref(false);
-  stopListening();
-  updateVoiceButton();
-  setVoiceStatus(message || "Voice is off. Type your answer, or tap Voice to turn it back on.");
-}
-
-// Pause the mic when the tab is hidden, resume when it comes back.
-document.addEventListener("visibilitychange", () => {
-  if (document.hidden) stopListening();
-  else if (voiceOn) startListening();
-});
-
-/* ---------- Turning speech into a number ---------- */
-const SMALL = { zero:0, oh:0, one:1, two:2, three:3, four:4, five:5, six:6, seven:7, eight:8, nine:9,
-  ten:10, eleven:11, twelve:12, thirteen:13, fourteen:14, fifteen:15, sixteen:16, seventeen:17,
-  eighteen:18, nineteen:19 };
-const TENS = { twenty:20, thirty:30, forty:40, fourty:40, fifty:50, sixty:60, seventy:70, eighty:80, ninety:90 };
-// Sound-alike words, only trusted when they are the whole answer.
-const SOUND_ALIKE = { won:1, to:2, too:2, tu:2, for:4, fore:4, ate:8 };
-
-// Returns the LAST number in the phrase ("six times seven is forty two" -> 42), or null.
-function speechToNumber(text) {
-  const clean = text.toLowerCase().replace(/,/g, "").replace(/-/g, " ");
-  const digits = clean.match(/\d+/g);
-  if (digits) return Number(digits[digits.length - 1]);
-
-  const words = clean.split(/[^a-z]+/).filter(Boolean);
-  if (words.length === 1 && words[0] in SOUND_ALIKE) return SOUND_ALIKE[words[0]];
-
-  const found = [];
-  let total = 0, current = null;
-  const flush = () => { if (current !== null) { found.push(total + current); } total = 0; current = null; };
-  for (const w of words) {
-    if (w in SMALL) current = (current || 0) + SMALL[w];
-    else if (w in TENS) current = (current || 0) + TENS[w];
-    else if (w === "hundred") current = (current || 1) * 100;
-    else if (w === "thousand") { total += (current || 1) * 1000; current = 0; }
-    else if (w === "and" && current !== null) continue;
-    else flush();
-  }
-  flush();
-  return found.length ? found[found.length - 1] : null;
-}
-
-function isCommand(text, words) {
-  const t = text.toLowerCase();
-  return words.some(w => new RegExp(`\\b${w}\\b`).test(t));
-}
-
-function handleSpeech(alternatives) {
-  const heard = alternatives[0];
-
-  // Between questions: listen for "next" / "start".
-  if (!running) {
-    if (isCommand(heard, ["next", "start", "go", "play", "again"])) {
-      if (gameOver) startNextGame(); else newQuestion();
-    } else {
-      setVoiceStatus(`Heard “${heard}”. Say “${gameOver ? "next game" : "next"}” to continue.`);
-    }
-    return;
-  }
-
-  // Prefer an alternative that matches the right answer, otherwise the first one with a number.
-  let best = null;
-  for (const alt of alternatives) {
-    const n = speechToNumber(alt);
-    if (n === null) continue;
-    if (n === correctAnswer) { best = { n, alt }; break; }
-    if (!best) best = { n, alt };
-  }
-  if (!best) {
-    setVoiceStatus(`Heard “${heard}” — no number there. Try again!`);
-    return; // keep the question open
-  }
-  setVoiceStatus(`Heard: “${best.alt}”`);
-  $("answer").value = String(best.n); // show the spoken number in the answer box
-  submitAnswer(best.n, "voice", best.alt);
-}
-
-/* ---------- Game ---------- */
-function randomInt(min, max) {
-  return Math.floor(Math.random() * (max - min + 1)) + min;
-}
-function updateScore() {
-  $("score").textContent = `Correct ${correctCount} · Wrong ${wrongCount}`;
-  const total = correctCount + wrongCount;
-  $("totalStat").textContent = total;
-  $("accuracyStat").textContent = total ? `${Math.round(correctCount / total * 100)}%` : "—";
-  $("streakStat").textContent = streak;
-}
-function setFeedback(message, kind = "") {
-  $("feedback").textContent = message;
-  $("feedback").className = `feedback ${kind}`;
-}
-function stopTimer() {
-  if (ticker) clearInterval(ticker);
-  ticker = null;
-  running = false;
-}
-function setAnswerEnabled(enabled) {
-  $("answer").disabled = !enabled;
-  $("submitAnswer").disabled = !enabled;
-  // Don't pop up the phone keyboard when the child is answering by voice.
-  if (enabled && !voiceOn) $("answer").focus();
-}
-function resetStats() {
-  correctCount = 0; wrongCount = 0; streak = 0; questionNumber = 0;
-  gameNumber = 1; gameCorrect = 0; gameOver = false;
-  $("gameSummary").hidden = true;
-  updateScore();
-}
-function afterQuestion() {
-  if (questionNumber >= QUESTIONS_PER_GAME) { endGame(); return; }
-  $("nextBtn").textContent = "➡️ Next question";
-  $("nextBtn").disabled = false;
-  if (voiceOn) setVoiceStatus("🎤 Say “next” for the next question.");
-}
-function endGame() {
-  gameOver = true;
-  const isBest = gameCorrect > bestScore;
-  if (isBest) bestScore = gameCorrect;
-  const stars = gameCorrect === QUESTIONS_PER_GAME ? "🏆⭐⭐⭐"
-    : gameCorrect >= 8 ? "⭐⭐⭐"
-    : gameCorrect >= 5 ? "⭐⭐"
-    : gameCorrect >= 1 ? "⭐" : "💪";
-  const message = gameCorrect === QUESTIONS_PER_GAME ? "PERFECT GAME! You're a true Math Superstar!"
-    : gameCorrect >= 8 ? "Amazing work! Almost perfect!"
-    : gameCorrect >= 5 ? "Great job! Keep going to get even more!"
-    : "Good try! Every game makes you faster.";
-  $("summaryTitle").textContent = `🎉 Game ${gameNumber} finished!`;
-  $("summaryStars").textContent = stars;
-  $("summaryScore").textContent = `${gameCorrect} / ${QUESTIONS_PER_GAME}`;
-  $("summaryMessage").textContent = message;
-  $("summaryBest").textContent = isBest && gameNumber > 1 ? `🥇 New best score: ${bestScore}/10!` : `Best score so far: ${bestScore}/10`;
-  $("gameSummary").hidden = false;
-  $("gameSummary").scrollIntoView({ behavior: "smooth", block: "nearest" });
-  $("nextBtn").textContent = "🎮 Next game";
-  $("nextBtn").disabled = false;
-  setFeedback(`Game over — you got ${gameCorrect} out of ${QUESTIONS_PER_GAME}!`, gameCorrect >= 5 ? "good" : "");
-  if (voiceOn) setVoiceStatus("🎤 Say “next game” to play again.");
-}
-function startNextGame() {
-  gameNumber++;
-  questionNumber = 0;
-  gameCorrect = 0;
-  gameOver = false;
-  $("gameSummary").hidden = true;
-  newQuestion();
-}
-function newQuestion() {
-  if (gameOver) { startNextGame(); return; }
-  stopTimer();
-  finished = false;
-  questionNumber++;
-  a = randomInt(minTable, maxTable);
-  b = randomInt(1, maxFactor);
-  correctAnswer = a * b;
-  $("question").textContent = `${a} × ${b} = ?`;
-  $("questionCount").textContent = `Game ${gameNumber} · Question ${questionNumber}/${QUESTIONS_PER_GAME}`;
-  $("timerBar").style.width = "100%";
-  $("timerBar").style.background = TIMER_GRADIENT;
-  $("timerText").textContent = "10.0 seconds";
-  $("answer").value = "";
-  $("answerReveal").hidden = true;
-  $("answerReveal").textContent = "";
-  setFeedback(voiceOn ? "Say your answer out loud! 🎤" : "Type your answer or turn on Voice.");
-  $("startBtn").textContent = "🔄 Restart";
-  $("nextBtn").disabled = true;
-  setAnswerEnabled(true);
-  if (voiceOn) setVoiceStatus("🎤 Listening… just say the answer.");
-  running = true;
-  deadline = Date.now() + FULL_TIME;
-  ticker = setInterval(tick, 50);
-}
-function tick() {
-  const remaining = Math.max(0, deadline - Date.now());
-  $("timerText").textContent = `${(remaining / 1000).toFixed(1)} seconds`;
-  $("timerBar").style.width = `${remaining / FULL_TIME * 100}%`;
-  if (remaining <= 3000) $("timerBar").style.background = "#e34b4b";
-  else if (remaining <= 6000) $("timerBar").style.background = "#f0a52b";
-  if (remaining <= 0) {
-    stopTimer();
-    finished = true;
-    wrongCount++;
-    streak = 0;
-    setFeedback("Time's up! This one is marked wrong.", "bad");
-    revealAnswer();
-    updateScore();
-    setAnswerEnabled(false);
-    afterQuestion();
-  }
-}
-function revealAnswer() {
-  $("answerReveal").textContent = `Correct answer: ${a} × ${b} = ${correctAnswer}`;
-  $("answerReveal").hidden = false;
-}
-function submitAnswer(value, source = "typed", heardText = "") {
-  if (!running || finished) return;
-  const answer = typeof value === "number" ? value : Number(String(value).trim());
-  if (String(value).trim() === "" || !Number.isFinite(answer)) return;
-  finished = true;
-  stopTimer();
-  setAnswerEnabled(false);
-  revealAnswer();
-  if (answer === correctAnswer) {
-    correctCount++;
-    gameCorrect++;
-    streak++;
-    setFeedback(source === "voice" ? `Correct — I heard ${answer}! 🌟` : "Correct! Nice work. 🌟", "good");
-  } else {
-    wrongCount++;
-    streak = 0;
-    setFeedback(source === "voice" ? `Not quite — I heard “${heardText}” (${answer}).` : "Not quite. Marked wrong.", "bad");
-  }
-  updateScore();
-  afterQuestion();
-}
-
-$("answerForm").addEventListener("submit", event => {
-  event.preventDefault();
-  submitAnswer($("answer").value);
-});
-$("startBtn").addEventListener("click", () => {
-  if (questionNumber > 0) resetStats(); // "Restart" really restarts
-  newQuestion();
-  if (voiceOn) startListening(); // user tap: safe moment to (re)start the mic
-});
-$("nextBtn").addEventListener("click", () => { if (gameOver) startNextGame(); else newQuestion(); });
-$("voiceBtn").addEventListener("click", () => {
-  if (voiceOn) turnVoiceOff();
-  else turnVoiceOn();
-});
-$("applySettings").addEventListener("click", () => {
-  const min = Number($("minTable").value);
-  const max = Number($("maxTable").value);
-  const factor = Number($("maxFactor").value);
-  if (![min, max, factor].every(n => Number.isInteger(n) && n >= 1 && n <= 99) || min > max) {
-    alert("Use whole numbers from 1 to 99, and make sure 'Tables from' is not greater than 'to'.");
-    return;
-  }
-  minTable = min; maxTable = max; maxFactor = factor;
-  setFeedback(`Settings applied: tables ${minTable}–${maxTable}, multiplied by 1–${maxFactor}. Applies from the next question.`);
-});
-
-/* ---------- Startup ---------- */
-updateScore();
-updateVoiceButton();
-if (!voiceAvailable) {
-  setVoiceStatus("Voice recognition isn't supported in this browser (try Chrome or Edge). You can always type your answer.");
-  $("voiceBtn").title = "Speech recognition is not supported by this browser.";
-} else if (location.protocol === "file:") {
-  setVoiceStatus("Tip: open this page from a web address (https) — when opened as a file, the browser may ask for the microphone every time.");
-} else if (loadPref()) {
-  // Voice was ON last time: turn it back on without asking again (permission is remembered).
-  turnVoiceOn();
-} else {
-  setVoiceStatus("💡 Tap “Voice” once to answer by speaking — the mic then stays on.");
-}
+(()=>{'use strict';
+const $=id=>document.getElementById(id);
+const AGE_ICONS=['🧸','🐣','🦋','🐸','🦊','🐼','🐯','🦄','🐬','🦉','🚀'];
+const AGE_DESC=['Counting','Numbers','Small sums','Add & take away','Number explorer','Multiply','Times tables','Maths puzzles','Fractions','Decimals','Big challenges'];
+const TOPICS=[{id:'counting',name:'Counting',icon:'🔢',desc:'Numbers and patterns'},{id:'addition',name:'Addition',icon:'➕',desc:'Put numbers together'},{id:'subtraction',name:'Subtraction',icon:'➖',desc:'Take numbers away'},{id:'multiplication',name:'Multiplication',icon:'✖️',desc:'Times tables'},{id:'division',name:'Division',icon:'➗',desc:'Share equally'},{id:'fractions',name:'Fractions',icon:'🍕',desc:'Parts of a whole'},{id:'mixed',name:'Mixed maths',icon:'🌈',desc:'A bit of everything'}];
+const STORE='mathstars-progress-v2',VOICE='mathstars-voice-v1';
+let data={stars:0,completed:{}},age=5,topic='addition',level=1,questions=[],qi=0,score=0,answered=false,voiceOn=false,quizTopic='addition',quizAge=5;
+try{data={...data,...JSON.parse(localStorage.getItem(STORE)||'{}')}}catch(e){}
+try{voiceOn=localStorage.getItem(VOICE)==='1'}catch(e){}
+function save(){try{localStorage.setItem(STORE,JSON.stringify(data))}catch(e){}}
+function say(text,force=false){if(!('speechSynthesis'in window)||(!voiceOn&&!force))return;try{speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(text);u.lang='en-IN';u.rate=.88;u.pitch=1.05;u.volume=.72;const vs=speechSynthesis.getVoices();u.voice=vs.find(v=>v.lang==='en-IN')||vs.find(v=>v.lang.startsWith('en'))||null;speechSynthesis.speak(u)}catch(e){}}
+function toast(t){$('toast').textContent=t;$('toast').classList.remove('hidden');setTimeout(()=>$('toast').classList.add('hidden'),2000)}
+function k(a,t,l){return a+':'+t+':'+l}function rec(a=age,t=topic,l=level){return data.completed[k(a,t,l)]||null}
+function passed(){return Object.values(data.completed).filter(x=>x&&x.passed).length}
+function best(){return Math.max(0,...Object.values(data.completed).map(x=>x?.score||0))}
+function stats(){$('totalStars').textContent=data.stars||0;$('levelsDone').textContent=passed();$('bestScore').textContent=passed()?best():'—';$('pStars').textContent=data.stars||0;$('pLevels').textContent=passed();$('pBest').textContent=passed()?best():'—';renderBadges()}
+function page(p){['home','ages','topic','quiz','progress'].forEach(x=>$(x+'Page').classList.toggle('hidden',x!==p));document.querySelectorAll('#nav button').forEach(b=>b.classList.toggle('active',b.dataset.page===p||(p==='topic'&&b.dataset.topic===topic)));$('breadcrumb').textContent=({home:'Home',ages:'My age',topic:'Age '+age+' · '+(TOPICS.find(t=>t.id===topic)?.name||''),quiz:'Level '+level,progress:'My progress'})[p]||'MathStars';$('app').classList.remove('menu-open')}
+function renderAges(id,short=false){const el=$(id);el.innerHTML='';for(let a=3;a<=13;a++){if(short&&a>8&&a!==13)continue;const b=document.createElement('button');b.className='age-card'+(a===age?' selected':'');b.innerHTML='<span class="age-emoji">'+AGE_ICONS[a-3]+'</span><strong>Age '+a+'</strong><small>'+AGE_DESC[a-3]+'</small>';b.onclick=()=>{age=a;renderAges('homeAges',true);renderAges('allAgeGrid');renderTopics('homeTopics');openTopic(topic)};el.appendChild(b)}}
+function renderTopics(id){const el=$(id);el.innerHTML='';TOPICS.forEach(t=>{const b=document.createElement('button');b.className='topic-card';b.innerHTML='<span class="age-emoji">'+t.icon+'</span><strong>'+t.name+'</strong><small>'+t.desc+'</small>';b.onclick=()=>openTopic(t.id);el.appendChild(b)})}
+function unlocked(l){return l===1||!!(rec(age,topic,l-1)?.passed)}
+function renderLevels(){const g=$('levelGrid');g.innerHTML='';for(let l=1;l<=20;l++){const r=rec(age,topic,l),u=unlocked(l),b=document.createElement('button');b.className='level '+(r?.passed?'done':u?'current':'locked');b.disabled=!u;b.innerHTML='<strong>Level '+l+'</strong><span>'+(r?.passed?'⭐':u?'○':'🔒')+'</span><small>'+(r?r.score+'/10':u?'Ready':'Locked')+'</small>';b.onclick=()=>startQuiz(l);g.appendChild(b)}}
+function openTopic(t){topic=t;const meta=TOPICS.find(x=>x.id===t)||TOPICS[1];$('topicHeading').textContent=meta.icon+' '+meta.name;$('topicSub').textContent='Age '+age+' · 20 levels';$('levelsHeading').textContent=meta.name+' levels';renderTopics('topicChooser');renderLevels();renderAges('homeAges',true);renderAges('allAgeGrid');renderTopics('homeTopics');$('homeTopicSub').textContent='Choose what you want to practise.';stats();page('topic')}
+function rand(n){return Math.floor(Math.random()*n)}function pick(a){return a[rand(a.length)]}
+function makeQ(a,t,l){let x,y,z,p,vis='',hint,spoken,ans;const cap=a<=4?5+l:a<=6?10+l*2:a<=9?20+l*5:50+l*15;const simple=a<=4,early=a<=6,mid=a<=9;
+ if(t==='counting'){if(a<=4){ans=rand(Math.min(5+l,10))+1;vis='⭐ '.repeat(Math.min(ans,10));p='How many stars?';hint='Count each star slowly.';spoken='Count the stars. How many are there?'}else{x=rand(Math.min(cap,100))+1;if(rand(2)){ans=x+1;p='What comes after '+x+'?';hint='Count one more.'}else{ans=Math.max(0,x-1);p='What comes before '+x+'?';hint='Count one back.'}spoken=p}}
+ else if(t==='addition'||(t==='mixed'&&rand(4)===0)){x=rand(Math.min(cap,999))+1;y=rand(Math.min(cap,999))+1;ans=x+y;p=x+' + '+y+' = ?';hint='Start with '+x+' and count '+y+' more.';spoken='What is '+x+' plus '+y+'?'}
+ else if(t==='subtraction'||(t==='mixed'&&rand(3)===0)){x=rand(Math.min(cap,999))+1;y=rand(x+1);ans=x-y;p=x+' − '+y+' = ?';hint='Take '+y+' away from '+x+'.';spoken='What is '+x+' minus '+y+'?'}
+ else if(t==='multiplication'||t==='mixed'){const m=early?5:mid?12:Math.min(20,5+l);x=rand(m)+1;y=rand(m)+1;ans=x*y;p=x+' × '+y+' = ?';hint='Think of '+x+' groups of '+y+'.';spoken='What is '+x+' times '+y+'?'}
+ else if(t==='division'){const m=early?5:mid?12:Math.min(20,5+l);y=rand(m)+1;ans=rand(m)+1;x=y*ans;p=x+' ÷ '+y+' = ?';hint='Share '+x+' into '+y+' equal groups.';spoken='What is '+x+' divided by '+y+'?'}
+ else if(t==='fractions'){const fs=['1/2','1/3','1/4','2/3','3/4'];ans=pick(a<=6?['1/2']:a<=9?fs:['0.5','0.25','0.75','25%','50%','75%']);p=a<=6?'Which fraction is one half?':a<=9?'Choose a fraction: '+ans:'Choose an equal value: '+ans;hint='Think about equal parts of one whole.';spoken=p}
+ else{x=rand(10)+1;y=rand(10)+1;ans=x+y;p=x+' + '+y+' = ?';hint='Add both numbers.';spoken='What is '+x+' plus '+y+'?'}
+ return {p,ans:String(ans),vis,hint,spoken}}
+function createQuestions(){const out=[];for(let i=0;i<10;i++){let q=makeQ(age,topic,level),n=0;while(out.some(v=>v.p===q.p)&&n++<10)q=makeQ(age,topic,level);out.push(q)}return out}
+function opts(q){const correct=q.ans,arr=[correct];let tries=0;while(arr.length<4&&tries++<100){let v;if(!isNaN(Number(correct))){const n=Number(correct),d=Math.max(3,Math.ceil(Math.abs(n)*.2));v=String(Math.max(0,n+rand(d*2+1)-d));if(v===correct)continue}else v=pick(['1/2','1/3','1/4','2/3','3/4','0.25','0.5','0.75','25%','50%','75%']);if(!arr.includes(v))arr.push(v)}while(arr.length<4)arr.push(String(rand(20)));for(let i=arr.length-1;i>0;i--){const j=rand(i+1);[arr[i],arr[j]]=[arr[j],arr[i]]}return arr}
+function startQuiz(l){level=l;quizAge=age;quizTopic=topic;questions=createQuestions();qi=0;score=0;$('quizPanel').classList.remove('hidden');$('resultPanel').classList.add('hidden');page('quiz');showQ();say('Let us try a few maths questions. Take your time.')}
+function showQ(){if(qi>=10){finish();return}answered=false;const q=questions[qi];$('quizLabel').textContent='LEVEL '+level+' · QUESTION '+(qi+1);$('questionCount').textContent=(qi+1)+' / 10';$('progressFill').style.width=(qi*10)+'%';$('visualCount').textContent=q.vis;$('questionText').textContent=q.p;$('hintLine').textContent='Choose one answer.';$('feedback').textContent='';$('nextArea').classList.add('hidden');$('hintBtn').disabled=false;const el=$('answers');el.innerHTML='';opts(q).forEach(v=>{const b=document.createElement('button');b.className='answer';b.textContent=v;b.onclick=()=>answer(b,v);el.appendChild(b)});if(voiceOn)say(q.spoken)}
+function answer(btn,val){if(answered)return;answered=true;const q=questions[qi],ok=String(val)===q.ans;if(ok)score++;[...$('answers').children].forEach(b=>{b.disabled=true;if(b.textContent===q.ans)b.classList.add('correct')});if(!ok)btn.classList.add('wrong');const msg=ok?pick(['Well done!','That is right!','Nice thinking!']):pick(['Good try. Let us learn together.','That is okay. Keep practising.','Nice effort. The right answer is '+q.ans+'.']);$('feedback').textContent=ok?msg:msg+' Answer: '+q.ans;$('feedback').style.color=ok?'var(--green)':'#9b5369';$('nextArea').classList.remove('hidden');$('nextQuestion').textContent=qi===9?'See my score':'Next question →';$('progressFill').style.width=((qi+1)*10)+'%';say(ok?msg:msg)}
+function finish(){const key=k(quizAge,quizTopic,level),old=data.completed[key],passedNow=score>=8,stars=score===10?3:score>=8?2:score>=5?1:0,earned=Math.max(0,stars-(old?.stars||0));data.completed[key]={score:Math.max(score,old?.score||0),passed:!!(passedNow||old?.passed),stars:Math.max(stars,old?.stars||0)};data.stars=(data.stars||0)+earned;save();stats();renderLevels();$('quizPanel').classList.add('hidden');$('resultPanel').classList.remove('hidden');$('resultEmoji').textContent=score===10?'🏆':passedNow?'🌟':score>=5?'🌱':'💜';$('resultTitle').textContent=score===10?'Perfect score!':passedNow?'Level passed!':'Good practice!';$('resultText').textContent='You got '+score+' out of 10. You earned '+earned+' new stars. '+(passedNow?'The next level is ready when you are.':'Try again whenever you feel ready. Get 8 out of 10 to pass.');$('continueBtn').textContent=passedNow&&level<20?'Next level →':'Choose a game';$('continueBtn').onclick=()=>passedNow&&level<20?startQuiz(level+1):openTopic(quizTopic);say(score===10?'Perfect score. Well done!':passedNow?'Well done. You passed this level.':'Good practice. You can try this level again whenever you are ready.')}
+function renderBadges(){const el=$('badges');if(!el)return;const list=[['⭐','First star',(data.stars||0)>=1],['📘','First level',passed()>=1],['🏅','Five levels',passed()>=5],['🏆','Perfect score',best()===10],['🌟','Ten levels',passed()>=10],['💜','Star learner',(data.stars||0)>=25]];el.innerHTML='';list.forEach(([i,n,ok])=>{const d=document.createElement('div');d.className='badge-card'+(ok?'':' locked-badge');d.innerHTML='<span class="age-emoji">'+i+'</span><strong>'+n+'</strong><small>'+(ok?'Earned':'Keep learning')+'</small>';el.appendChild(d)})}
+$('nav').onclick=e=>{const b=e.target.closest('button');if(!b)return;if(b.dataset.page){if(b.dataset.page==='ages'){page('ages');renderAges('allAgeGrid')}else{page(b.dataset.page);if(b.dataset.page==='progress')stats()}}else if(b.dataset.topic)openTopic(b.dataset.topic)};
+$('startAdventure').onclick=()=>{openTopic(topic);say('Choose a maths game to begin.',true)};$('allAges').onclick=()=>{page('ages');renderAges('allAgeGrid')};$('backHome').onclick=()=>page('home');$('exitQuiz').onclick=()=>openTopic(quizTopic);
+$('repeatQuestion').onclick=()=>{if(questions[qi])say(questions[qi].spoken,true)};$('hintBtn').onclick=()=>{if(!questions[qi])return;$('hintLine').textContent='💡 '+questions[qi].hint;say(questions[qi].hint,true);$('hintBtn').disabled=true};
+$('nextQuestion').onclick=()=>{qi++;showQ()};$('retryBtn').onclick=()=>startQuiz(level);$('resultLevels').onclick=()=>openTopic(quizTopic);$('menuBtn').onclick=()=>$('app').classList.toggle('menu-open');
+$('voiceToggle').onclick=()=>{voiceOn=!voiceOn;try{localStorage.setItem(VOICE,voiceOn?'1':'0')}catch(e){}$('voiceToggle').textContent=voiceOn?'🔊 Voice on':'🔇 Voice off';$('voiceToggle').setAttribute('aria-pressed',String(voiceOn));if(!voiceOn&&'speechSynthesis'in window)speechSynthesis.cancel();else say('Voice is on. Take your time.',true)};
+$('resetProgress').onclick=()=>{if(confirm('Reset saved stars and levels on this device?')){data={stars:0,completed:{}};save();stats();openTopic(topic);toast('Progress reset.')}};document.addEventListener('click',e=>{if($('app').classList.contains('menu-open')&&!e.target.closest('aside')&&!e.target.closest('#menuBtn'))$('app').classList.remove('menu-open')});
+$('voiceToggle').textContent=voiceOn?'🔊 Voice on':'🔇 Voice off';$('voiceToggle').setAttribute('aria-pressed',String(voiceOn));renderAges('homeAges',true);renderAges('allAgeGrid');renderTopics('homeTopics');renderTopics('topicChooser');stats();openTopic(topic);page('home');
+})();
 </script>
-</body>
-</html>
+</body></html>
