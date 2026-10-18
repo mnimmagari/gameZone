@@ -2,5 +2,8 @@
      "name": "gamezone",
      "main": "worker.js",
      "compatibility_date": "2025-01-01",
-     "preview_urls": false
+     "preview_urls": false,
+"vars": {
+    "GOOGLE_TTS_API_KEY": "AIzaSyD-h6pnWsCXwZKYyaG0pBCVki4HpzyZ6eI"
+  }
    }
