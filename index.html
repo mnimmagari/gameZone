@@ -60,7 +60,7 @@ let data={stars:0,completed:{}},age=5,topic='addition',level=1,questions=[],qi=0
 try{data={...data,...JSON.parse(localStorage.getItem(STORE)||'{}')}}catch(e){}
 try{voiceOn=localStorage.getItem(VOICE)==='1'}catch(e){}
 function save(){try{localStorage.setItem(STORE,JSON.stringify(data))}catch(e){}}
-function say(text,force=false){if(!('speechSynthesis'in window)||(!voiceOn&&!force))return;try{speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(text);u.lang='en-IN';u.rate=.88;u.pitch=1.05;u.volume=.72;const vs=speechSynthesis.getVoices();u.voice=vs.find(v=>v.lang==='en-IN')||vs.find(v=>v.lang.startsWith('en'))||null;speechSynthesis.speak(u)}catch(e){}}
+function say(text,force=false){if(!('speechSynthesis'in window)||(!voiceOn&&!force))return;try{speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(text);u.lang='en-IN';u.rate=.78;u.pitch=1.12;u.volume=.58;const vs=speechSynthesis.getVoices().filter(v=>/^en(-|$)/i.test(v.lang));const named=v=>/female|zira|jenny|aria|ava|samantha|sonia|libby|google.*female|natural/i.test(v.name);u.voice=vs.find(v=>v.lang.toLowerCase()==='en-in'&&named(v))||vs.find(v=>v.lang.toLowerCase()==='en-in')||vs.find(named)||vs.find(v=>v.lang.toLowerCase().startsWith('en-gb'))||vs.find(v=>v.lang.toLowerCase().startsWith('en-us'))||vs[0]||null;speechSynthesis.speak(u)}catch(e){}}
 function toast(t){$('toast').textContent=t;$('toast').classList.remove('hidden');setTimeout(()=>$('toast').classList.add('hidden'),2000)}
 function k(a,t,l){return a+':'+t+':'+l}function rec(a=age,t=topic,l=level){return data.completed[k(a,t,l)]||null}
 function passed(){return Object.values(data.completed).filter(x=>x&&x.passed).length}
