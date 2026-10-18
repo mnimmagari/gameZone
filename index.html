@@ -61,7 +61,41 @@ let data={stars:0,completed:{}},age=5,topic='addition',level=1,questions=[],qi=0
 try{data={...data,...JSON.parse(localStorage.getItem(STORE)||'{}')}}catch(e){}
 try{voiceOn=localStorage.getItem(VOICE)==='1'}catch(e){}
 function save(){try{localStorage.setItem(STORE,JSON.stringify(data))}catch(e){}}
-function say(text,force=false,onDone=null){if(!('speechSynthesis'in window)||(!voiceOn&&!force)){if(typeof onDone==='function')onDone();return}try{speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(text);u.lang='en-IN';u.rate=.9;u.pitch=1.78;u.volume=.9;const vs=speechSynthesis.getVoices().filter(v=>/^en(-|$)/i.test(v.lang));const girlFriendly=v=>/jenny|aria|ava|samantha|sonia|libby|karen|moira|tessa|susan|zira|female|child|girl/i.test(v.name);const indianGirls=vs.filter(v=>v.lang.toLowerCase()==='en-in'&&girlFriendly(v));const englishGirls=vs.filter(girlFriendly);const preferred=indianGirls[0]||englishGirls.find(v=>/en-(us|gb|au|in)/i.test(v.lang))||vs.find(v=>v.lang.toLowerCase()==='en-in')||vs.find(v=>v.lang.toLowerCase().startsWith('en-us'))||vs.find(v=>v.lang.toLowerCase().startsWith('en-gb'))||vs[0]||null;if(preferred)u.voice=preferred;if(typeof onDone==='function'){let called=false;const done=()=>{if(!called){called=true;onDone()}};u.onend=done;u.onerror=done}speechSynthesis.speak(u)}catch(e){if(typeof onDone==='function')onDone()}}
+// Paste your deployed Cloudflare Worker URL here after following GOOGLE_TTS_SETUP.md.
+const GOOGLE_TTS_WORKER_URL='';
+let cloudAudio=null,cloudAudioUrl=null,cloudRequestId=0;
+function say(text,force=false,onDone=null){
+ if(!voiceOn&&!force){if(typeof onDone==='function')onDone();return}
+ const requestId=++cloudRequestId;
+ const finish=()=>{if(requestId===cloudRequestId&&typeof onDone==='function')onDone()};
+ const browserFallback=()=>{
+  if(requestId!==cloudRequestId)return;
+  if(!('speechSynthesis'in window)){finish();return}
+  try{
+   speechSynthesis.cancel();
+   const u=new SpeechSynthesisUtterance(text);u.lang='en-IN';u.rate=.9;u.pitch=1.12;u.volume=.9;
+   const vs=speechSynthesis.getVoices().filter(v=>/^en(-|$)/i.test(v.lang));
+   const preferred=vs.find(v=>v.lang.toLowerCase()==='en-in')||vs.find(v=>v.lang.toLowerCase().startsWith('en-us'))||vs[0]||null;
+   if(preferred)u.voice=preferred;
+   let called=false;const done=()=>{if(!called){called=true;finish()}};
+   u.onend=done;u.onerror=done;speechSynthesis.speak(u);
+  }catch(e){finish()}
+ };
+ if(!GOOGLE_TTS_WORKER_URL.trim()){browserFallback();return}
+ if('speechSynthesis'in window)speechSynthesis.cancel();
+ if(cloudAudio){cloudAudio.pause();cloudAudio=null}
+ if(cloudAudioUrl){URL.revokeObjectURL(cloudAudioUrl);cloudAudioUrl=null}
+ fetch(GOOGLE_TTS_WORKER_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({text})})
+  .then(response=>{if(!response.ok)throw new Error('Google TTS unavailable');return response.blob()})
+  .then(blob=>{
+   if(requestId!==cloudRequestId)return;
+   cloudAudioUrl=URL.createObjectURL(blob);cloudAudio=new Audio(cloudAudioUrl);
+   cloudAudio.onended=()=>{if(requestId===cloudRequestId){if(cloudAudioUrl)URL.revokeObjectURL(cloudAudioUrl);cloudAudioUrl=null;cloudAudio=null;finish()}};
+   cloudAudio.onerror=()=>{if(requestId===cloudRequestId){cloudAudio=null;browserFallback()}};
+   return cloudAudio.play().catch(()=>browserFallback());
+  })
+  .catch(()=>browserFallback());
+}
 function toast(t){$('toast').textContent=t;$('toast').classList.remove('hidden');setTimeout(()=>$('toast').classList.add('hidden'),2000)}
 function k(a,t,l){return a+':'+t+':'+l}function rec(a=age,t=topic,l=level){return data.completed[k(a,t,l)]||null}
 function passed(){return Object.values(data.completed).filter(x=>x&&x.passed).length}
