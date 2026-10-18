@@ -1,5 +1,5 @@
 {
   "name": "gamezone",
-  "main": "index.html",
+  "main": "cloudflare-worker-tts.js",
   "compatibility_date": "2025-01-01"
 }
