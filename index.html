@@ -62,7 +62,7 @@ try{data={...data,...JSON.parse(localStorage.getItem(STORE)||'{}')}}catch(e){}
 try{voiceOn=localStorage.getItem(VOICE)==='1'}catch(e){}
 function save(){try{localStorage.setItem(STORE,JSON.stringify(data))}catch(e){}}
 // Paste your deployed Cloudflare Worker URL here after following GOOGLE_TTS_SETUP.md.
-const GOOGLE_TTS_WORKER_URL='https://3ac06657-gamezone.madhumithareddy185.workers.dev/';
+const GOOGLE_TTS_WORKER_URL='https://gamezone.madhumithareddy185.workers.dev/';
 let cloudAudio=null,cloudAudioUrl=null,cloudRequestId=0;
 function say(text,force=false,onDone=null){
  if(!voiceOn&&!force){if(typeof onDone==='function')onDone();return}
