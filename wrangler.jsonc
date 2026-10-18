@@ -1,5 +1,6 @@
-{
-  "name": "gamezone",
-  "main": "cloudflare-worker-tts.js",
-  "compatibility_date": "2025-01-01"
-}
+ {
+     "name": "gamezone",
+     "main": "worker.js",
+     "compatibility_date": "2025-01-01",
+     "preview_urls": false
+   }
