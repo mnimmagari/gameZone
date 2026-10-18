@@ -85,7 +85,7 @@ function say(text,force=false,onDone=null){
  if('speechSynthesis'in window)speechSynthesis.cancel();
  if(cloudAudio){cloudAudio.pause();cloudAudio=null}
  if(cloudAudioUrl){URL.revokeObjectURL(cloudAudioUrl);cloudAudioUrl=null}
- fetch(GOOGLE_TTS_WORKER_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({text})})
+ fetch(GOOGLE_TTS_WORKER_URL,{method:'POST',headers:{'Content-Type':'text/plain;charset=UTF-8'},body:JSON.stringify({text})})
   .then(response=>{if(!response.ok)throw new Error('Google TTS unavailable');return response.blob()})
   .then(blob=>{
    if(requestId!==cloudRequestId)return;
