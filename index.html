@@ -1,6 +1,7 @@
 <!doctype html>
 <html lang="en">
 <head>
+<link rel="icon" href="data:,">
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#f7f4ff">
@@ -85,7 +86,8 @@ function makeQ(a,t,l){let x,y,z,p,vis='',hint,spoken,ans;const cap=a<=4?5+l:a<=6
 function createQuestions(){const out=[];for(let i=0;i<10;i++){let q=makeQ(age,topic,level),n=0;while(out.some(v=>v.p===q.p)&&n++<10)q=makeQ(age,topic,level);out.push(q)}return out}
 function opts(q){const correct=q.ans,arr=[correct];let tries=0;while(arr.length<4&&tries++<100){let v;if(!isNaN(Number(correct))){const n=Number(correct),d=Math.max(3,Math.ceil(Math.abs(n)*.2));v=String(Math.max(0,n+rand(d*2+1)-d));if(v===correct)continue}else v=pick(['1/2','1/3','1/4','2/3','3/4','0.25','0.5','0.75','25%','50%','75%']);if(!arr.includes(v))arr.push(v)}while(arr.length<4)arr.push(String(rand(20)));for(let i=arr.length-1;i>0;i--){const j=rand(i+1);[arr[i],arr[j]]=[arr[j],arr[i]]}return arr}
 function startQuiz(l){level=l;quizAge=age;quizTopic=topic;questions=createQuestions();qi=0;score=0;$('quizPanel').classList.remove('hidden');$('resultPanel').classList.add('hidden');page('quiz');showQ();say('Ready, MathStar? Let’s have some maths fun! You can do it!')}
-function stopTimer(){if(timerInterval!==null){clearInterval(timerInterval);timerInterval=null}}\nfunction clearAnswerTimeout(){if(answerTimeout!==null){clearTimeout(answerTimeout);answerTimeout=null}}
+function stopTimer(){if(timerInterval!==null){clearInterval(timerInterval);timerInterval=null}}
+function clearAnswerTimeout(){if(answerTimeout!==null){clearTimeout(answerTimeout);answerTimeout=null}}
 function updateTimer(){const ring=$('timerRing');$('timerNumber').textContent=String(timeLeft);ring.style.setProperty('--timer-progress',(timeLeft/10*100)+'%');ring.classList.toggle('soon',!answered&&timeLeft<=3);ring.classList.toggle('paused',answered);ring.setAttribute('aria-label',answered?'Timer stopped':timeLeft+' seconds remaining')}
 function startTimer(){stopTimer();clearAnswerTimeout();timeLeft=10;updateTimer();timerInterval=setInterval(()=>{if(answered){stopTimer();return}timeLeft--;updateTimer();if(timeLeft<=0){stopTimer();timeExpired()}},1000)}
 function timeExpired(){if(answered)return;answered=true;const q=questions[qi];[...$('answers').children].forEach(b=>{b.disabled=true;if(b.textContent===q.ans)b.classList.add('correct')});$('feedback').textContent='Time’s up! The correct answer is '+q.ans+'.';$('feedback').style.color='var(--muted)';$('hintLine').textContent='Great try, MathStar! Let’s keep learning.';$('controlsNote').textContent='Correct answer: '+q.ans+' · Next question coming up…';if(voiceOn)say('Time is up, MathStar! The correct answer is '+q.ans+'. Great job for trying!');$('nextArea').classList.add('hidden');updateTimer();answerTimeout=setTimeout(()=>{answerTimeout=null;qi++;showQ()},3500)}
