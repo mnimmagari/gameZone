@@ -228,7 +228,10 @@ const GRADE_OPTIONS=[
  {id:'2',label:'Class 2',desc:'Operations & measures',icon:'🐯'},
  {id:'3',label:'Class 3',desc:'Numbers, shapes & data',icon:'🦄'},
  {id:'4',label:'Class 4',desc:'Larger numbers & fractions',icon:'🐬'},
- {id:'5',label:'Class 5',desc:'Operations & reasoning',icon:'🚀'}
+ {id:'5',label:'Class 5',desc:'Operations & reasoning',icon:'🚀'},
+ {id:'6',label:'Class 6',desc:'Integers, geometry & data',icon:'🧭'},
+ {id:'7',label:'Class 7',desc:'Expressions, decimals & angles',icon:'🧪'},
+ {id:'8',label:'Class 8',desc:'Algebra, powers & proportionality',icon:'🚀'}
 ];
 const EARLY_TOPICS=[
  [{id:'counting',name:'Notice & Match',icon:'🔎',desc:'Match objects and quantities',skill:'count'},
@@ -299,12 +302,45 @@ const PRIMARY_TOPICS={
  {id:'geometry',name:'Geometry & Spatial Sense',icon:'📐',desc:'Angles, shapes and views',skill:'shape'},
  {id:'measurement',name:'Measurement & Perimeter',icon:'📏',desc:'Units, perimeter and area ideas',skill:'measure'},
  {id:'data',name:'Data & Graphs',icon:'📊',desc:'Interpret tables and charts',skill:'data'},
- {id:'mixed',name:'Real-life Problem Solving',icon:'🌟',desc:'Reason across topics',skill:'word'}]
+ {id:'mixed',name:'Real-life Problem Solving',icon:'🌟',desc:'Reason across topics',skill:'word'}],
+ '6':[
+ {id:'counting',name:'Patterns & Number Play',icon:'🔢',desc:'Number patterns, integers and number properties',skill:'count'},
+ {id:'addition',name:'Operations with Integers',icon:'➕',desc:'Add and reason with positive and negative numbers',skill:'add'},
+ {id:'subtraction',name:'Integer Differences',icon:'➖',desc:'Subtract integers and interpret change',skill:'subtract'},
+ {id:'multiplication',name:'Prime Time & Factors',icon:'✖️',desc:'Factors, multiples and divisibility',skill:'multiply'},
+ {id:'division',name:'Fractions & Division',icon:'➗',desc:'Fractions and equal sharing',skill:'divide'},
+ {id:'fractions',name:'Fractions',icon:'🍕',desc:'Represent, compare and operate with fractions',skill:'fraction'},
+ {id:'geometry',name:'Lines, Angles & Constructions',icon:'📐',desc:'Classify angles and geometric figures',skill:'shape'},
+ {id:'measurement',name:'Perimeter & Area',icon:'📏',desc:'Measure boundaries and surfaces',skill:'measure'},
+ {id:'data',name:'Data Handling',icon:'📊',desc:'Tables, charts and interpreting data',skill:'data'},
+ {id:'mixed',name:'Mathematical Reasoning',icon:'🌟',desc:'Solve multi-step number and geometry problems',skill:'word'}],
+ '7':[
+ {id:'counting',name:'Large Numbers & Integers',icon:'🔢',desc:'Compare numbers and use place value',skill:'count'},
+ {id:'addition',name:'Arithmetic Expressions',icon:'➕',desc:'Evaluate expressions using operation order',skill:'add'},
+ {id:'subtraction',name:'Integers & Rational Numbers',icon:'➖',desc:'Calculate differences and compare values',skill:'subtract'},
+ {id:'multiplication',name:'Decimals & Operations',icon:'✖️',desc:'Multiply decimals and estimate results',skill:'multiply'},
+ {id:'division',name:'Fractions & Decimals',icon:'➗',desc:'Divide and convert representations',skill:'divide'},
+ {id:'fractions',name:'Working with Fractions',icon:'🍕',desc:'Compare and calculate with fractions',skill:'fraction'},
+ {id:'geometry',name:'Lines, Angles & Triangles',icon:'📐',desc:'Angle relationships and triangle properties',skill:'shape'},
+ {id:'measurement',name:'Geometric Measurement',icon:'📏',desc:'Perimeter and area reasoning',skill:'measure'},
+ {id:'data',name:'Data & Graphs',icon:'📊',desc:'Organise and interpret data',skill:'data'},
+ {id:'mixed',name:'Variables & Problem Solving',icon:'🌟',desc:'Use letter-numbers and reason across topics',skill:'word'}],
+ '8':[
+ {id:'counting',name:'Number Systems & Powers',icon:'🔢',desc:'Rational numbers, squares, cubes and exponents',skill:'count'},
+ {id:'addition',name:'Linear Equations',icon:'➕',desc:'Solve one-variable equations',skill:'add'},
+ {id:'subtraction',name:'Comparing Quantities',icon:'➖',desc:'Percentages, discounts and changes',skill:'subtract'},
+ {id:'multiplication',name:'Algebraic Expressions',icon:'✖️',desc:'Expand, simplify and use identities',skill:'multiply'},
+ {id:'division',name:'Factorisation',icon:'➗',desc:'Factor expressions and numbers',skill:'divide'},
+ {id:'fractions',name:'Fractions & Proportional Reasoning',icon:'🍕',desc:'Ratios, rates and proportional relationships',skill:'fraction'},
+ {id:'geometry',name:'Quadrilaterals & Pythagoras',icon:'📐',desc:'Properties, angles and right-triangle reasoning',skill:'shape'},
+ {id:'measurement',name:'Mensuration: Area & Volume',icon:'📏',desc:'Find areas, perimeters and volumes',skill:'measure'},
+ {id:'data',name:'Data Handling & Graphs',icon:'📊',desc:'Interpret data and coordinate graphs',skill:'data'},
+ {id:'mixed',name:'Multi-step Problem Solving',icon:'🌟',desc:'Connect algebra, geometry and proportional thinking',skill:'word'}]
 };
 const SET_NAMES=['Warm-up','Picture clues','Number detectives','Story time','Find the missing part','Compare & order','Everyday maths','Think another way','Pattern challenge','Quick reasoning','Mixed practice','Choose a strategy','Visual puzzle','Explain the relationship','Challenge round','Real-life mission','Spot the mistake','Two-step thinking','Brain teaser','Star challenge'];
 function gradeTopics(){if(['IK1','IK2','IK3','LKG','UKG'].includes(grade))return EARLY_TOPICS[GRADE_OPTIONS.findIndex(g=>g.id===grade)];return PRIMARY_TOPICS[grade]||PRIMARY_TOPICS['1']}
 function topicMeta(t=topic){return gradeTopics().find(x=>x.id===t)||gradeTopics()[0]}
-function gradeBand(){return ({IK1:0,IK2:1,IK3:2,LKG:3,UKG:4,'1':5,'2':6,'3':7,'4':8,'5':9})[grade]||4}
+function gradeBand(){return ({IK1:0,IK2:1,IK3:2,LKG:3,UKG:4,'1':5,'2':6,'3':7,'4':8,'5':9,'6':10,'7':11,'8':12})[grade]??4}
 function curriculumName(){return curriculum==='SCERT'?'Telangana SCERT':curriculum==='NCERT'?'NCERT / NCF':curriculum==='CBSE'?'CBSE-aligned':'ICSE-aligned'}
 function renderGrades(id){const el=$(id);if(!el)return;el.innerHTML='';GRADE_OPTIONS.forEach(g=>{const b=document.createElement('button');b.className='age-card'+(g.id===grade?' selected':'');b.innerHTML='<span class="age-emoji">'+g.icon+'</span><strong>'+g.label+'</strong><small>'+g.desc+'</small>';b.onclick=()=>{grade=g.id;age=gradeBand()<=4?3+gradeBand():Math.min(13,gradeBand()-1);if(!gradeTopics().some(t=>t.id===topic))topic=gradeTopics()[0].id;renderGrades('gradeGrid');renderGrades('homeGrades');renderTopics('homeTopics');openTopic(topic)};el.appendChild(b)})}
 function setCurriculum(v){curriculum=v;const el=$('curriculumSelect');if(el)el.value=curriculum;openTopic(topic)}
@@ -347,7 +383,7 @@ function makeQ(a,t,l){let x,y,z,p,vis='',hint,spoken,ans;const cap=a<=4?Math.min
 function curriculumQ(i){
  const band=gradeBand(),meta=topicMeta(),skill=meta.skill||topic;
  const early=band<=4,lo=band<=2?1:band===3?1:band===4?2:band===5?5:band===6?10:band===7?20:band===8?50:100;
- const hi=band<=2?5:band===3?10:band===4?20:band===5?20:band===6?100:band===7?999:band===8?9999:99999;
+ const hi=band<=2?5:band===3?10:band===4?20:band===5?20:band===6?100:band===7?999:band===8?9999:band===9?99999:band===10?999999:band===11?9999999:99999999;
  const rnd=(a,b)=>a+rand(Math.max(1,b-a+1)),shapes=['●','■','▲','◆'],shapeNames=['circle','square','triangle','diamond'];
  let x,y,ans,p,vis='',hint,spoken;
  const setMode=(level+i)%6;
