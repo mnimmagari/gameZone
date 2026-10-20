@@ -91,6 +91,27 @@
 @keyframes cometEnter{0%{opacity:0;translate:80px -50px;scale:.2}100%{opacity:1;scale:1}}
 @media(prefers-reduced-motion:reduce){.quiz-panel[id="quizPanel"] .question,.quiz-panel[id="quizPanel"] .answer{animation:none!important}}
 \n@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+
+/* Fraction questions: clean layout, circular fraction tiles, compact corner timer */
+.quiz-panel{overflow:visible}
+.quiz-top{position:relative;justify-content:flex-start;min-height:34px}
+.timer-ring{position:absolute;right:8px;top:0;margin:0;width:66px;height:66px;z-index:3;box-shadow:0 4px 12px #4e3a9910}
+.timer-ring:before{inset:5px}
+.timer-ring strong{font-size:22px}
+.timer-ring small{font-size:8px;letter-spacing:.7px}
+.question{font-size:clamp(27px,4.1vw,42px);line-height:1.18;letter-spacing:-.7px;margin:10px auto 8px;max-width:900px}
+.visual{font-size:clamp(24px,3.3vw,34px);line-height:1.3;min-height:0;margin:8px auto 12px}
+.answers{max-width:560px;gap:12px}
+.answer{min-height:64px;padding:10px 12px;font-size:clamp(23px,2.7vw,30px);border-radius:17px}
+.fraction-visual{display:flex;justify-content:center;gap:10px;align-items:center;flex-wrap:wrap;margin:10px auto 12px}
+.fraction-whole{display:flex;gap:7px;justify-content:center;align-items:center;flex-wrap:wrap;max-width:100%}
+.fraction-piece{width:clamp(36px,5vw,54px);height:clamp(36px,5vw,54px);border-radius:50%;border:2px solid #cfc6ef;background:#fff;box-shadow:inset 0 -3px 0 #00000008;display:grid;place-items:center}
+.fraction-piece.shaded{background:linear-gradient(145deg,#c45cff,#8e39ed);border-color:#8e39ed;box-shadow:inset 0 -4px 0 #5f20b4}
+.fraction-answer{display:inline-flex;flex-direction:column;align-items:center;justify-content:center;min-width:62px;line-height:1}
+.fraction-answer .fraction-line{width:100%;height:2px;background:currentColor;margin:4px 0}
+.answer.fraction-option{display:flex;align-items:center;justify-content:center}
+@media(max-width:600px){.quiz-panel{height:auto;min-height:540px}.timer-ring{width:58px;height:58px;right:2px}.timer-ring strong{font-size:19px}.question{font-size:clamp(25px,6vw,35px);padding:0 3px}.answer{min-height:58px}.fraction-piece{width:36px;height:36px}}
+@media(prefers-reduced-motion:reduce){.fraction-piece{transition:none}}
 </style>
 </head>
 <body>
@@ -200,10 +221,10 @@ function makeQ(a,t,l){let x,y,z,p,vis='',hint,spoken,ans;const cap=a<=4?Math.min
  if(a<=6){
    const den=pick([2,3,4,5]),num=rand(den-1)+1;ans=num+'/'+den;
    const parts=Array.from({length:den},(_,i)=>i<num?'🟪':'⬜').join(' ');
-   vis=parts;p='The whole is split into '+den+' equal parts. '+num+' part'+(num===1?' is':'s are')+' shaded. What fraction is shaded?';
+   vis='<div class="fraction-visual" role="img" aria-label="'+num+' of '+den+' equal circular parts shaded"><div class="fraction-whole">'+Array.from({length:den},(_,i)=>'<span class="fraction-piece '+(i<num?'shaded':'')+'"></span>').join('')+'</div></div>';p='Look at the circles. What fraction is shaded?';
    hint='The bottom number tells how many equal parts there are. The top number tells how many are shaded.';spoken=p;
-   const distract=[(den-num)+'/'+den,'1/'+den,den+'/'+den,'1/'+(den+1)].filter(v=>v!==ans);
-   return {p,ans,vis,hint,spoken,options:[ans,...distract].slice(0,4)};
+   const distract=[(den-num)+'/'+den,'1/'+(den+1),den+'/'+den,Math.max(1,num-1)+'/'+den].filter(v=>v!==ans);
+   return {p,ans,vis,hint,spoken,options:[...new Set([ans,...distract])].slice(0,4)};
  }else if(a<=9){
    ans=frac;p='Which fraction represents '+f.n+' out of '+f.d+' equal parts?';vis='🟪 '.repeat(f.n)+'⬜ '.repeat(f.d-f.n);hint='A fraction shows part of a whole. The top number counts the parts; the bottom number counts all equal parts.';spoken=p;
    const pool=base.map(v=>v.n+'/'+v.d).filter(v=>v!==ans);return {p,ans,vis,hint,spoken,options:[ans,...pool.sort(()=>Math.random()-.5).slice(0,3)]};
