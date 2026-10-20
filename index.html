@@ -150,11 +150,11 @@
  <section id="homePage">
   <div class="hero"><div class="hero-copy"><div class="eyebrow">A little practice goes a long way</div><h2>Hello, MathStar! ⭐</h2><p>Choose your age, pick a game, and learn at your own pace.</p><button class="primary" id="startAdventure">Choose a game →</button></div><div class="mascot" aria-hidden="true">🌟</div></div>
   <div class="stats"><div class="stat"><div class="stat-ico">⭐</div><div><strong id="totalStars">0</strong><small>Stars earned</small></div></div><div class="stat"><div class="stat-ico">📘</div><div><strong id="levelsDone">0</strong><small>Levels passed</small></div></div><div class="stat"><div class="stat-ico">🎯</div><div><strong id="bestScore">—</strong><small>Best score / 10</small></div></div></div>
-  <div class="section-head"><div><h3>Choose your age</h3><p>We’ll match the questions to you.</p></div><button class="secondary" id="allAges">All ages</button></div><div class="age-grid" id="homeAges"></div>
+  <div class="section-head"><div><h3>Choose your class</h3><p>Pick your learning stage for chapter-wise practice.</p></div></div><div class="age-grid" id="homeGrades"></div><div class="section-head"><div><h3>Curriculum</h3><p>Classes 1–5: select your school alignment. Early years use foundational learning goals.</p></div><select id="curriculumSelect" aria-label="Curriculum"><option value="SCERT">Telangana SCERT</option><option value="NCERT">NCERT / NCF</option><option value="CBSE">CBSE-aligned</option><option value="ICSE">ICSE-aligned</option></select></div>
   <div class="section-head"><div><h3>Choose a game</h3><p id="homeTopicSub">Pick what you want to practise.</p></div></div><div class="topic-grid" id="homeTopics"></div>
  </section>
- <section id="agesPage" class="hidden"><div class="section-head"><div><h3>How old are you?</h3><p>Choose an age to see your games.</p></div></div><div class="age-grid" id="allAgeGrid"></div></section>
- <section id="topicPage" class="hidden"><div class="section-head"><div><h3 id="topicHeading">Choose a game</h3><p id="topicSub">Choose a level.</p></div><button class="secondary" id="backHome">← Home</button></div><div class="topic-grid" id="topicChooser"></div><div class="section-head"><div><h3 id="levelsHeading">Choose any question set</h3><p>All 20 sets are available. Your completed levels are saved on this device.</p></div><button class="primary" id="continueLevel">▶ Continue</button></div><div class="level-grid" id="levelGrid"></div></section>
+ <section id="agesPage" class="hidden"><div class="section-head"><div><h3>Choose your class</h3><p>Choose a foundational stage or primary class.</p></div></div><div class="age-grid" id="gradeGrid"></div></section>
+ <section id="topicPage" class="hidden"><div class="section-head"><div><h3 id="topicHeading">Choose a game</h3><p id="topicSub">Choose a chapter and question set.</p></div><button class="secondary" id="backHome">← Home</button></div><div class="topic-grid" id="topicChooser"></div><div class="section-head"><div><h3 id="levelsHeading">Choose any question set</h3><p id="setDescription">20 distinct practice sets. Progress is saved separately for each class, curriculum, chapter and set on this device.</p></div><button class="primary" id="continueLevel">▶ Continue</button></div><div class="level-grid" id="levelGrid"></div></section>
  <section id="quizPage" class="hidden"><div class="quiz-wrap"><div class="quiz-exit-row"><button class="secondary" id="exitQuiz">← Games</button></div><div class="quiz-panel" id="quizPanel"><div class="quiz-top"><div class="progress-track"><div class="progress-fill" id="progressFill"></div></div><strong id="questionCount">1/10</strong></div><div class="quiz-label hidden" id="quizLabel"></div><div class="timer-ring" id="timerRing" role="timer" aria-label="10 seconds remaining" style="--timer-progress:100%"><div class="timer-ring-inner"><strong id="timerNumber">10</strong><small>seconds</small></div></div><div class="visual" id="visualCount"></div><div class="question" id="questionText">2 + 1 = ?</div><div class="hintline" id="hintLine">Choose an answer.</div><div class="answers" id="answers"></div><div class="feedback" id="feedback" aria-live="polite"></div></div><div class="quiz-controls-panel" id="quizControls"><button class="secondary" id="repeatQuestion">🔊 Read question</button><button class="secondary" id="hintBtn">💡 Hint</button><div class="result-actions hidden" id="nextArea"><button class="primary" id="nextQuestion">Next →</button></div><div class="quiz-controls-note" id="controlsNote">You can take your time. Have fun, MathStar!</div></div>
   <div class="quiz-panel result hidden" id="resultPanel"><div class="result-emoji" id="resultEmoji">🌟</div><h3 id="resultTitle">Well done!</h3><p id="resultText"></p><div class="result-actions"><button class="primary" id="continueBtn">Next level →</button><button class="secondary" id="retryBtn">Try again</button><button class="secondary" id="resultLevels">All levels</button></div></div>
  </div></section>
@@ -168,7 +168,7 @@ const AGE_ICONS=['🧸','🐣','🦋','🐸','🦊','🐼','🐯','🦄','🐬',
 const AGE_DESC=['Counting','Numbers','Small sums','Add & take away','Number explorer','Multiply','Times tables','Maths puzzles','Fractions','Decimals','Big challenges'];
 const TOPICS=[{id:'counting',name:'Counting',icon:'🔢',desc:'Numbers and patterns'},{id:'addition',name:'Addition',icon:'➕',desc:'Put numbers together'},{id:'subtraction',name:'Subtraction',icon:'➖',desc:'Take numbers away'},{id:'multiplication',name:'Multiplication',icon:'✖️',desc:'Times tables'},{id:'division',name:'Division',icon:'➗',desc:'Share equally'},{id:'fractions',name:'Fractions',icon:'🍕',desc:'Parts of a whole'},{id:'mixed',name:'Mixed maths',icon:'🌈',desc:'A bit of everything'}];
 const STORE='mathstars-progress-v2',VOICE='mathstars-voice-v1';
-let data={stars:0,completed:{}},age=5,topic='addition',level=1,questions=[],qi=0,score=0,answered=false,voiceOn=false,quizTopic='addition',quizAge=5,timerInterval=null,timeLeft=10,answerTimeout=null,timerAudio=null;
+let data={stars:0,completed:{}},age=5,grade='UKG',curriculum='SCERT',topic='counting',level=1,questions=[],qi=0,score=0,answered=false,voiceOn=false,quizTopic='counting',quizAge=5,quizGrade='UKG',quizCurriculum='SCERT',timerInterval=null,timeLeft=10,answerTimeout=null,timerAudio=null;
 try{data={...data,...JSON.parse(localStorage.getItem(STORE)||'{}')}}catch(e){}
 try{voiceOn=localStorage.getItem(VOICE)==='1'}catch(e){}
 function save(){try{localStorage.setItem(STORE,JSON.stringify(data))}catch(e){}}
@@ -210,17 +210,110 @@ function say(text,force=false,onDone=null){
   .catch(()=>browserFallback());
 }
 function toast(t){$('toast').textContent=t;$('toast').classList.remove('hidden');setTimeout(()=>$('toast').classList.add('hidden'),2000)}
-function k(a,t,l){return a+':'+t+':'+l}function rec(a=age,t=topic,l=level){return data.completed[k(a,t,l)]||null}
+function k(a,t,l){return (grade||'UKG')+':'+(curriculum||'SCERT')+':'+t+':'+l}function rec(a=age,t=topic,l=level){return data.completed[k(a,t,l)]||null}
 function passed(){return Object.values(data.completed).filter(x=>x&&x.passed).length}
 function best(){return Math.max(0,...Object.values(data.completed).map(x=>x?.score||0))}
 function stats(){$('totalStars').textContent=data.stars||0;$('levelsDone').textContent=passed();$('bestScore').textContent=passed()?best():'—';$('pStars').textContent=data.stars||0;$('pLevels').textContent=passed();$('pBest').textContent=passed()?best():'—';renderBadges()}
 function page(p){['home','ages','topic','quiz','progress'].forEach(x=>$(x+'Page').classList.toggle('hidden',x!==p));document.querySelectorAll('#nav button').forEach(b=>b.classList.toggle('active',b.dataset.page===p||(p==='topic'&&b.dataset.topic===topic)));$('breadcrumb').textContent=({home:'Home',ages:'My age',topic:'Age '+age+' · '+(TOPICS.find(t=>t.id===topic)?.name||''),quiz:'Question time',progress:'My progress'})[p]||'MathStars';$('app').classList.remove('menu-open')}
-function renderAges(id,short=false){const el=$(id);el.innerHTML='';for(let a=3;a<=13;a++){if(short&&a>8&&a!==13)continue;const b=document.createElement('button');b.className='age-card'+(a===age?' selected':'');b.innerHTML='<span class="age-emoji">'+AGE_ICONS[a-3]+'</span><strong>Age '+a+'</strong><small>'+AGE_DESC[a-3]+'</small>';b.onclick=()=>{age=a;renderAges('homeAges',true);renderAges('allAgeGrid');renderTopics('homeTopics');openTopic(topic)};el.appendChild(b)}}
-function renderTopics(id){const el=$(id);el.innerHTML='';TOPICS.forEach(t=>{const b=document.createElement('button');b.className='topic-card';b.innerHTML='<span class="age-emoji">'+t.icon+'</span><strong>'+t.name+'</strong><small>'+t.desc+'</small>';b.onclick=()=>openTopic(t.id);el.appendChild(b)})}
+
+// Curriculum map: chapter titles are paraphrased from official curriculum/textbook structures;
+// quiz prompts are original practice items, not copied textbook exercises.
+const GRADE_OPTIONS=[
+ {id:'IK1',label:'IK1',desc:'Explore & notice',icon:'🧸'},
+ {id:'IK2',label:'IK2',desc:'Sort & compare',icon:'🐣'},
+ {id:'IK3',label:'IK3',desc:'Count & patterns',icon:'🦋'},
+ {id:'LKG',label:'LKG',desc:'Early number play',icon:'🐸'},
+ {id:'UKG',label:'UKG',desc:'Ready for Class 1',icon:'🦊'},
+ {id:'1',label:'Class 1',desc:'Numbers to 99',icon:'🐼'},
+ {id:'2',label:'Class 2',desc:'Operations & measures',icon:'🐯'},
+ {id:'3',label:'Class 3',desc:'Numbers, shapes & data',icon:'🦄'},
+ {id:'4',label:'Class 4',desc:'Larger numbers & fractions',icon:'🐬'},
+ {id:'5',label:'Class 5',desc:'Operations & reasoning',icon:'🚀'}
+];
+const EARLY_TOPICS=[
+ [{id:'counting',name:'Notice & Match',icon:'🔎',desc:'Match objects and quantities',skill:'count'},
+  {id:'shapes',name:'Shapes Around Me',icon:'🔺',desc:'Sort familiar shapes',skill:'shape'}],
+ [{id:'counting',name:'Sort & Count',icon:'🔢',desc:'Count small groups',skill:'count'},
+  {id:'patterns',name:'Patterns',icon:'🌈',desc:'Continue a pattern',skill:'pattern'},
+  {id:'shapes',name:'Shapes & Space',icon:'🔵',desc:'Recognise shapes and position',skill:'shape'}],
+ [{id:'counting',name:'Counting & Numerals',icon:'🔢',desc:'Count and recognise numerals',skill:'count'},
+  {id:'patterns',name:'Patterns & Order',icon:'🌈',desc:'Order and extend patterns',skill:'pattern'},
+  {id:'shapes',name:'Shapes & Position',icon:'🔺',desc:'Describe shapes and positions',skill:'shape'}],
+ [{id:'counting',name:'Numbers 1–10',icon:'🔢',desc:'Count objects and match numerals',skill:'count'},
+  {id:'shapes',name:'Shapes & Sorting',icon:'🔺',desc:'Group objects by shape',skill:'shape'},
+  {id:'patterns',name:'Patterns',icon:'🌈',desc:'Repeat and extend patterns',skill:'pattern'}],
+ [{id:'counting',name:'Numbers 1–20',icon:'🔢',desc:'Count, compare and order',skill:'count'},
+  {id:'addition',name:'Joining Groups',icon:'➕',desc:'Add with pictures and objects',skill:'add'},
+  {id:'subtraction',name:'Taking Away',icon:'➖',desc:'Subtract with pictures',skill:'subtract'},
+  {id:'shapes',name:'Shapes & Space',icon:'🔺',desc:'2D shapes and position',skill:'shape'},
+  {id:'patterns',name:'Patterns & Measure',icon:'🌈',desc:'Patterns, length and comparison',skill:'pattern'}]
+];
+const PRIMARY_TOPICS={
+ '1':[
+ {id:'counting',name:'Numbers & Place Value',icon:'🔢',desc:'Read, write, compare and order numbers',skill:'count'},
+ {id:'addition',name:'Addition Stories',icon:'➕',desc:'Join groups and add within 99',skill:'add'},
+ {id:'subtraction',name:'Subtraction Stories',icon:'➖',desc:'Take away and compare',skill:'subtract'},
+ {id:'shapes',name:'Shapes & Space',icon:'🔺',desc:'Recognise shapes and position',skill:'shape'},
+ {id:'measurement',name:'Length, Weight & Capacity',icon:'📏',desc:'Compare everyday measures',skill:'measure'},
+ {id:'patterns',name:'Patterns & Time',icon:'🕒',desc:'Sequences and daily events',skill:'pattern'},
+ {id:'mixed',name:'Everyday Maths',icon:'🌟',desc:'Use maths in little stories',skill:'word'}],
+ '2':[
+ {id:'counting',name:'Numbers & Place Value',icon:'🔢',desc:'Read and compare larger numbers',skill:'count'},
+ {id:'addition',name:'Addition with Regrouping',icon:'➕',desc:'Add using tens and ones',skill:'add'},
+ {id:'subtraction',name:'Subtraction & Borrowing',icon:'➖',desc:'Subtract and compare',skill:'subtract'},
+ {id:'multiplication',name:'Equal Groups & Tables',icon:'✖️',desc:'Repeated addition and tables',skill:'multiply'},
+ {id:'division',name:'Sharing & Grouping',icon:'➗',desc:'Share equally',skill:'divide'},
+ {id:'shapes',name:'Shapes & Patterns',icon:'🔷',desc:'Shape properties and patterns',skill:'shape'},
+ {id:'measurement',name:'Length, Mass, Capacity & Time',icon:'📏',desc:'Practical measurement',skill:'measure'},
+ {id:'money',name:'Money & Bills',icon:'🪙',desc:'Coins and simple totals',skill:'money'},
+ {id:'mixed',name:'Everyday Word Problems',icon:'🌟',desc:'Choose an operation',skill:'word'}],
+ '3':[
+ {id:'counting',name:'Numbers & Place Value',icon:'🔢',desc:'Read, compare and expand numbers',skill:'count'},
+ {id:'addition',name:'Addition',icon:'➕',desc:'Add larger numbers',skill:'add'},
+ {id:'subtraction',name:'Subtraction',icon:'➖',desc:'Subtract with regrouping',skill:'subtract'},
+ {id:'multiplication',name:'Multiplication',icon:'✖️',desc:'Tables and arrays',skill:'multiply'},
+ {id:'division',name:'Division',icon:'➗',desc:'Equal groups and remainders',skill:'divide'},
+ {id:'fractions',name:'Fractions',icon:'🍕',desc:'Equal parts and simple fractions',skill:'fraction'},
+ {id:'shapes',name:'Shapes & Geometry',icon:'🔷',desc:'Lines, turns and shapes',skill:'shape'},
+ {id:'measurement',name:'Measurement & Time',icon:'📏',desc:'Length, mass, capacity, time',skill:'measure'},
+ {id:'data',name:'Data & Tables',icon:'📊',desc:'Read simple charts and tables',skill:'data'},
+ {id:'mixed',name:'Problem Solving',icon:'🌟',desc:'Multi-step everyday maths',skill:'word'}],
+ '4':[
+ {id:'counting',name:'Large Numbers & Place Value',icon:'🔢',desc:'Expanded form and ordering',skill:'count'},
+ {id:'addition',name:'Addition & Estimation',icon:'➕',desc:'Add and estimate totals',skill:'add'},
+ {id:'subtraction',name:'Subtraction & Checking',icon:'➖',desc:'Subtract and check answers',skill:'subtract'},
+ {id:'multiplication',name:'Multiplication',icon:'✖️',desc:'Multi-digit products',skill:'multiply'},
+ {id:'division',name:'Division & Remainders',icon:'➗',desc:'Divide and interpret remainders',skill:'divide'},
+ {id:'fractions',name:'Fractions',icon:'🍕',desc:'Compare and make equivalent fractions',skill:'fraction'},
+ {id:'shapes',name:'Geometry & Symmetry',icon:'🔷',desc:'Angles, shapes and symmetry',skill:'shape'},
+ {id:'measurement',name:'Measurement & Conversion',icon:'📏',desc:'Units, perimeter and time',skill:'measure'},
+ {id:'data',name:'Data Handling',icon:'📊',desc:'Read and compare data',skill:'data'},
+ {id:'mixed',name:'Word Problems',icon:'🌟',desc:'Select methods and explain results',skill:'word'}],
+ '5':[
+ {id:'counting',name:'Numbers & Operations',icon:'🔢',desc:'Place value, factors and multiples',skill:'count'},
+ {id:'addition',name:'Addition & Estimation',icon:'➕',desc:'Multi-step totals',skill:'add'},
+ {id:'subtraction',name:'Subtraction & Difference',icon:'➖',desc:'Compare quantities',skill:'subtract'},
+ {id:'multiplication',name:'Multiplication',icon:'✖️',desc:'Factors and larger products',skill:'multiply'},
+ {id:'division',name:'Division',icon:'➗',desc:'Quotients and remainders',skill:'divide'},
+ {id:'fractions',name:'Fractions & Decimals',icon:'🍕',desc:'Equivalent fractions and decimals',skill:'fraction'},
+ {id:'geometry',name:'Geometry & Spatial Sense',icon:'📐',desc:'Angles, shapes and views',skill:'shape'},
+ {id:'measurement',name:'Measurement & Perimeter',icon:'📏',desc:'Units, perimeter and area ideas',skill:'measure'},
+ {id:'data',name:'Data & Graphs',icon:'📊',desc:'Interpret tables and charts',skill:'data'},
+ {id:'mixed',name:'Real-life Problem Solving',icon:'🌟',desc:'Reason across topics',skill:'word'}]
+};
+const SET_NAMES=['Warm-up','Picture clues','Number detectives','Story time','Find the missing part','Compare & order','Everyday maths','Think another way','Pattern challenge','Quick reasoning','Mixed practice','Choose a strategy','Visual puzzle','Explain the relationship','Challenge round','Real-life mission','Spot the mistake','Two-step thinking','Brain teaser','Star challenge'];
+function gradeTopics(){if(['IK1','IK2','IK3','LKG','UKG'].includes(grade))return EARLY_TOPICS[GRADE_OPTIONS.findIndex(g=>g.id===grade)];return PRIMARY_TOPICS[grade]||PRIMARY_TOPICS['1']}
+function topicMeta(t=topic){return gradeTopics().find(x=>x.id===t)||gradeTopics()[0]}
+function gradeBand(){return ({IK1:0,IK2:1,IK3:2,LKG:3,UKG:4,'1':5,'2':6,'3':7,'4':8,'5':9})[grade]||4}
+function curriculumName(){return curriculum==='SCERT'?'Telangana SCERT':curriculum==='NCERT'?'NCERT / NCF':curriculum==='CBSE'?'CBSE-aligned':'ICSE-aligned'}
+function renderGrades(id){const el=$(id);if(!el)return;el.innerHTML='';GRADE_OPTIONS.forEach(g=>{const b=document.createElement('button');b.className='age-card'+(g.id===grade?' selected':'');b.innerHTML='<span class="age-emoji">'+g.icon+'</span><strong>'+g.label+'</strong><small>'+g.desc+'</small>';b.onclick=()=>{grade=g.id;age=gradeBand()<=4?3+gradeBand():Math.min(13,gradeBand()-1);if(!gradeTopics().some(t=>t.id===topic))topic=gradeTopics()[0].id;renderGrades('gradeGrid');renderGrades('homeGrades');renderTopics('homeTopics');openTopic(topic)};el.appendChild(b)})}
+function setCurriculum(v){curriculum=v;if(!['1','2','3','4','5'].includes(grade))curriculum='SCERT';const el=$('curriculumSelect');if(el)el.value=curriculum;openTopic(topic)}
+function renderAges(id,short=false){const el=$(id);el.innerHTML='';for(let a=3;a<=13;a++){if(short&&a>8&&a!==13)continue;const b=document.createElement('button');b.className='age-card'+(a===age?' selected':'');b.innerHTML='<span class="age-emoji">'+AGE_ICONS[a-3]+'</span><strong>Age '+a+'</strong><small>'+AGE_DESC[a-3]+'</small>';b.onclick=()=>{age=a;renderGrades('homeGrades');renderGrades('gradeGrid');renderTopics('homeTopics');openTopic(topic)};el.appendChild(b)}}
+function renderTopics(id){const el=$(id);if(!el)return;el.innerHTML='';gradeTopics().forEach(t=>{const b=document.createElement('button');b.className='topic-card';b.innerHTML='<span class="age-emoji">'+t.icon+'</span><strong>'+t.name+'</strong><small>'+t.desc+'</small>';b.onclick=()=>openTopic(t.id);el.appendChild(b)})}
 function unlocked(l){return true}
 function nextLevel(){for(let l=1;l<=20;l++){if(!rec(age,topic,l)?.passed)return l}return 20}
-function renderLevels(){const g=$('levelGrid');g.innerHTML='';for(let l=1;l<=20;l++){const r=rec(age,topic,l),b=document.createElement('button');b.className='level '+(r?.passed?'done':l===nextLevel()?'current':'');b.setAttribute('aria-label','Question set '+l+(r?.passed?', completed':', available'));b.innerHTML='<strong>Set '+l+'</strong><span>'+(r?.passed?'⭐':l===nextLevel()?'▶':'○')+'</span><small>'+(r?'Best: '+r.score+'/10':l===nextLevel()?'Continue here':'Start anytime')+'</small>';b.onclick=()=>startQuiz(l);g.appendChild(b)}}
-function openTopic(t){topic=t;const meta=TOPICS.find(x=>x.id===t)||TOPICS[1];$('topicHeading').textContent=meta.icon+' '+meta.name;$('topicSub').textContent='Age '+age+' · Choose a question set';$('levelsHeading').textContent='Choose a question set';renderTopics('topicChooser');renderLevels();renderAges('homeAges',true);renderAges('allAgeGrid');renderTopics('homeTopics');$('homeTopicSub').textContent='Choose what you want to practise.';stats();page('topic')}
+function renderLevels(){const g=$('levelGrid');g.innerHTML='';for(let l=1;l<=20;l++){const r=rec(age,topic,l),b=document.createElement('button');b.className='level '+(r?.passed?'done':l===nextLevel()?'current':'');b.setAttribute('aria-label','Question set '+l+(r?.passed?', completed':', available'));b.innerHTML='<strong>Set '+l+'</strong><span>'+(r?.passed?'⭐':l===nextLevel()?'▶':'○')+'</span><small>'+(SET_NAMES[l-1])+'</small><small>'+(r?'Best: '+r.score+'/10':l===nextLevel()?'Continue here':'Start anytime')+'</small>';b.onclick=()=>startQuiz(l);g.appendChild(b)}}
+function openTopic(t){if(!gradeTopics().some(x=>x.id===t))t=gradeTopics()[0].id;topic=t;const meta=topicMeta(t);$('topicHeading').textContent=meta.icon+' '+meta.name;$('topicSub').textContent=grade==='IK1'||grade==='IK2'||grade==='IK3'||grade==='LKG'||grade==='UKG'?grade+' · Foundational maths': 'Class '+grade+' · '+curriculumName()+' chapter alignment';$('levelsHeading').textContent='20 sets · '+meta.name;const desc=$('setDescription');if(desc)desc.textContent='Set themes: '+SET_NAMES.join(' · ')+'. Every set changes the skill focus, story, visual or reasoning task. Progress is saved separately for class, curriculum, chapter and set.';renderTopics('topicChooser');renderLevels();renderGrades('homeGrades');renderGrades('gradeGrid');renderTopics('homeTopics');stats();page('topic')}
 function rand(n){return Math.floor(Math.random()*n)}function pick(a){return a[rand(a.length)]}
 function makeQ(a,t,l){let x,y,z,p,vis='',hint,spoken,ans;const cap=a<=4?Math.min(20,4+l*2):a<=6?Math.min(60,8+l*3):a<=9?Math.min(250,15+l*12):Math.min(999,40+l*35);const simple=a<=4,early=a<=6,mid=a<=9;
  if(t==='counting'){if(a<=4){ans=rand(Math.min(5+l,10))+1;vis='⭐ '.repeat(Math.min(ans,10));p='How many stars?';hint='Count each star slowly.';spoken='Count the stars. How many are there?'}else{x=rand(Math.min(cap,100))+1;if(rand(2)){ans=x+1;p='What comes after '+x+'?';hint='Count one more.'}else{ans=Math.max(0,x-1);p='What comes before '+x+'?';hint='Count one back.'}spoken=p}}
@@ -253,7 +346,7 @@ function makeQ(a,t,l){let x,y,z,p,vis='',hint,spoken,ans;const cap=a<=4?Math.min
  return {p,ans:String(ans),vis,hint,spoken}}
 function createQuestions(){const out=[];for(let i=0;i<10;i++){let q=makeQ(age,topic,level),n=0;while(out.some(v=>v.p===q.p)&&n++<10)q=makeQ(age,topic,level);out.push(q)}return out}
 function opts(q){if(q.options){const choices=[...q.options];for(let i=choices.length-1;i>0;i--){const j=rand(i+1);[choices[i],choices[j]]=[choices[j],choices[i]]}return choices}const correct=q.ans,arr=[correct];let tries=0;while(arr.length<4&&tries++<100){let v;if(!isNaN(Number(correct))){const n=Number(correct),d=Math.max(3,Math.ceil(Math.abs(n)*.2));v=String(Math.max(0,n+rand(d*2+1)-d));if(v===correct)continue}else v=pick(['1/2','1/3','1/4','2/3','3/4','0.25','0.5','0.75','25%','50%','75%']);if(!arr.includes(v))arr.push(v)}while(arr.length<4)arr.push(String(rand(20)));for(let i=arr.length-1;i>0;i--){const j=rand(i+1);[arr[i],arr[j]]=[arr[j],arr[i]]}return arr}
-function startQuiz(l){level=l;quizAge=age;quizTopic=topic;questions=createQuestions();qi=0;score=0;stopTimer();clearAnswerTimeout();$('quizPanel').classList.add('hidden');$('resultPanel').classList.add('hidden');page('quiz');startIntro()}
+function startQuiz(l){level=l;quizAge=age;quizGrade=grade;quizCurriculum=curriculum;quizTopic=topic;questions=createQuestions();qi=0;score=0;stopTimer();clearAnswerTimeout();$('quizPanel').classList.add('hidden');$('resultPanel').classList.add('hidden');page('quiz');startIntro()}
 function startIntro(){$('quizPage').classList.add('quiz-showing-intro');let panel=$('introPanel');if(!panel){panel=document.createElement('div');panel.id='introPanel';panel.className='quiz-panel result video-intro';panel.innerHTML='<div class="adventure-scene" aria-hidden="true"></div><div class="welcome-wordmark"><span class="welcome-small">WELCOME TO</span><h2 class="welcome-title"><span>THE</span><span>QUIZ!</span></h2></div><div class="welcome-swoosh" aria-hidden="true"></div>';$('quizPanel').parentNode.insertBefore(panel,$('quizPanel'))}const themes=[{bg:'linear-gradient(130deg,#ff4f9a,#ff8b38,#ffe84a,#35e6c5,#6564ff)',a:'#fff34c',b:'#fff',shadow:'#ff3d91',icons:['✦','✧','✹','★','ϟ','☄'],tag:'WELCOME TO',swoosh:'#fff65b'},{bg:'linear-gradient(135deg,#00c2ff,#6657ff,#ff4fcb,#ffca3a)',a:'#a7fffc',b:'#fff',shadow:'#ff4fcb',icons:['★','✦','⚡','✧','✷','✦'],tag:'WELCOME TO',swoosh:'#a7fffc'},{bg:'linear-gradient(135deg,#ff5d5d,#ffb627,#faff70,#38e6a5)',a:'#5d37ff',b:'#fff',shadow:'#5d37ff',icons:['✹','✦','★','ϟ','✧','✷'],tag:'WELCOME TO',swoosh:'#fff'},{bg:'linear-gradient(135deg,#7b2ff7,#f107a3,#ff7a45,#ffe45e)',a:'#fff16a',b:'#fff',shadow:'#18d8ff',icons:['✦','★','✧','☄','ϟ','✹'],tag:'WELCOME TO',swoosh:'#18f0e0'},{bg:'linear-gradient(135deg,#00d2ff,#3a7bd5,#8e44ad,#ff6cab)',a:'#ffef70',b:'#fff',shadow:'#39256f',icons:['✧','✹','★','✦','ϟ','✷'],tag:'WELCOME TO',swoosh:'#ffef70'},{bg:'linear-gradient(135deg,#ff6a00,#ee0979,#8e2de2,#4a00e0)',a:'#b6fffa',b:'#fff',shadow:'#ffce45',icons:['★','✦','✷','✧','☄','ϟ'],tag:'WELCOME TO',swoosh:'#b6fffa'}];let themeIndex=Math.floor(Math.random()*themes.length);if(themes.length>1&&themeIndex===window.__lastIntroTheme)themeIndex=(themeIndex+1+Math.floor(Math.random()*(themes.length-1)))%themes.length;window.__lastIntroTheme=themeIndex;const t=themes[themeIndex];panel.dataset.design='design-'+themeIndex;panel.style.background=t.bg;panel.style.backgroundSize='250% 250%';panel.style.animation='adventureBg 8s ease infinite';const title=panel.querySelector('.welcome-title');title.innerHTML='<span>THE</span><span>QUIZ!</span>';const tag=panel.querySelector('.welcome-small');tag.textContent=t.tag;tag.style.color=t.a;title.querySelector('span:first-child').style.color=t.a;title.querySelector('span:last-child').style.color=t.b;title.style.textShadow='5px 6px 0 '+t.shadow+',9px 11px 0 #39256f,0 16px 28px #37205c45';panel.querySelector('.welcome-swoosh').style.background=t.swoosh;const scene=panel.querySelector('.adventure-scene');scene.innerHTML='<span class="adventure-orbit orbit-one"></span><span class="adventure-orbit orbit-two"></span>'+t.icons.map((icon,i)=>'<span class="adventure-star star-'+['one','two','three','four','five'][i%5]+'">'+icon+'</span>').join('')+'<span class="adventure-bolt bolt-one">ϟ</span><span class="adventure-bolt bolt-two">ϟ</span><span class="adventure-comet">☄</span><span class="adventure-planet planet-one"></span><span class="adventure-planet planet-two"></span>';panel.classList.remove('hidden');panel.classList.remove('intro-animate');void panel.offsetWidth;panel.classList.add('intro-animate');const begin=()=>{setTimeout(()=>{panel.classList.add('hidden');$('quizPage').classList.remove('quiz-showing-intro');$('quizPanel').classList.remove('hidden');$('quizControls').classList.remove('hidden');showQ()},2000)};if(voiceOn)say('Welcome to the quiz!',false,begin);else begin()}
 function stopTimer(){if(timerInterval!==null){clearInterval(timerInterval);timerInterval=null}}
 function playTimerTick(){try{const AC=window.AudioContext||window.webkitAudioContext;if(!AC)return;if(!timerAudio)timerAudio=new AC();if(timerAudio.state==='suspended')timerAudio.resume();const now=timerAudio.currentTime,osc=timerAudio.createOscillator(),gain=timerAudio.createGain();osc.type='sine';osc.frequency.setValueAtTime(1050,now);gain.gain.setValueAtTime(0.0001,now);gain.gain.exponentialRampToValueAtTime(0.09,now+0.004);gain.gain.exponentialRampToValueAtTime(0.0001,now+0.035);osc.connect(gain);gain.connect(timerAudio.destination);osc.start(now);osc.stop(now+0.04)}catch(e){}}
@@ -271,7 +364,7 @@ $('repeatQuestion').onclick=()=>{if(questions[qi])say(questions[qi].spoken,true)
 $('nextQuestion').onclick=()=>{stopTimer();clearAnswerTimeout();qi++;showQ()};$('retryBtn').onclick=()=>startQuiz(level);$('resultLevels').onclick=()=>openTopic(quizTopic);$('menuBtn').onclick=()=>$('app').classList.toggle('menu-open');
 $('voiceToggle').onclick=()=>{voiceOn=!voiceOn;try{localStorage.setItem(VOICE,voiceOn?'1':'0')}catch(e){}$('voiceToggle').textContent=voiceOn?'🔊 Voice on':'🔇 Voice off';$('voiceToggle').setAttribute('aria-pressed',String(voiceOn));if(!voiceOn&&'speechSynthesis'in window)speechSynthesis.cancel();else say('Voice is on. Take your time.',true)};
 $('resetProgress').onclick=()=>{if(confirm('Reset saved stars and levels on this device?')){data={stars:0,completed:{}};save();stats();openTopic(topic);toast('Progress reset.')}};document.addEventListener('click',e=>{if($('app').classList.contains('menu-open')&&!e.target.closest('aside')&&!e.target.closest('#menuBtn'))$('app').classList.remove('menu-open')});
-$('voiceToggle').textContent=voiceOn?'🔊 Voice on':'🔇 Voice off';$('voiceToggle').setAttribute('aria-pressed',String(voiceOn));renderAges('homeAges',true);renderAges('allAgeGrid');renderTopics('homeTopics');renderTopics('topicChooser');stats();openTopic(topic);page('home');
+$('voiceToggle').textContent=voiceOn?'🔊 Voice on':'🔇 Voice off';$('voiceToggle').setAttribute('aria-pressed',String(voiceOn));renderGrades('homeGrades');renderGrades('gradeGrid');renderTopics('homeTopics');renderTopics('topicChooser');stats();openTopic(topic);page('home');
 })();
 </script>
 </body></html>
