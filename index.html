@@ -125,7 +125,7 @@
 .quiz-panel[id="quizPanel"] .hintline{margin:6px 0 10px;min-height:0}
 .quiz-panel[id="quizPanel"] .timer-ring{right:8px;top:8px}
 @media(max-width:600px){.quiz-panel[id="quizPanel"]{padding-top:70px}.quiz-panel[id="quizPanel"] .question{font-size:clamp(24px,6vw,33px)}}
-</style>
+.curriculum-diagram{font-size:clamp(24px,4vw,42px);padding:12px;text-align:center;line-height:1.65;overflow-wrap:anywhere}.number-card{display:inline-block;border:3px solid #9c8df4;border-radius:18px;background:#f4f0ff;padding:8px 28px;font-weight:900}.pattern-diagram span{color:#7354df;font-weight:900}.data-diagram{font-size:15px;text-align:left;display:inline-block}.data-diagram div{margin:4px}.data-diagram span{display:block}.group-dot{display:inline-flex;flex-wrap:wrap;max-width:110px;padding:6px;border:2px dashed #9c8df4;border-radius:10px;font-size:16px}.ruler-diagram{font-size:28px}.count-diagram{max-width:560px;margin:auto}</style>
 </head>
 <body>
 <div class="app" id="app">
@@ -344,7 +344,55 @@ function makeQ(a,t,l){let x,y,z,p,vis='',hint,spoken,ans;const cap=a<=4?Math.min
  }}
  else{x=rand(10)+1;y=rand(10)+1;ans=x+y;p=x+' + '+y+' = ?';hint='Add both numbers.';spoken='What is '+x+' plus '+y+'?'}
  return {p,ans:String(ans),vis,hint,spoken}}
-function createQuestions(){const out=[];for(let i=0;i<10;i++){let q=makeQ(age,topic,level),n=0;while(out.some(v=>v.p===q.p)&&n++<10)q=makeQ(age,topic,level);out.push(q)}return out}
+function curriculumQ(i){
+ const band=gradeBand(),meta=topicMeta(),skill=meta.skill||topic;
+ const early=band<=4,lo=band<=2?1:band===3?1:band===4?2:band===5?5:band===6?10:band===7?20:band===8?50:100;
+ const hi=band<=2?5:band===3?10:band===4?20:band===5?20:band===6?100:band===7?999:band===8?9999:99999;
+ const rnd=(a,b)=>a+rand(Math.max(1,b-a+1)),shapes=['●','■','▲','◆'],shapeNames=['circle','square','triangle','diamond'];
+ let x,y,ans,p,vis='',hint,spoken;
+ const setMode=(level+i)%6;
+ if(skill==='shape'){
+   const n=rand(4);ans=shapeNames[n];p=early?'Which shape is shown?':'Which shape is shown in the picture?';vis='<div class="curriculum-diagram" aria-label="'+ans+'">'+shapes[n]+'</div>';hint='Look carefully at the outline and corners.';spoken=p;
+   return {p,ans,vis,hint,spoken,options:[ans,...shapeNames.filter(v=>v!==ans).sort(()=>Math.random()-.5).slice(0,3)]};
+ }
+ if(skill==='pattern'){
+   const seqs=[['🔴','🔵','🔴','🔵','🔴','🔵'],['⭐','⭐','🌙','⭐','⭐','🌙'],['▲','■','▲','■','▲','■'],['🟢','🟡','🟡','🟢','🟡','🟡']];
+   const seq=seqs[(level+i)%seqs.length],missing=seq[seq.length-1];ans=missing;p='Which symbol comes next in the pattern?';vis='<div class="curriculum-diagram pattern-diagram">'+seq.slice(0,-1).join('　')+'　<span>?</span></div>';hint='Look for the part that repeats.';spoken=p;
+   return {p,ans,vis,hint,spoken,options:[ans,...['🔴','🔵','⭐','🌙','▲','■','🟢','🟡'].filter(v=>v!==ans).sort(()=>Math.random()-.5).slice(0,3)]};
+ }
+ if(skill==='count'){
+   if(early&&band<=2){ans=rnd(1,Math.min(5,2+level));p='How many objects can you count?';vis='<div class="curriculum-diagram count-diagram">'+Array(ans).fill('⭐').join(' ')+'</div>';hint='Touch or point to each object once.';spoken=p;return {p,ans:String(ans),vis,hint,spoken}}
+   x=rnd(lo,hi);
+   if(setMode===0){ans=x;p='Which number is shown?';vis='<div class="curriculum-diagram number-card">'+x+'</div>';hint='Read the digits from left to right.'}
+   else if(setMode===1){ans=x+1;p='What number comes just after '+x+'?';hint='Move one step forward on the number line.'}
+   else if(setMode===2){ans=Math.max(0,x-1);p='What number comes just before '+x+'?';hint='Move one step backward on the number line.'}
+   else if(setMode===3){ans=x;p='Which is the larger number: '+x+' or '+(x+rand(9)+1)+'?';ans=x+rand(9)+1;p='Which number is larger: '+x+' or '+ans+'?';hint='Compare the highest place value first.'}
+   else if(setMode===4){ans=Math.floor(x/10)*10;p='What is the nearest lower multiple of 10 to '+x+'?';hint='Look at the tens groups.'}
+   else {ans=String(x).split('').reverse().join('');if(x<10)ans=x;p='Write '+x+' with its digits reversed.';hint='Read the digits from the other end.'}
+   spoken=p;return {p,ans:String(ans),vis:vis||'🔢',hint,spoken};
+ }
+ if(skill==='add'||skill==='subtract'||skill==='multiply'||skill==='divide'||skill==='fraction'||skill==='measure'||skill==='money'||skill==='data'||skill==='word'){
+   const max=hi, isAdd=skill==='add'||(skill==='word'&&level%3===0),isSub=skill==='subtract'||(skill==='word'&&level%3===1),isMul=skill==='multiply',isDiv=skill==='divide';
+   if(skill==='fraction'){
+     const d=pick([2,3,4,5,8,10]),n=rnd(1,d-1);ans=n+'/'+d;p='A shape is split into '+d+' equal parts. '+n+' parts are shaded. What fraction is shaded?';vis='<div class="fraction-visual"><div class="fraction-whole">'+Array.from({length:d},(_,j)=>'<span class="fraction-piece '+(j<n?'shaded':'')+'"></span>').join('')+'</div></div>';hint='The numerator counts shaded parts; the denominator counts all equal parts.';spoken=p;return {p,ans,vis,hint,spoken,options:[ans,...[1+'/'+d,(d-n)+'/'+d,n+'/'+(d+1)].filter(v=>v!==ans)]};
+   }
+   if(skill==='measure'){
+     if(band<=5){const cm=rnd(2,20);ans=cm;p='A pencil is '+cm+' cm long. How many centimetres long is it?';vis='<div class="curriculum-diagram ruler-diagram">📏 '+cm+' cm</div>';hint='Use the unit given in the question.'}
+     else {x=rnd(2,20);y=rnd(2,20);ans=x+y;p='A ribbon is '+x+' cm and another is '+y+' cm. What is their total length in cm?';vis='📏';hint='Combine the two lengths using the same unit.'}
+     spoken=p;return {p,ans:String(ans),vis,hint,spoken};
+   }
+   if(skill==='money'){x=rnd(5,50);y=rnd(1,Math.min(20,x));ans=x+y;p='You have ₹'+x+' and receive ₹'+y+'. How much money do you have now?';vis='<div class="curriculum-diagram">🪙 ₹'+x+' + ₹'+y+'</div>';hint='Put the two amounts together.';spoken=p;return {p,ans:String(ans),vis,hint,spoken}}
+   if(skill==='data'){const vals=[rnd(2,8),rnd(2,8),rnd(2,8)],ix=rand(3),labels=['Apples','Mangoes','Bananas'];ans=vals[ix];p='Which number of '+labels[ix].toLowerCase()+' is shown in the chart?';vis='<div class="curriculum-diagram data-diagram">'+labels.map((v,j)=>'<div>'+v+' <span>'+('🟦'.repeat(vals[j]))+' '+vals[j]+'</span></div>').join('')+'</div>';hint='Find the named category, then read its count.';spoken=p;return {p,ans:String(ans),vis,hint,spoken}}
+   if(isMul){x=rnd(2,Math.min(12,band+3+level));y=rnd(2,Math.min(12,band+3+level));ans=x*y;p='What is '+x+' groups of '+y+'?';vis='<div class="curriculum-diagram"> '+Array.from({length:Math.min(x,8)},()=>'<span class="group-dot">'+Array.from({length:Math.min(y,8)},()=> '●').join('')+'</span>').join('　')+'</div>';hint='Repeated equal groups can be counted by multiplication.'}
+   else if(isDiv){y=rnd(2,Math.min(10,band+2));ans=rnd(2,Math.min(12,band+3));x=y*ans;p='Share '+x+' objects equally into '+y+' groups. How many in each group?';vis='<div class="curriculum-diagram">🍎 '+x+' objects ÷ '+y+' groups</div>';hint='Divide the total into equal groups.'}
+   else if(isSub){x=rnd(lo+2,Math.max(lo+3,Math.min(max,1000)));y=rnd(1,x);ans=x-y;p='There are '+x+' objects. '+y+' are taken away. How many remain?';vis='🍎 '.repeat(Math.min(8,x))+(x>8?'…':'');hint='Find the difference by taking away.'}
+   else {x=rnd(lo,Math.min(max,1000));y=rnd(lo,Math.min(max,1000));ans=x+y;p='A collection has '+x+' red beads and '+y+' blue beads. How many beads altogether?';vis='<div class="curriculum-diagram">🔴 '+x+'　🔵 '+y+'</div>';hint='Add both groups to find the total.'}
+   spoken=p;return {p,ans:String(ans),vis,hint,spoken};
+ }
+ // Age-appropriate foundational quantity and comparison questions
+ const n=rnd(1,Math.min(20,4+level+band*2));ans=n;p='How many stars are shown?';vis='<div class="curriculum-diagram count-diagram">'+Array(n).fill('⭐').join(' ')+'</div>';hint='Count each star only once.';spoken=p;return {p,ans:String(ans),vis,hint,spoken};
+}
+function createQuestions(){const out=[];for(let i=0;i<10;i++){let q=curriculumQ(i),n=0;while(out.some(v=>v.p===q.p)&&n++<10)q=curriculumQ(i+out.length);out.push(q)}return out}
 function opts(q){if(q.options){const choices=[...q.options];for(let i=choices.length-1;i>0;i--){const j=rand(i+1);[choices[i],choices[j]]=[choices[j],choices[i]]}return choices}const correct=q.ans,arr=[correct];let tries=0;while(arr.length<4&&tries++<100){let v;if(!isNaN(Number(correct))){const n=Number(correct),d=Math.max(3,Math.ceil(Math.abs(n)*.2));v=String(Math.max(0,n+rand(d*2+1)-d));if(v===correct)continue}else v=pick(['1/2','1/3','1/4','2/3','3/4','0.25','0.5','0.75','25%','50%','75%']);if(!arr.includes(v))arr.push(v)}while(arr.length<4)arr.push(String(rand(20)));for(let i=arr.length-1;i>0;i--){const j=rand(i+1);[arr[i],arr[j]]=[arr[j],arr[i]]}return arr}
 function startQuiz(l){level=l;quizAge=age;quizGrade=grade;quizCurriculum=curriculum;quizTopic=topic;questions=createQuestions();qi=0;score=0;stopTimer();clearAnswerTimeout();$('quizPanel').classList.add('hidden');$('resultPanel').classList.add('hidden');page('quiz');startIntro()}
 function startIntro(){$('quizPage').classList.add('quiz-showing-intro');let panel=$('introPanel');if(!panel){panel=document.createElement('div');panel.id='introPanel';panel.className='quiz-panel result video-intro';panel.innerHTML='<div class="adventure-scene" aria-hidden="true"></div><div class="welcome-wordmark"><span class="welcome-small">WELCOME TO</span><h2 class="welcome-title"><span>THE</span><span>QUIZ!</span></h2></div><div class="welcome-swoosh" aria-hidden="true"></div>';$('quizPanel').parentNode.insertBefore(panel,$('quizPanel'))}const themes=[{bg:'linear-gradient(130deg,#ff4f9a,#ff8b38,#ffe84a,#35e6c5,#6564ff)',a:'#fff34c',b:'#fff',shadow:'#ff3d91',icons:['✦','✧','✹','★','ϟ','☄'],tag:'WELCOME TO',swoosh:'#fff65b'},{bg:'linear-gradient(135deg,#00c2ff,#6657ff,#ff4fcb,#ffca3a)',a:'#a7fffc',b:'#fff',shadow:'#ff4fcb',icons:['★','✦','⚡','✧','✷','✦'],tag:'WELCOME TO',swoosh:'#a7fffc'},{bg:'linear-gradient(135deg,#ff5d5d,#ffb627,#faff70,#38e6a5)',a:'#5d37ff',b:'#fff',shadow:'#5d37ff',icons:['✹','✦','★','ϟ','✧','✷'],tag:'WELCOME TO',swoosh:'#fff'},{bg:'linear-gradient(135deg,#7b2ff7,#f107a3,#ff7a45,#ffe45e)',a:'#fff16a',b:'#fff',shadow:'#18d8ff',icons:['✦','★','✧','☄','ϟ','✹'],tag:'WELCOME TO',swoosh:'#18f0e0'},{bg:'linear-gradient(135deg,#00d2ff,#3a7bd5,#8e44ad,#ff6cab)',a:'#ffef70',b:'#fff',shadow:'#39256f',icons:['✧','✹','★','✦','ϟ','✷'],tag:'WELCOME TO',swoosh:'#ffef70'},{bg:'linear-gradient(135deg,#ff6a00,#ee0979,#8e2de2,#4a00e0)',a:'#b6fffa',b:'#fff',shadow:'#ffce45',icons:['★','✦','✷','✧','☄','ϟ'],tag:'WELCOME TO',swoosh:'#b6fffa'}];let themeIndex=Math.floor(Math.random()*themes.length);if(themes.length>1&&themeIndex===window.__lastIntroTheme)themeIndex=(themeIndex+1+Math.floor(Math.random()*(themes.length-1)))%themes.length;window.__lastIntroTheme=themeIndex;const t=themes[themeIndex];panel.dataset.design='design-'+themeIndex;panel.style.background=t.bg;panel.style.backgroundSize='250% 250%';panel.style.animation='adventureBg 8s ease infinite';const title=panel.querySelector('.welcome-title');title.innerHTML='<span>THE</span><span>QUIZ!</span>';const tag=panel.querySelector('.welcome-small');tag.textContent=t.tag;tag.style.color=t.a;title.querySelector('span:first-child').style.color=t.a;title.querySelector('span:last-child').style.color=t.b;title.style.textShadow='5px 6px 0 '+t.shadow+',9px 11px 0 #39256f,0 16px 28px #37205c45';panel.querySelector('.welcome-swoosh').style.background=t.swoosh;const scene=panel.querySelector('.adventure-scene');scene.innerHTML='<span class="adventure-orbit orbit-one"></span><span class="adventure-orbit orbit-two"></span>'+t.icons.map((icon,i)=>'<span class="adventure-star star-'+['one','two','three','four','five'][i%5]+'">'+icon+'</span>').join('')+'<span class="adventure-bolt bolt-one">ϟ</span><span class="adventure-bolt bolt-two">ϟ</span><span class="adventure-comet">☄</span><span class="adventure-planet planet-one"></span><span class="adventure-planet planet-two"></span>';panel.classList.remove('hidden');panel.classList.remove('intro-animate');void panel.offsetWidth;panel.classList.add('intro-animate');const begin=()=>{setTimeout(()=>{panel.classList.add('hidden');$('quizPage').classList.remove('quiz-showing-intro');$('quizPanel').classList.remove('hidden');$('quizControls').classList.remove('hidden');showQ()},2000)};if(voiceOn)say('Welcome to the quiz!',false,begin);else begin()}
