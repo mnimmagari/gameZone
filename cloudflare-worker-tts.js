@@ -56,9 +56,9 @@ export default {
         ? body.text.trim()
         : "";
 
-      if (!text || text.length > 1000) {
+      if (!text || text.length > 400) {
         return new Response(
-          "Text must contain 1 to 1000 characters",
+          "Text must contain 1 to 400 characters",
           { status: 400, headers: corsHeaders }
         );
       }
@@ -88,10 +88,10 @@ export default {
 
       // 7. Return Google's error details if synthesis fails.
       if (!googleResponse.ok) {
-        const details = await googleResponse.text();
+        console.error("Google TTS error", googleResponse.status);
 
         return new Response(
-          "Google TTS request failed: " + details,
+          "Speech service unavailable",
           {
             status: 502,
             headers: {
@@ -130,8 +130,7 @@ export default {
 
     } catch (error) {
       return new Response(
-        "Unable to synthesize speech: " +
-          (error?.message || "Unknown error"),
+        "Unable to synthesize speech",
         {
           status: 500,
           headers: {

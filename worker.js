@@ -5,7 +5,8 @@ const ALLOWED_ORIGINS = [
   "http://127.0.0.1:5500",
 ];
 const VOICE_NAME = "en-IN-Chirp3-HD-Despina";
-const MAX_CHARS = 1000;
+const MAX_CHARS = 400;
+const MAX_BODY_BYTES = 4096;
 
 export default {
   async fetch(request, env) {
@@ -18,6 +19,7 @@ export default {
       "Access-Control-Allow-Headers": "Content-Type",
       "Access-Control-Max-Age": "86400",
       "Vary": "Origin",
+      "X-Content-Type-Options": "nosniff",
     };
 
     const text = (body, status, extra = {}) =>
@@ -58,6 +60,8 @@ export default {
 
     try {
       // Validate input
+      const declared = Number(request.headers.get("Content-Length") || 0);
+      if (declared > MAX_BODY_BYTES) return text("Request too large", 413);
       let body;
       try {
         body = await request.json();
@@ -86,8 +90,8 @@ export default {
       );
 
       if (!googleResponse.ok) {
-        const details = await googleResponse.text();
-        return text("Google TTS request failed: " + details, 502);
+        console.error("Google TTS error", googleResponse.status);
+        return text("Speech service unavailable", 502);
       }
 
       const result = await googleResponse.json();
@@ -111,10 +115,8 @@ export default {
         },
       });
     } catch (error) {
-      return text(
-        "Unable to synthesize speech: " + (error?.message || "Unknown error"),
-        500
-      );
+      console.error("TTS worker error", error?.message);
+      return text("Unable to synthesize speech", 500);
     }
   },
 };

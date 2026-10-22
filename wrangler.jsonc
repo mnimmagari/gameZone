@@ -1,9 +1,8 @@
- {
-     "name": "gamezone",
-     "main": "worker.js",
-     "compatibility_date": "2025-01-01",
-     "preview_urls": false,
-"vars": {
-    "GOOGLE_TTS_API_KEY": "AIzaSyD-h6pnWsCXwZKYyaG0pBCVki4HpzyZ6eI"
-  }
-   }
+{
+  "name": "gamezone",
+  "main": "worker.js",
+  "compatibility_date": "2025-01-01",
+  "preview_urls": false
+  // The Google key must NEVER be stored here. Set it as an encrypted secret:
+  //   npx wrangler secret put GOOGLE_TTS_API_KEY
+}
