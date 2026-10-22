@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <link rel="icon" href="data:,">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src data:; media-src blob: data:; connect-src https://gamezone.madhumithareddy185.workers.dev; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src data:; connect-src 'none'; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="no-referrer">
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -286,6 +286,16 @@ body .quiz-panel[id].question-level-20{--level-bg:hsl(235 75% 93%);--level-borde
 .pat-nums{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}.pat-nums b{min-width:48px;padding:8px 10px;border-radius:14px;background:#fffdf8;border:2px solid var(--level-border,#cdd);font:800 clamp(20px,3vw,28px) var(--font);color:var(--level-ink,#35324a)}.pat-nums b.q{border:3px dashed var(--level-accent,#6d5fc7);color:var(--level-accent,#6d5fc7)}
 .len-bar{display:flex;align-items:center;gap:10px;margin:8px 0;justify-content:center}.len-bar span{width:70px;text-align:right;font:800 15px var(--font)}.len-bar i{display:block;height:20px;border-radius:10px;border:2px solid #5b4fb0}
 .pictograph{display:grid;gap:6px;text-align:left;font-size:clamp(18px,2.6vw,26px)}.pictograph>div{display:flex;align-items:center;gap:10px}.pg-l{width:78px;font:800 14px var(--font);color:var(--level-ink,#35324a)}.pictograph small{font:800 13px var(--font);color:var(--level-ink,#35324a);opacity:.8}
+
+/* v2.4: class-wise welcome banner */
+.welcome-hero{background:linear-gradient(135deg,var(--w1,#d9efe8),var(--w2,#e4def7) 55%,var(--w3,#fbe6c9));transition:background .4s}
+.welcome-copy h2{color:var(--wa,#3b3478)!important}
+.welcome-copy .eyebrow{color:var(--wa,#5b4fb0)}
+.wh-num{font-size:clamp(30px,5vw,46px);color:var(--wa,#6d5fc7);opacity:.3}.wh-num.n4{right:36%;top:18px}
+.teaser{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:0 0 16px;padding:9px 12px;background:#fffdf8cc;border-radius:16px;font:800 14px var(--font);color:#35324a;max-width:430px}
+.teaser button{background:var(--wa,#6d5fc7);color:#fff;border-radius:999px;padding:5px 14px;font:800 13px var(--font);min-height:32px}
+.teaser button.shown{background:#2f7d5e}
+@media(max-width:600px){.wh-num.n4{display:none}.welcome-hero{min-height:440px}}
 </style>
 </head>
 <body>
@@ -307,9 +317,9 @@ body .quiz-panel[id].question-level-20{--level-bg:hsl(235 75% 93%);--level-borde
  <div class="side-note">🌱 Take your time. Learning is not a race.</div>
 </aside>
 <main class="main">
- <div class="topbar"><div style="display:flex;align-items:center;gap:8px"><button class="pill mobile-menu" id="menuBtn" aria-label="Open menu">☰</button><span class="crumb" id="breadcrumb">Home</span></div><div class="top-actions"><button class="pill" id="voiceToggle" aria-pressed="false">🔊 Voice off</button></div></div>
+ <div class="topbar"><div style="display:flex;align-items:center;gap:8px"><button class="pill mobile-menu" id="menuBtn" aria-label="Open menu">☰</button><span class="crumb" id="breadcrumb">Home</span></div><div class="top-actions"><button class="pill" id="voiceChoose" title="Try another girl voice">🎀 Girl voice</button><button class="pill" id="voiceToggle" aria-pressed="false">🔊 Voice off</button></div></div>
  <section id="homePage">
-  <div class="hero welcome-hero"><span class="wh-shape s1"></span><span class="wh-shape s2"></span><span class="wh-shape s3"></span><span class="wh-num n1">7</span><span class="wh-num n2">+</span><span class="wh-num n3">3</span><div class="hero-copy welcome-copy"><div class="eyebrow">Maths · Classes IK1 to 8</div><h2>Hello, little <em>MathStar!</em></h2><p>20 gentle levels, 10 friendly questions each. Pick your class and let's play.</p><button class="welcome-start" id="startAdventure" aria-label="Start quiz">Let's play <b>▶</b></button></div><div class="welcome-baby" aria-label="A cheerful cartoon baby waving hello"><span class="baby-star star-a">⭐</span><span class="baby-star star-b">✨</span><span class="baby-hair">〰</span><span class="baby-head"><i class="baby-eye left"></i><i class="baby-eye right"></i><i class="baby-blush left"></i><i class="baby-blush right"></i><i class="baby-smile"></i></span><span class="baby-shirt"><b>★</b></span><span class="baby-wave">👋</span><span class="baby-name">BOBO</span></div></div>
+  <div class="hero welcome-hero"><span class="wh-shape s1"></span><span class="wh-shape s2"></span><span class="wh-shape s3"></span><span class="wh-num n1">7</span><span class="wh-num n2">+</span><span class="wh-num n3">3</span><span class="wh-num n4">=</span><div class="hero-copy welcome-copy"><div class="eyebrow" id="wEyebrow">Maths · Classes IK1 to 8</div><h2 id="wTitle">Hello, little <em>MathStar!</em></h2><p id="wSub">20 gentle levels, 10 friendly questions each. Pick your class and let's play.</p><div class="teaser" id="wTeaser"><span id="wQ"></span><button type="button" id="wReveal">Reveal</button></div><button class="welcome-start" id="startAdventure" aria-label="Start quiz">Let's play <b>▶</b></button></div><div class="welcome-baby" aria-label="A cheerful cartoon baby waving hello"><span class="baby-star star-a">⭐</span><span class="baby-star star-b">✨</span><span class="baby-hair">〰</span><span class="baby-head"><i class="baby-eye left"></i><i class="baby-eye right"></i><i class="baby-blush left"></i><i class="baby-blush right"></i><i class="baby-smile"></i></span><span class="baby-shirt"><b>★</b></span><span class="baby-wave">👋</span><span class="baby-name">BOBO</span></div></div>
   <div class="stats"><div class="stat"><div class="stat-ico">⭐</div><div><strong id="totalStars">0</strong><small>Stars earned</small></div></div><div class="stat"><div class="stat-ico">📘</div><div><strong id="levelsDone">0</strong><small>Levels passed</small></div></div><div class="stat"><div class="stat-ico">🎯</div><div><strong id="bestScore">—</strong><small>Best score / 10</small></div></div></div>
   <div class="section-head"><div><h3>Choose your class</h3><p>Pick your learning stage for chapter-wise practice.</p></div></div><div class="age-grid" id="homeGrades"></div><div class="section-head"><div><h3>Curriculum</h3><p>Classes 1–5: select your school alignment. Early years use foundational learning goals.</p></div><select id="curriculumSelect" aria-label="Curriculum"><option value="SCERT">Telangana SCERT</option><option value="NCERT">NCERT / NCF</option><option value="CBSE">CBSE-aligned</option><option value="ICSE">ICSE-aligned</option></select></div>
   <div class="section-head"><div><h3>Choose a game</h3><p id="homeTopicSub">Pick what you want to practise.</p></div></div><div class="topic-grid" id="homeTopics"></div>
@@ -333,42 +343,21 @@ let data={stars:0,completed:{}},age=5,grade='UKG',curriculum='SCERT',topic='coun
 try{const sv=JSON.parse(localStorage.getItem(STORE)||'{}');if(sv&&typeof sv==='object'){const done={};if(sv.completed&&typeof sv.completed==='object')Object.keys(sv.completed).slice(0,5000).forEach(key=>{const r=sv.completed[key];if(r&&typeof r==='object'&&Number.isFinite(r.score))done[String(key).slice(0,60)]={score:Math.max(0,Math.min(10,Math.floor(r.score))),passed:!!r.passed,stars:Math.max(0,Math.min(3,Math.floor(Number(r.stars)||0)))}});data={stars:Number.isFinite(sv.stars)?Math.max(0,Math.min(100000,Math.floor(sv.stars))):0,completed:done}}}catch(e){}
 try{voiceOn=localStorage.getItem(VOICE)==='1'}catch(e){}
 function save(){try{localStorage.setItem(STORE,JSON.stringify(data))}catch(e){}}
-// Paste your deployed Cloudflare Worker URL here after following GOOGLE_TTS_SETUP.md.
-const GOOGLE_TTS_WORKER_URL='https://gamezone.madhumithareddy185.workers.dev/';
-let cloudAudio=null,cloudAudioUrl=null,cloudRequestId=0,voiceAudioContext=null;
+let voicePick=0;try{voicePick=parseInt(localStorage.getItem('mathstars-voice-pick')||'0',10)||0}catch(e){}
+function girlVoices(){if(!('speechSynthesis'in window))return[];const all=speechSynthesis.getVoices().filter(v=>/^en(-|_|$)/i.test(v.lang)),male=/david|mark|james|daniel|george|guy|male|ravi|prabhat|rishi|alex|fred|thomas|oliver|ryan|brian|eric|roger|steffan/i,fem=/\bana\b|aria|jenny|zira|samantha|susan|hazel|karen|tessa|moira|fiona|victoria|libby|sonia|neerja|heera|catherine|female|girl|child|kid|emma|ava|michelle|natasha/i;const f=all.filter(v=>!male.test(v.name)&&fem.test(v.name));f.sort((x,y)=>(/\bana\b|child|kid/i.test(y.name)?1:0)-(/\bana\b|child|kid/i.test(x.name)?1:0)||(/natural|online/i.test(y.name)?1:0)-(/natural|online/i.test(x.name)?1:0)||(/^en-(in|us|gb)/i.test(y.lang)?1:0)-(/^en-(in|us|gb)/i.test(x.lang)?1:0));return f.length?f:all.filter(v=>!male.test(v.name))}
+function girlVoice(){const l=girlVoices();return l.length?l[voicePick%l.length]:null}
+if('speechSynthesis'in window)speechSynthesis.onvoiceschanged=()=>{};
+let speakId=0;
 function say(text,force=false,onDone=null){
  if(!voiceOn&&!force){if(typeof onDone==='function')onDone();return}
- const requestId=++cloudRequestId;
- const finish=()=>{if(requestId===cloudRequestId&&typeof onDone==='function')onDone()};
- const browserFallback=()=>{
-  if(requestId!==cloudRequestId)return;
-  if(!('speechSynthesis'in window)){finish();return}
-  try{
-   speechSynthesis.cancel();
-   const u=new SpeechSynthesisUtterance(text);u.lang='en-IN';u.rate=.9;u.pitch=1.12;u.volume=1;
-   const vs=speechSynthesis.getVoices().filter(v=>/^en(-|$)/i.test(v.lang));
-   const preferred=vs.find(v=>v.lang.toLowerCase()==='en-in')||vs.find(v=>v.lang.toLowerCase().startsWith('en-us'))||vs[0]||null;
-   if(preferred)u.voice=preferred;
-   let called=false;const done=()=>{if(!called){called=true;finish()}};
-   u.onend=done;u.onerror=done;speechSynthesis.speak(u);
-  }catch(e){finish()}
- };
- if(!GOOGLE_TTS_WORKER_URL.trim()){browserFallback();return}
- if('speechSynthesis'in window)speechSynthesis.cancel();
- if(cloudAudio){cloudAudio.pause();cloudAudio=null}
- if(cloudAudioUrl){URL.revokeObjectURL(cloudAudioUrl);cloudAudioUrl=null}
- fetch(GOOGLE_TTS_WORKER_URL,{method:'POST',headers:{'Content-Type':'text/plain;charset=UTF-8'},body:JSON.stringify({text})})
-  .then(response=>{if(!response.ok)throw new Error('Google TTS unavailable');return response.blob()})
-  .then(blob=>{
-   if(requestId!==cloudRequestId)return;
-   cloudAudioUrl=URL.createObjectURL(blob);cloudAudio=new Audio(cloudAudioUrl);cloudAudio.volume=1;
-   // Boost Google TTS playback using Web Audio; HTML audio volume is capped at 1.
-   try{const AC=window.AudioContext||window.webkitAudioContext;if(AC){if(!voiceAudioContext)voiceAudioContext=new AC();if(voiceAudioContext.state==="suspended")voiceAudioContext.resume();const source=voiceAudioContext.createMediaElementSource(cloudAudio);const boost=voiceAudioContext.createGain();boost.gain.value=4;const lim=voiceAudioContext.createDynamicsCompressor();source.connect(boost);boost.connect(lim);lim.connect(voiceAudioContext.destination)}}catch(e){}
-   cloudAudio.onended=()=>{if(requestId===cloudRequestId){if(cloudAudioUrl)URL.revokeObjectURL(cloudAudioUrl);cloudAudioUrl=null;cloudAudio=null;finish()}};
-   cloudAudio.onerror=()=>{if(requestId===cloudRequestId){cloudAudio=null;browserFallback()}};
-   return cloudAudio.play().catch(()=>browserFallback());
-  })
-  .catch(()=>browserFallback());
+ const id=++speakId,finish=()=>{if(id===speakId&&typeof onDone==='function')onDone()};
+ if(!('speechSynthesis'in window)){finish();return}
+ try{
+  speechSynthesis.cancel();
+  const u=new SpeechSynthesisUtterance(text);u.volume=1;const gv=girlVoice();if(gv){u.voice=gv;u.lang=gv.lang}else u.lang='en-IN';u.rate=1;u.pitch=/ana|child|kid/i.test(gv?gv.name:'')?1.1:1.5;
+  let called=false;const done=()=>{if(!called){called=true;finish()}};
+  u.onend=done;u.onerror=done;speechSynthesis.speak(u);
+ }catch(err){finish()}
 }
 function toast(t){$('toast').textContent=t;$('toast').classList.remove('hidden');setTimeout(()=>$('toast').classList.add('hidden'),2000)}
 function k(a,t,l){return (grade||'UKG')+':'+(curriculum||'SCERT')+':'+t+':'+l}function rec(a=age,t=topic,l=level){return data.completed[k(a,t,l)]||null}
@@ -503,7 +492,23 @@ function gradeTopics(){if(['IK1','IK2','IK3','LKG','UKG'].includes(grade))return
 function topicMeta(t=topic){return gradeTopics().find(x=>x.id===t)||gradeTopics()[0]}
 function gradeBand(){return ({IK1:0,IK2:1,IK3:2,LKG:3,UKG:4,'1':5,'2':6,'3':7,'4':8,'5':9,'6':10,'7':11,'8':12})[grade]??4}
 function curriculumName(){return curriculum==='SCERT'?'Telangana SCERT':curriculum==='NCERT'?'NCERT / NCF':curriculum==='CBSE'?'CBSE-aligned':'ICSE-aligned'}
-function renderGrades(id){const el=$(id);if(!el)return;el.innerHTML='';GRADE_OPTIONS.forEach(g=>{const b=document.createElement('button');b.className='age-card'+(g.id===grade?' selected':'');b.innerHTML='<span class="age-emoji">'+g.icon+'</span><strong>'+g.label+'</strong><small>'+g.desc+'</small>';b.onclick=()=>{grade=g.id;age=gradeBand()<=4?3+gradeBand():Math.min(13,gradeBand()-1);if(!gradeTopics().some(t=>t.id===topic))topic=gradeTopics()[0].id;renderGrades('gradeGrid');renderGrades('homeGrades');renderTopics('homeTopics');openTopic(topic)};el.appendChild(b)})}
+const WELCOME=[
+ {t:'Hello, tiny <em>explorer!</em>',s:'Look, notice and match. Maths is all around you.',e:'IK1 · Explore & notice',sym:['🧸','🔺','🔵','⭐'],q:'Which shape is round like a ball?',a:'Circle'},
+ {t:'Let\'s <em>sort & count!</em>',s:'Group things, count them and find the odd one out.',e:'IK2 · Sort & compare',sym:['🍎','🍌','🍇','🍊'],q:'3 apples and 1 banana. How many fruits?',a:'4'},
+ {t:'Count, pattern, <em>play!</em>',s:'Spot patterns and count up to 10.',e:'IK3 · Count & patterns',sym:['🔴','🔵','🔴','🔵'],q:'Red, blue, red, blue, ... what comes next?',a:'Red'},
+ {t:'Numbers <em>1 to 10</em> await!',s:'Match numerals, count objects and sort shapes.',e:'LKG · Early number play',sym:['1','2','3','4'],q:'What number comes after 6?',a:'7'},
+ {t:'Ready for <em>Class 1?</em>',s:'Count to 20, join groups and take away.',e:'UKG · Ready for Class 1',sym:['5','+','2','='],q:'5 + 2 = ?',a:'7'},
+ {t:'Number <em>adventure!</em>',s:'Tens, ones and little stories with sums.',e:'Class 1 · Numbers to 99',sym:['12','34','+','56'],q:'How many tens are in 47?',a:'4'},
+ {t:'Add, take away, <em>win!</em>',s:'Regrouping, tables, money and time.',e:'Class 2 · Operations & measures',sym:['₹','×','÷','24'],q:'2 groups of 5 = ?',a:'10'},
+ {t:'Tables & <em>shapes time!</em>',s:'Multiply, divide, tell the time and read charts.',e:'Class 3 · Numbers, shapes & data',sym:['×','7','⏰','📊'],q:'What is 6 × 7?',a:'42'},
+ {t:'Fractions are <em>fun!</em>',s:'Pies, strips and big numbers to explore.',e:'Class 4 · Larger numbers & fractions',sym:['½','¾','⅓','🍕'],q:'What is 3/4 of 12?',a:'9'},
+ {t:'Think like a <em>mathematician!</em>',s:'Decimals, factors, perimeter and reasoning.',e:'Class 5 · Operations & reasoning',sym:['0.5','%','∠','📐'],q:'Write 1/4 as a decimal.',a:'0.25'},
+ {t:'Integers & angles <em>quest!</em>',s:'Negative numbers, primes, ratio and constructions.',e:'Class 6 · Integers, geometry & data',sym:['−3','∠','π','🧭'],q:'What is (−7) + 10?',a:'3'},
+ {t:'Decimals, angles & <em>algebra!</em>',s:'Expressions, triangles and rational thinking.',e:'Class 7 · Expressions & angles',sym:['x','△','0.5','%'],q:'If x = 4, what is 2x + 1?',a:'9'},
+ {t:'Algebra <em>hero mode!</em>',s:'Powers, equations, Pythagoras and proportion.',e:'Class 8 · Algebra & proportion',sym:['x²','√','%','π'],q:'What is √144?',a:'12'}
+];
+function renderWelcome(){const i=Math.max(0,GRADE_OPTIONS.findIndex(g=>g.id===grade)),w=WELCOME[i]||WELCOME[0],h=document.querySelector('.welcome-hero');if(!h)return;const hue=(i*29+150)%360;h.style.setProperty('--w1','hsl('+hue+' 60% 90%)');h.style.setProperty('--w2','hsl('+((hue+55)%360)+' 62% 91%)');h.style.setProperty('--w3','hsl('+((hue+120)%360)+' 70% 90%)');h.style.setProperty('--wa','hsl('+hue+' 45% 32%)');$('wTitle').innerHTML=w.t;$('wSub').textContent=w.s;$('wEyebrow').textContent=w.e;$('wQ').textContent='🧠 Brain teaser: '+w.q;const r=$('wReveal');r.textContent='Reveal';r.classList.remove('shown');r.onclick=()=>{r.textContent=r.classList.toggle('shown')?'Answer: '+w.a:'Reveal'};h.querySelectorAll('.wh-num').forEach((n,k)=>{n.textContent=w.sym[k%w.sym.length]});const sh=h.querySelector('.baby-shirt b');if(sh)sh.textContent=GRADE_OPTIONS[i].icon}
+function renderGrades(id){const el=$(id);if(!el)return;el.innerHTML='';GRADE_OPTIONS.forEach(g=>{const b=document.createElement('button');b.className='age-card'+(g.id===grade?' selected':'');b.innerHTML='<span class="age-emoji">'+g.icon+'</span><strong>'+g.label+'</strong><small>'+g.desc+'</small>';b.onclick=()=>{grade=g.id;age=gradeBand()<=4?3+gradeBand():Math.min(13,gradeBand()-1);if(!gradeTopics().some(t=>t.id===topic))topic=gradeTopics()[0].id;renderGrades('gradeGrid');renderGrades('homeGrades');renderTopics('homeTopics');renderWelcome();openTopic(topic)};el.appendChild(b)})}
 function setCurriculum(v){curriculum=v;const el=$('curriculumSelect');if(el)el.value=curriculum;openTopic(topic)}
 function renderAges(id,short=false){const el=$(id);el.innerHTML='';for(let a=3;a<=13;a++){if(short&&a>8&&a!==13)continue;const b=document.createElement('button');b.className='age-card'+(a===age?' selected':'');b.innerHTML='<span class="age-emoji">'+AGE_ICONS[a-3]+'</span><strong>Age '+a+'</strong><small>'+AGE_DESC[a-3]+'</small>';b.onclick=()=>{age=a;renderGrades('homeGrades');renderGrades('gradeGrid');renderTopics('homeTopics');openTopic(topic)};el.appendChild(b)}}
 function renderTopics(id){const el=$(id);if(!el)return;el.innerHTML='';gradeTopics().forEach(t=>{const b=document.createElement('button');b.className='topic-card';b.innerHTML='<span class="age-emoji">'+t.icon+'</span><strong>'+t.name+'</strong><small>'+t.desc+'</small>';b.onclick=()=>openTopic(t.id);el.appendChild(b)})}
@@ -835,9 +840,10 @@ $('nav').onclick=e=>{const b=e.target.closest('button');if(!b)return;if(b.datase
 $('startAdventure').onclick=()=>{openTopic(topic);say('Welcome to the quiz!')};$('continueLevel').onclick=()=>startQuiz(nextLevel());if($('allAges'))$('allAges').onclick=()=>{page('ages');renderGrades('gradeGrid')};$('backHome').onclick=()=>page('home');$('exitQuiz').onclick=()=>openTopic(quizTopic);
 $('repeatQuestion').onclick=()=>{if(questions[qi])say(questions[qi].spoken,true)};$('hintBtn').onclick=()=>{if(!questions[qi])return;$('hintLine').textContent='💡 '+questions[qi].hint;say(questions[qi].hint,true);$('hintBtn').disabled=true};
 $('nextQuestion').onclick=()=>{stopTimer();clearAnswerTimeout();qi++;showQ()};$('retryBtn').onclick=()=>startQuiz(level);$('continueBtn').onclick=()=>startQuiz(Math.min(20,level+1));$('resultLevels').onclick=()=>openTopic(quizTopic);$('menuBtn').onclick=()=>$('app').classList.toggle('menu-open');
+$('voiceChoose').onclick=()=>{const l=girlVoices();if(!l.length){toast('No girl voice found on this device.');return}voicePick=(voicePick+1)%l.length;try{localStorage.setItem('mathstars-voice-pick',String(voicePick))}catch(e){}$('voiceChoose').textContent='🎀 '+l[voicePick].name.replace(/Microsoft |Google |Online|\(Natural\)|- English.*$/g,'').trim().slice(0,18);voiceOn=true;try{localStorage.setItem(VOICE,'1')}catch(e){}$('voiceToggle').textContent='🔊 Voice on';$('voiceToggle').setAttribute('aria-pressed','true');say('Hi! I am your maths friend. Let us have fun!',true)};
 $('voiceToggle').onclick=()=>{voiceOn=!voiceOn;try{localStorage.setItem(VOICE,voiceOn?'1':'0')}catch(e){}$('voiceToggle').textContent=voiceOn?'🔊 Voice on':'🔇 Voice off';$('voiceToggle').setAttribute('aria-pressed',String(voiceOn));if(!voiceOn&&'speechSynthesis'in window)speechSynthesis.cancel();else say('Voice is on. Take your time.',true)};
 $('resetProgress').onclick=()=>{if(confirm('Reset saved stars and levels on this device?')){data={stars:0,completed:{}};save();stats();openTopic(topic);toast('Progress reset.')}};document.addEventListener('click',e=>{if($('app').classList.contains('menu-open')&&!e.target.closest('aside')&&!e.target.closest('#menuBtn'))$('app').classList.remove('menu-open')});
-$('voiceToggle').textContent=voiceOn?'🔊 Voice on':'🔇 Voice off';$('voiceToggle').setAttribute('aria-pressed',String(voiceOn));renderGrades('homeGrades');renderGrades('gradeGrid');renderTopics('homeTopics');renderTopics('topicChooser');stats();openTopic(topic);page('home');
+$('voiceToggle').textContent=voiceOn?'🔊 Voice on':'🔇 Voice off';$('voiceToggle').setAttribute('aria-pressed',String(voiceOn));renderGrades('homeGrades');renderGrades('gradeGrid');renderTopics('homeTopics');renderTopics('topicChooser');renderWelcome();stats();openTopic(topic);page('home');
 })();
 </script>
 </body></html>
