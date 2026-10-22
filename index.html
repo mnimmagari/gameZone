@@ -511,7 +511,9 @@ body #quizPage #recStage>.quiz-panel[id="quizPanel"]:not(.hidden) #questionCount
 body #quizPage #recStage>.quiz-panel[id="quizPanel"]:not(.hidden) .question{grid-row:2;margin:0 128px 0 0!important;max-width:none!important;width:auto!important;height:auto!important;min-height:0!important;padding:34px 22px 12px!important;display:flex!important;align-items:center;justify-content:center;text-align:center;overflow:hidden;font-size:54px;line-height:1.12;border-radius:24px}
 body #quizPage #recStage>.quiz-panel[id="quizPanel"]:not(.hidden) .question>span{display:block;max-width:100%;overflow-wrap:anywhere}
 body #quizPage #recStage>.quiz-panel[id="quizPanel"]:not(.hidden) .visual{grid-row:3;margin:0!important;max-width:none!important;width:auto!important;min-height:0!important;padding:4px 10px!important;display:flex;align-items:center;justify-content:center;overflow:hidden;border-radius:20px;font-size:54px;line-height:1.1;flex-wrap:wrap;gap:2px 6px}
-body #quizPage #recStage>.quiz-panel[id="quizPanel"]:not(.hidden) .visual .emo-block .ic{width:56px;height:56px}
+body #quizPage #recStage>.quiz-panel[id="quizPanel"]:not(.hidden) .visual .emo-block .ic{width:var(--icsz,56px);height:var(--icsz,56px)}
+body #quizPage #recStage>.quiz-panel[id="quizPanel"]:not(.hidden) .visual{flex-wrap:nowrap}
+body #quizPage #recStage>.quiz-panel[id="quizPanel"]:not(.hidden) .visual>.emo-block:not(.pictograph .emo-block){display:flex;flex-wrap:nowrap;align-items:center;gap:4px;white-space:nowrap}
 /* Pictographs stack several rows, so their icons stay smaller to fit the picture area. */
 body #quizPage #recStage>.quiz-panel[id="quizPanel"]:not(.hidden) .visual .pictograph .emo-block .ic{width:28px;height:28px}
 body #quizPage #recStage>.quiz-panel[id="quizPanel"]:not(.hidden) .answers{grid-row:4;display:grid!important;grid-template-columns:1fr 1fr;grid-auto-rows:minmax(0,1fr);gap:12px;max-width:none!important;width:100%!important;height:100%;margin:0!important}
@@ -662,6 +664,13 @@ function endFx(ttl,sm){const rp=$('resultPanel'),h=rand(360),gi=Math.max(0,GRADE
 const fx=document.createElement('div');fx.className='bgfx';fx.setAttribute('aria-hidden','true');let h='';for(let k=0;k<8;k++)h+='<i style="left:'+(4+k*12.5)+'%;width:'+(22+(k*9)%28)+'px;height:'+(22+(k*9)%28)+'px;animation-delay:-'+(k*2.3)+'s;animation-duration:'+(16+(k%3)*4)+'s"></i>';fx.innerHTML=h;qp.prepend(fx);
 function paint(){let i;do{i=Math.floor(Math.random()*HUES.length)}while(i===last&&HUES.length>1);last=i;const H=HUES[i],S=qp.style;S.setProperty('--level-bg','linear-gradient(160deg,hsl('+H+' 100% 95%),hsl('+((H+40)%360)+' 100% 92%))');S.setProperty('--level-border','hsl('+H+' 70% 78%)');S.setProperty('--level-accent','hsl('+H+' 65% 46%)');S.setProperty('--level-ink','hsl('+H+' 60% 18%)');S.setProperty('--fx','hsl('+((H+20)%360)+' 90% 78%)');['a','b','c','d'].forEach((n,k)=>S.setProperty('--answer-'+n,'hsl('+((H+k*70)%360)+' 100% 90%)'))}
 new MutationObserver(()=>{const t=qt.textContent;if(t&&t!==lastText){lastText=t;paint()}}).observe(qt,{childList:true,characterData:true,subtree:true})})();
+/* ---- Picture-row icon sizing ----
+   All icons in the picture row sit on ONE line. Their size is derived from how many there are and how
+   much width/height the row has (few icons = big, many icons = smaller but still using the full width). */
+(()=>{const v=$('visualCount');if(!v)return;let busy=false;
+function fit(){busy=false;if(v.querySelector('.pictograph'))return;const n=v.querySelectorAll('.emo-block .ic').length,w=v.clientWidth-24,h=v.clientHeight-8;if(!n||w<=0||h<=0)return;const groups=v.querySelectorAll('.emo-block').length,size=Math.max(24,Math.min(96,Math.floor(Math.min((w-(groups-1)*20)/n-4,h))));v.style.setProperty('--icsz',size+'px')}
+function queue(){if(!busy){busy=true;requestAnimationFrame(fit)}}
+new MutationObserver(queue).observe(v,{childList:true,subtree:true});const qp=$('quizPanel');if(qp)new MutationObserver(queue).observe(qp,{attributes:true,attributeFilter:['class']})})();
 let speakId=0;
 function say(text,force=false,onDone=null){
  if(!voiceOn&&!force){if(typeof onDone==='function')onDone();return}
