@@ -919,12 +919,35 @@ function setCurriculum(v){curriculum=v;const el=$('curriculumSelect');if(el)el.v
 function renderAges(id,short=false){const el=$(id);el.innerHTML='';for(let a=3;a<=13;a++){if(short&&a>8&&a!==13)continue;const b=document.createElement('button');b.className='age-card'+(a===age?' selected':'');b.innerHTML='<span class="age-emoji">'+AGE_ICONS[a-3]+'</span><strong>Age '+a+'</strong><small>'+AGE_DESC[a-3]+'</small>';b.onclick=()=>{age=a;renderGrades('homeGrades');renderGrades('gradeGrid');renderTopics('homeTopics');openTopic(topic)};el.appendChild(b)}}
 function renderTopics(id){const el=$(id);if(!el)return;el.innerHTML='';gradeTopics().forEach(t=>{const b=document.createElement('button');b.className='topic-card';b.innerHTML='<span class="age-emoji">'+t.icon+'</span><strong>'+t.name+'</strong><small>'+t.desc+'</small>';b.onclick=()=>openTopic(t.id);el.appendChild(b)})}
 function unlocked(l){return true}
-/* Sets that can really supply 10 different questions for the current class/curriculum/topic.
-   A set is sampled 120 times; if it yields fewer than 10 distinct prompts it is hidden. Cached per selection. */
-const levelCache={};
-function availableLevels(){const key=[grade,curriculum,topic].join('|');if(levelCache[key])return levelCache[key];const keepLevel=level,keepUsed=quizUsed,keepEmo=quizEmo,list=[];try{for(let l=1;l<=20;l++){level=l;const prompts=new Set();for(let n=0;n<120&&prompts.size<10;n++){quizUsed=new Set();quizEmo=new Set();prompts.add(curriculumQ(n%10).p)}if(prompts.size>=10)list.push(l)}}catch(e){}level=keepLevel;quizUsed=keepUsed;quizEmo=keepEmo;if(!list.length)for(let l=1;l<=20;l++)list.push(l);return levelCache[key]=list}
+/* ---- Unique question pools per level ----
+   Questions are generated, not stored, so overlap between levels used to happen by chance. For each class /
+   curriculum / topic we now build a fixed pool for every level and keep it exclusive:
+   - a question is a duplicate if its normalised text OR its structure (the same numbers + answer, e.g. 3 + 4 and 4 + 3)
+     was already taken by an earlier level or earlier in the same level;
+   - a level is only published if it ends up with at least 10 unique questions - otherwise it is dropped;
+   - nothing is ever copied from another level, topic or class to fill a gap.
+   Pools are cached per selection; levelAudit() reports what was kept and removed. */
+const QUIZ_LEN=10,POOL_CAP=40,POOL_DRAWS=250,levelPools={},levelAudits={};
+/* Identity of a question = its wording plus its picture (colours ignored), because many questions
+   (e.g. "What shape is this?") share wording and differ only in the diagram. */
+const visHash=v=>{const t=String(v||'').replace(/#[0-9a-f]{3,8}\b|hsla?\([^)]*\)|rgba?\([^)]*\)/gi,'').replace(/\s+/g,' ');let h=0;for(let i=0;i<t.length;i++)h=(h*31+t.charCodeAt(i))|0;return t.length+'.'+(h>>>0).toString(36)};
+const normQ=q=>String(q.p).toLowerCase().replace(/<[^>]*>/g,' ').replace(/[^a-z0-9.\/]+/g,' ').trim()+'|'+visHash(q.vis);
+function structKey(q){const nums=String(q.p).match(/\d+(?:\.\d+)?(?:\/\d+)?/g)||[];return nums.length>=2?nums.slice().sort().join(',')+'|'+q.ans:null}
+function buildPools(){const key=[grade,curriculum,topic].join('|');if(levelPools[key])return levelPools[key];
+ const keepLevel=level,keepUsed=quizUsed,keepEmo=quizEmo,pools={},audit={levels:[],removed:0,kept:0},texts=new Set(),structs=new Set();
+ try{for(let l=1;l<=20;l++){level=l;const cand=[],lt=new Set(),ls=new Set();let removed=0;
+   for(let n=0;n<POOL_DRAWS&&cand.length<POOL_CAP;n++){quizUsed=new Set();quizEmo=new Set();const q=cleanQuestion(curriculumQ(n));if(!q)continue;const k=normQ(q),sk=structKey(q);
+    if(texts.has(k)||lt.has(k)||(sk&&(structs.has(sk)||ls.has(sk)))){removed++;continue}
+    lt.add(k);if(sk)ls.add(sk);cand.push(q)}
+   audit.removed+=removed;
+   if(cand.length>=QUIZ_LEN){pools[l]=cand;cand.forEach(q=>{texts.add(normQ(q));const sk=structKey(q);if(sk)structs.add(sk)});audit.levels.push({level:l,questions:cand.length,removed});audit.kept+=cand.length}}}catch(e){}
+ level=keepLevel;quizUsed=keepUsed;quizEmo=keepEmo;levelAudits[key]=audit;return levelPools[key]=pools}
+/* Levels (by original number, so saved progress stays valid) that have a full set of unique questions. */
+function availableLevels(){return Object.keys(buildPools()).map(Number)}
+/* Duplicate-check report for the current selection. */
+function levelAudit(){buildPools();return levelAudits[[grade,curriculum,topic].join('|')]}
 function nextLevel(){const ls=availableLevels();for(const l of ls){if(!rec(age,topic,l)?.passed)return l}return ls[ls.length-1]}
-function renderLevels(){const g=$('levelGrid');g.innerHTML='';for(const l of availableLevels()){const r=rec(age,topic,l),b=document.createElement('button');b.className='level '+(r?.passed?'done':l===nextLevel()?'current':'');b.setAttribute('aria-label','Question set '+l+(r?.passed?', completed':', available'));b.innerHTML='<strong>Set '+l+'</strong><span>'+(r?.passed?'⭐':l===nextLevel()?'▶':'○')+'</span><small>'+(SET_NAMES[l-1])+'</small><small>'+(r?'Best: '+r.score+'/10':l===nextLevel()?'Continue here':'Start anytime')+'</small>';b.onclick=()=>startQuiz(l);g.appendChild(b)}}
+function renderLevels(){const g=$('levelGrid');g.innerHTML='';let shown=0;for(const l of availableLevels()){shown++;const r=rec(age,topic,l),b=document.createElement('button');b.className='level '+(r?.passed?'done':l===nextLevel()?'current':'');b.setAttribute('aria-label','Question set '+shown+(r?.passed?', completed':', available'));b.innerHTML='<strong>Set '+shown+'</strong><span>'+(r?.passed?'⭐':l===nextLevel()?'▶':'○')+'</span><small>'+(SET_NAMES[l-1])+'</small><small>'+(r?'Best: '+r.score+'/10':l===nextLevel()?'Continue here':'Start anytime')+'</small>';b.onclick=()=>startQuiz(l);g.appendChild(b)}}
 function openTopic(t){if(!gradeTopics().some(x=>x.id===t))t=gradeTopics()[0].id;topic=t;const meta=topicMeta(t);$('topicHeading').textContent=meta.icon+' '+meta.name;$('topicSub').textContent=grade==='IK1'||grade==='IK2'||grade==='IK3'||grade==='LKG'||grade==='UKG'?grade+' · Foundational maths': 'Class '+grade+' · '+curriculumName()+' chapter alignment';$('levelsHeading').textContent=availableLevels().length+' sets · '+meta.name;const desc=$('setDescription');if(desc)desc.textContent='Set themes: '+SET_NAMES.join(' · ')+'. Every set changes the skill focus, story, visual or reasoning task. Progress is saved separately for class, curriculum, chapter and set.';renderTopics('topicChooser');renderLevels();renderGrades('homeGrades');renderGrades('gradeGrid');renderTopics('homeTopics');stats();page('topic')}
 function rand(n){return Math.floor(Math.random()*n)}function pick(a){return a[rand(a.length)]}
 function makeQ(a,t,l){let x,y,z,p,vis='',hint,spoken,ans;const cap=a<=4?Math.min(20,4+l*2):a<=6?Math.min(60,8+l*3):a<=9?Math.min(250,15+l*12):Math.min(999,40+l*35);const simple=a<=4,early=a<=6,mid=a<=9;
@@ -1269,10 +1292,12 @@ function cleanQuestion(q){if(!q||typeof q.p!=='string'||!q.p.trim())return null;
  m=q.p.match(/^What is (\d+) groups of (\d+)\?$/);if(m&&String(m[1]*m[2])!==String(q.ans))return null;
  m=q.p.match(/^Share (\d+) objects equally into (\d+) groups/);if(m&&String(m[1]/m[2])!==String(q.ans))return null;
  return q}
-/* Builds 10 questions with no repeated prompt in the quiz, and avoids earlier attempts of this level
-   where possible. Small question pools (e.g. counting) fall back to in-quiz uniqueness only, and the
-   history resets once it has been used up. */
-function createQuestions(){quizUsed=new Set();quizEmo=new Set();const key=[quizTopic,quizGrade,quizCurriculum,level].join('|'),seen=seenQ[key]||(seenQ[key]=new Set()),out=[];const gen=k=>{for(let t=0;t<20;t++){const c=cleanQuestion(curriculumQ(k+t));if(c)return c}return curriculumQ(k)};for(let i=0;i<10;i++){let q=gen(i),n=0;while(n++<150&&(out.some(v=>v.p===q.p)||seen.has(q.p)))q=gen(i+out.length+n);for(n=0;n++<150&&out.some(v=>v.p===q.p);)q=gen(i+out.length+n);out.push(q)}out.forEach(q=>seen.add(q.p));if(seen.size>200)seen.clear();return out}
+/* Picks the quiz's 10 questions from this level's exclusive pool, preferring ones not shown on earlier attempts.
+   The pool never overlaps other levels, so no question can repeat across levels. */
+function createQuestions(){quizUsed=new Set();quizEmo=new Set();const pools=buildPools(),pool=(pools[level]||pools[Object.keys(pools)[0]]||[]).slice(),key=[grade,curriculum,topic,level].join('|'),seen=seenQ[key]||(seenQ[key]=new Set());
+ for(let i=pool.length-1;i>0;i--){const j=rand(i+1);[pool[i],pool[j]]=[pool[j],pool[i]]}
+ const fresh=pool.filter(q=>!seen.has(normQ(q))),rest=pool.filter(q=>seen.has(normQ(q))),out=fresh.concat(rest).slice(0,QUIZ_LEN);
+ if(fresh.length<QUIZ_LEN)seen.clear();out.forEach(q=>seen.add(normQ(q)));return out}
 function opts(q){if(q.options){const choices=[...q.options];for(let i=choices.length-1;i>0;i--){const j=rand(i+1);[choices[i],choices[j]]=[choices[j],choices[i]]}return choices}const correct=q.ans,arr=[correct];let tries=0;while(arr.length<4&&tries++<100){let v;if(!isNaN(Number(correct))){const n=Number(correct),d=Math.max(3,Math.ceil(Math.abs(n)*.2));v=String(Math.max(0,n+rand(d*2+1)-d));if(v===correct)continue}else v=pick(['1/2','1/3','1/4','2/3','3/4','0.25','0.5','0.75','25%','50%','75%']);if(!arr.includes(v))arr.push(v)}while(arr.length<4)arr.push(String(rand(20)));for(let i=arr.length-1;i>0;i--){const j=rand(i+1);[arr[i],arr[j]]=[arr[j],arr[i]]}return arr}
 function startQuiz(l){recAsk(l)}
 function startQuizNow(l){if(recState==='recording')recStop();$('quizPage').classList.remove('quiz-showing-end');$('endControls').classList.add('hidden');level=l;quizAge=age;quizGrade=grade;quizCurriculum=curriculum;quizTopic=topic;questions=createQuestions();qi=0;score=0;stopTimer();clearAnswerTimeout();$('quizPanel').classList.add('hidden');$('resultPanel').classList.add('hidden');page('quiz');/* The welcome screen shows at once; its voice waits on introGate (recorder ready) so it is captured. */introGate=Promise.resolve(recOnStart());startIntro();introGate.then(()=>{musicStop();musicTrack=pickTrack();musicStart()})}
@@ -1288,7 +1313,7 @@ function fitAll(){const vz0=$('visualCount'),hasVis=!!(vz0&&(vz0.children.length
 window.addEventListener('resize',()=>{stageScale();fitAll()});
 if(window.ResizeObserver)new ResizeObserver(()=>{stageScale();fitAll()}).observe($('recStage'));
 stageScale();
-function vidBanner(){const p=$('quizPanel');if(!p.querySelector('.deco')){[['d1','1f4da'],['d3','270f'],['d2','1f30d']].forEach(([c,u])=>{});}let t=p.querySelector('.lvl-tag');if(!t){t=document.createElement('span');t.className='lvl-tag';p.appendChild(t)}t.textContent='Level '+level;placeLvl()}
+function vidBanner(){const p=$('quizPanel');if(!p.querySelector('.deco')){[['d1','1f4da'],['d3','270f'],['d2','1f30d']].forEach(([c,u])=>{});}let t=p.querySelector('.lvl-tag');if(!t){t=document.createElement('span');t.className='lvl-tag';p.appendChild(t)}t.textContent='Level '+(availableLevels().indexOf(level)+1||level);placeLvl()}
 function placeLvl(){const c=$('questionCount'),t=$('quizPanel').querySelector('.lvl-tag');if(c&&t)t.style.left=(c.offsetLeft+c.offsetWidth+8)+'px'}
 function confetti(){const p=$('quizPanel');if(!p)return;const cols=['#f4a6c0','#ffd98a','#9adbc9','#9fb4f0','#f7b98a','#a8e3b9'];for(let i=0;i<46;i++){const c=document.createElement('i');c.className='confetti-bit';c.style.left=rand(100)+'%';c.style.background=pick(cols);c.style.setProperty('--dx',(rand(160)-80)+'px');c.style.setProperty('--rot',(rand(720)-360)+'deg');c.style.animationDuration=(1.4+Math.random()*1.4)+'s';c.style.animationDelay=(Math.random()*.3)+'s';p.appendChild(c);setTimeout(()=>c.remove(),3500)}}
 function duck(on){try{if(musicGain)musicGain.gain.value=on?.012:.05}catch(e){}}
