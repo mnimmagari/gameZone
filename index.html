@@ -766,21 +766,28 @@ const GRADE_OPTIONS=[
 ];
 const EARLY_TOPICS=[
  [{id:'counting',name:'Notice & Match',icon:'🔎',desc:'Match objects and quantities',skill:'count'},
-  {id:'shapes',name:'Shapes Around Me',icon:'🔺',desc:'Sort familiar shapes',skill:'shape'}],
+  {id:'shapes',name:'Shapes Around Me',icon:'🔺',desc:'Sort familiar shapes',skill:'shape'},
+  {id:'measurement',name:'Big, Small & Heavy',icon:'📏',desc:'Compare sizes and the day',skill:'measure'}],
  [{id:'counting',name:'Sort & Count',icon:'🔢',desc:'Count small groups',skill:'count'},
   {id:'patterns',name:'Patterns',icon:'🌈',desc:'Continue a pattern',skill:'pattern'},
-  {id:'shapes',name:'Shapes & Space',icon:'🔵',desc:'Recognise shapes and position',skill:'shape'}],
+  {id:'shapes',name:'Shapes & Space',icon:'🔵',desc:'Recognise shapes and position',skill:'shape'},
+  {id:'measurement',name:'Compare & Day Time',icon:'📏',desc:'Bigger, taller, heavier and parts of the day',skill:'measure'}],
  [{id:'counting',name:'Counting & Numerals',icon:'🔢',desc:'Count and recognise numerals',skill:'count'},
   {id:'patterns',name:'Patterns & Order',icon:'🌈',desc:'Order and extend patterns',skill:'pattern'},
-  {id:'shapes',name:'Shapes & Position',icon:'🔺',desc:'Describe shapes and positions',skill:'shape'}],
+  {id:'shapes',name:'Shapes & Position',icon:'🔺',desc:'Describe shapes and positions',skill:'shape'},
+  {id:'measurement',name:'Compare & Measure',icon:'📏',desc:'Compare things and order the day',skill:'measure'}],
  [{id:'counting',name:'Numbers 1–10',icon:'🔢',desc:'Count objects and match numerals',skill:'count'},
   {id:'shapes',name:'Shapes & Sorting',icon:'🔺',desc:'Group objects by shape',skill:'shape'},
-  {id:'patterns',name:'Patterns',icon:'🌈',desc:'Repeat and extend patterns',skill:'pattern'}],
+  {id:'patterns',name:'Patterns',icon:'🌈',desc:'Repeat and extend patterns',skill:'pattern'},
+  {id:'measurement',name:'Measure & Time of Day',icon:'📏',desc:'Compare lengths, weights and the day',skill:'measure'}],
  [{id:'counting',name:'Numbers 1–20',icon:'🔢',desc:'Count, compare and order',skill:'count'},
   {id:'addition',name:'Joining Groups',icon:'➕',desc:'Add with pictures and objects',skill:'add'},
   {id:'subtraction',name:'Taking Away',icon:'➖',desc:'Subtract with pictures',skill:'subtract'},
   {id:'shapes',name:'Shapes & Space',icon:'🔺',desc:'2D shapes and position',skill:'shape'},
-  {id:'patterns',name:'Patterns & Measure',icon:'🌈',desc:'Patterns, length and comparison',skill:'pattern'}]
+  {id:'patterns',name:'Patterns & Measure',icon:'🌈',desc:'Patterns, length and comparison',skill:'pattern'},
+  {id:'measurement',name:'Length, Weight & Time',icon:'📏',desc:'Compare, order the day and read the clock',skill:'measure'},
+  {id:'money',name:'Coins & Money',icon:'🪙',desc:'Count coins and compare prices',skill:'money'},
+  {id:'multiplication',name:'Equal Groups & Sharing',icon:'✖️',desc:'Repeated addition and sharing',skill:'multiply'}]
 ];
 const PRIMARY_TOPICS={
  '1':[
@@ -790,6 +797,8 @@ const PRIMARY_TOPICS={
  {id:'shapes',name:'Shapes & Space',icon:'🔺',desc:'Recognise shapes and position',skill:'shape'},
  {id:'measurement',name:'Length, Weight & Capacity',icon:'📏',desc:'Compare everyday measures',skill:'measure'},
  {id:'patterns',name:'Patterns & Time',icon:'🕒',desc:'Sequences and daily events',skill:'pattern'},
+ {id:'multiplication',name:'How Many Times?',icon:'✖️',desc:'Equal groups and repeated addition',skill:'multiply'},
+ {id:'money',name:'How Much Can We Spend?',icon:'🪙',desc:'Coins and simple prices',skill:'money'},
  {id:'mixed',name:'Everyday Maths',icon:'🌟',desc:'Use maths in little stories',skill:'word'}],
  '2':[
  {id:'counting',name:'Numbers & Place Value',icon:'🔢',desc:'Read and compare larger numbers',skill:'count'},
@@ -800,6 +809,7 @@ const PRIMARY_TOPICS={
  {id:'shapes',name:'Shapes & Patterns',icon:'🔷',desc:'Shape properties and patterns',skill:'shape'},
  {id:'measurement',name:'Length, Mass, Capacity & Time',icon:'📏',desc:'Practical measurement',skill:'measure'},
  {id:'money',name:'Money & Bills',icon:'🪙',desc:'Coins and simple totals',skill:'money'},
+ {id:'data',name:'Data Handling',icon:'📊',desc:'Tally marks and picture charts',skill:'data'},
  {id:'mixed',name:'Everyday Word Problems',icon:'🌟',desc:'Choose an operation',skill:'word'}],
  '3':[
  {id:'counting',name:'Numbers & Place Value',icon:'🔢',desc:'Read, compare and expand numbers',skill:'count'},
@@ -811,6 +821,7 @@ const PRIMARY_TOPICS={
  {id:'shapes',name:'Shapes & Geometry',icon:'🔷',desc:'Lines, turns and shapes',skill:'shape'},
  {id:'measurement',name:'Measurement & Time',icon:'📏',desc:'Length, mass, capacity, time',skill:'measure'},
  {id:'data',name:'Data & Tables',icon:'📊',desc:'Read simple charts and tables',skill:'data'},
+ {id:'money',name:'Give and Take (Money)',icon:'🪙',desc:'Coins, prices and change',skill:'money'},
  {id:'mixed',name:'Problem Solving',icon:'🌟',desc:'Multi-step everyday maths',skill:'word'}],
  '4':[
  {id:'counting',name:'Large Numbers & Place Value',icon:'🔢',desc:'Expanded form and ordering',skill:'count'},
@@ -855,6 +866,7 @@ const PRIMARY_TOPICS={
  {id:'geometry',name:'Lines, Angles & Triangles',icon:'📐',desc:'Angle relationships and triangle properties',skill:'shape'},
  {id:'measurement',name:'Geometric Measurement',icon:'📏',desc:'Perimeter and area reasoning',skill:'measure'},
  {id:'data',name:'Data & Graphs',icon:'📊',desc:'Organise and interpret data',skill:'data'},
+ {id:'hcf',name:'Finding Common Ground',icon:'🧩',desc:'HCF, LCM and prime factors',skill:'multiply'},
  {id:'mixed',name:'Variables & Problem Solving',icon:'🌟',desc:'Use letter-numbers and reason across topics',skill:'word'}],
  '8':[
  {id:'counting',name:'Number Systems & Powers',icon:'🔢',desc:'Rational numbers, squares, cubes and exponents',skill:'count'},
@@ -927,28 +939,30 @@ function unlocked(l){return true}
    - a level is only published if it ends up with at least 10 unique questions - otherwise it is dropped;
    - nothing is ever copied from another level, topic or class to fill a gap.
    Pools are cached per selection; levelAudit() reports what was kept and removed. */
-const QUIZ_LEN=10,POOL_CAP=40,POOL_DRAWS=250,levelPools={},levelAudits={};
+const QUIZ_LEN=10,STEM_CAP=12 /* max questions of one wording shape per level */,POOL_CAP=40,POOL_DRAWS=250,levelPools={},levelAudits={};
 /* Identity of a question = its wording plus its picture (colours ignored), because many questions
    (e.g. "What shape is this?") share wording and differ only in the diagram. */
 const visHash=v=>{const t=String(v||'').replace(/#[0-9a-f]{3,8}\b|hsla?\([^)]*\)|rgba?\([^)]*\)/gi,'').replace(/\s+/g,' ');let h=0;for(let i=0;i<t.length;i++)h=(h*31+t.charCodeAt(i))|0;return t.length+'.'+(h>>>0).toString(36)};
 const normQ=q=>String(q.p).toLowerCase().replace(/<[^>]*>/g,' ').replace(/[^a-z0-9.\/]+/g,' ').trim()+'|'+visHash(q.vis);
 function structKey(q){const nums=String(q.p).match(/\d+(?:\.\d+)?(?:\/\d+)?/g)||[];return nums.length>=2?nums.slice().sort().join(',')+'|'+q.ans:null}
 function buildPools(){const key=[grade,curriculum,topic].join('|');if(levelPools[key])return levelPools[key];
- const keepLevel=level,keepUsed=quizUsed,keepEmo=quizEmo,pools={},audit={levels:[],removed:0,kept:0},texts=new Set(),structs=new Set();
+ const keepLevel=level,keepUsed=quizUsed,keepEmo=quizEmo,pools={},audit={levels:[],removed:0,kept:0},texts=new Set(),structs=new Set(),realRandom=Math.random;
+ /* Seeded random numbers while building: the same class/topic always gets the same levels, so saved progress per level stays meaningful. */
+ let seed=0;for(const ch of key)seed=(seed*31+ch.charCodeAt(0))>>>0;Math.random=()=>{seed=(seed+0x6D2B79F5)>>>0;let t=seed;t=Math.imul(t^t>>>15,t|1);t^=t+Math.imul(t^t>>>7,t|61);return((t^t>>>14)>>>0)/4294967296};
  try{for(let l=1;l<=20;l++){level=l;const cand=[],lt=new Set(),ls=new Set();let removed=0;
-   for(let n=0;n<POOL_DRAWS&&cand.length<POOL_CAP;n++){quizUsed=new Set();quizEmo=new Set();const q=cleanQuestion(curriculumQ(n));if(!q)continue;const k=normQ(q),sk=structKey(q);
+   const stems={};for(let n=0;n<POOL_DRAWS&&cand.length<POOL_CAP;n++){quizUsed=new Set();quizEmo=new Set();const q=cleanQuestion(curriculumQ(n));if(!q)continue;const k=normQ(q),sk=structKey(q),st=stemOf(q);if((stems[st]||0)>=STEM_CAP){removed++;continue}
     if(texts.has(k)||lt.has(k)||(sk&&(structs.has(sk)||ls.has(sk)))){removed++;continue}
-    lt.add(k);if(sk)ls.add(sk);cand.push(q)}
+    lt.add(k);if(sk)ls.add(sk);stems[st]=(stems[st]||0)+1;cand.push(q)}
    audit.removed+=removed;
    if(cand.length>=QUIZ_LEN){pools[l]=cand;cand.forEach(q=>{texts.add(normQ(q));const sk=structKey(q);if(sk)structs.add(sk)});audit.levels.push({level:l,questions:cand.length,removed});audit.kept+=cand.length}}}catch(e){}
- level=keepLevel;quizUsed=keepUsed;quizEmo=keepEmo;levelAudits[key]=audit;return levelPools[key]=pools}
+ Math.random=realRandom;level=keepLevel;quizUsed=keepUsed;quizEmo=keepEmo;levelAudits[key]=audit;return levelPools[key]=pools}
 /* Levels (by original number, so saved progress stays valid) that have a full set of unique questions. */
 function availableLevels(){return Object.keys(buildPools()).map(Number)}
 /* Duplicate-check report for the current selection. */
 function levelAudit(){buildPools();return levelAudits[[grade,curriculum,topic].join('|')]}
 function nextLevel(){const ls=availableLevels();for(const l of ls){if(!rec(age,topic,l)?.passed)return l}return ls[ls.length-1]}
-function renderLevels(){const g=$('levelGrid');g.innerHTML='';let shown=0;for(const l of availableLevels()){shown++;const r=rec(age,topic,l),b=document.createElement('button');b.className='level '+(r?.passed?'done':l===nextLevel()?'current':'');b.setAttribute('aria-label','Question set '+shown+(r?.passed?', completed':', available'));b.innerHTML='<strong>Set '+shown+'</strong><span>'+(r?.passed?'⭐':l===nextLevel()?'▶':'○')+'</span><small>'+(SET_NAMES[l-1])+'</small><small>'+(r?'Best: '+r.score+'/10':l===nextLevel()?'Continue here':'Start anytime')+'</small>';b.onclick=()=>startQuiz(l);g.appendChild(b)}}
-function openTopic(t){if(!gradeTopics().some(x=>x.id===t))t=gradeTopics()[0].id;topic=t;const meta=topicMeta(t);$('topicHeading').textContent=meta.icon+' '+meta.name;$('topicSub').textContent=grade==='IK1'||grade==='IK2'||grade==='IK3'||grade==='LKG'||grade==='UKG'?grade+' · Foundational maths': 'Class '+grade+' · '+curriculumName()+' chapter alignment';$('levelsHeading').textContent=availableLevels().length+' sets · '+meta.name;const desc=$('setDescription');if(desc)desc.textContent='Set themes: '+SET_NAMES.join(' · ')+'. Every set changes the skill focus, story, visual or reasoning task. Progress is saved separately for class, curriculum, chapter and set.';renderTopics('topicChooser');renderLevels();renderGrades('homeGrades');renderGrades('gradeGrid');renderTopics('homeTopics');stats();page('topic')}
+function renderLevels(){const g=$('levelGrid');g.innerHTML='';let shown=0;const lvls=availableLevels();for(const l of lvls){shown++;const fr=(shown-1)/Math.max(1,lvls.length-1),tier=fr<.2?'Basic':fr<.4?'Easy':fr<.6?'Medium':fr<.8?'Hard':'Advanced';const r=rec(age,topic,l),b=document.createElement('button');b.className='level '+(r?.passed?'done':l===nextLevel()?'current':'');b.setAttribute('aria-label','Question set '+shown+(r?.passed?', completed':', available'));b.innerHTML='<strong>Set '+shown+'</strong><span>'+(r?.passed?'⭐':l===nextLevel()?'▶':'○')+'</span><small>'+tier+' · '+(SET_NAMES[l-1])+'</small><small>'+(r?'Best: '+r.score+'/10':l===nextLevel()?'Continue here':'Start anytime')+'</small>';b.onclick=()=>startQuiz(l);g.appendChild(b)}}
+function openTopic(t){if(!gradeTopics().some(x=>x.id===t))t=gradeTopics()[0].id;topic=t;const meta=topicMeta(t);$('topicHeading').textContent=meta.icon+' '+meta.name;$('topicSub').textContent=grade==='IK1'||grade==='IK2'||grade==='IK3'||grade==='LKG'||grade==='UKG'?grade+' · Foundational maths': 'Class '+grade+' · '+curriculumName()+' chapter alignment';$('levelsHeading').textContent=availableLevels().length+' levels, Basic to Advanced · '+meta.name;const desc=$('setDescription');if(desc)desc.textContent='Set themes: '+SET_NAMES.join(' · ')+'. Every set changes the skill focus, story, visual or reasoning task. Progress is saved separately for class, curriculum, chapter and set.';renderTopics('topicChooser');renderLevels();renderGrades('homeGrades');renderGrades('gradeGrid');renderTopics('homeTopics');stats();page('topic')}
 function rand(n){return Math.floor(Math.random()*n)}function pick(a){return a[rand(a.length)]}
 function makeQ(a,t,l){let x,y,z,p,vis='',hint,spoken,ans;const cap=a<=4?Math.min(20,4+l*2):a<=6?Math.min(60,8+l*3):a<=9?Math.min(250,15+l*12):Math.min(999,40+l*35);const simple=a<=4,early=a<=6,mid=a<=9;
  if(t==='counting'){if(a<=4){ans=rand(Math.min(5+l,10))+1;vis='⭐ '.repeat(Math.min(ans,10));p='How many stars?';hint='Count each star slowly.';spoken='Count the stars. How many are there?'}else{x=rand(Math.min(cap,100))+1;if(rand(2)){ans=x+1;p='What comes after '+x+'?';hint='Count one more.'}else{ans=Math.max(0,x-1);p='What comes before '+x+'?';hint='Count one back.'}spoken=p}}
@@ -1017,6 +1031,7 @@ const R=(a,b)=>a+rand(Math.max(0,b-a)+1),S=(a,b)=>Math.round(a+(b-a)*(.2+.8*tl))
  const pie=(n,d)=>{const r=46,c=50;let b='';for(let k=0;k<d;k++){const a0=-Math.PI/2+2*Math.PI*k/d,a1=-Math.PI/2+2*Math.PI*(k+1)/d;b+='<path d="M50 50L'+(c+r*Math.cos(a0)).toFixed(1)+' '+(c+r*Math.sin(a0)).toFixed(1)+'A46 46 0 0 1 '+(c+r*Math.cos(a1)).toFixed(1)+' '+(c+r*Math.sin(a1)).toFixed(1)+'Z" fill="'+(k<n?'#9b8cf2':'#fffdf8')+'" stroke="'+ST+'" stroke-width="2.5" stroke-linejoin="round"/>'}return svg(100,100,b)};
  const bar=(n,d,lab)=>{const w=200,cw=w/d;let b='';for(let k=0;k<d;k++)b+='<rect x="'+(2+k*cw)+'" y="3" width="'+cw+'" height="34" fill="'+(k<n?'#9b8cf2':'#fffdf8')+'" stroke="'+ST+'" stroke-width="2.5"/>';return svg(204,lab?58:40,b+(lab?tx(102,54,lab,15):''))};
  const row=a=>'<div class="vis-row">'+a.join('')+'</div>';
+ const pieBar=(n,d)=>pie(n,d);
  const dots=(n,col,perRow)=>{perRow=perRow||5;let b='';for(let k=0;k<n;k++)b+='<circle cx="'+(14+(k%perRow)*24)+'" cy="'+(14+Math.floor(k/perRow)*24)+'" r="9" fill="'+col+'" stroke="'+ST+'" stroke-width="1.5"/>';return svg(14*2+(perRow-1)*24,14*2+(Math.ceil(n/perRow)-1)*24,b)};
  /* Plural of a pictograph label (Apple, Banana, Grapes, Orange, Berry) for question wording. */
 const plFruit=c=>c==='Berry'?'berries':c==='Grapes'?'grapes':c.toLowerCase()+'s';
@@ -1202,20 +1217,129 @@ const emo=(e,n)=>{let s='';for(let k=0;k<n;k++)s+=emoOne(e,40);return '<span cla
  wordD(){const nm=P(names),a=R(25,S(50,120))/2,b=R(10,40)/2,k=P(['dec','frac','avg']);if(k==='dec')return Q(nm+' buys vegetables for ₹'+a+' and fruit for ₹'+b+'. What is the total bill?','₹'+(a+b),'','Line up the decimal points and add.',['₹'+(a-b),'₹'+(a+b+1),'₹'+(a+b+.5),'₹'+(a+b-.5)]);if(k==='frac'){const d=P([4,5,8]),n=R(1,d-1),m=R(3,12);return Q('A tank holds '+d*m+' litres. It is '+n+'/'+d+' full. How many litres of water are in it?',n*m+' L','','Find 1/'+d+' of the tank, then take '+n+' of them.',[m+' L',(d*m-n*m)+' L',(n+m)+' L'])}const s=[R(5,9)*5,R(5,9)*5,R(5,9)*5];s.push(s[0]);return Q('In four tests '+nm+' scored '+s.join(', ')+'. What is the average score?',s.reduce((x,y)=>x+y,0)/4,'','Average = total ÷ number of tests.',[s.reduce((x,y)=>x+y,0)/4+1,s.reduce((x,y)=>x+y,0)/4-1,s.reduce((x,y)=>x+y,0)])},
  wordE(){const k=P(['bell','temp','ratio','area']);if(k==='bell'){const a=P([4,6,8,10]),b=P([6,9,12,15].filter(x=>x!==a));return Q('Two bells ring every '+a+' minutes and every '+b+' minutes. They ring together at 9:00. After how many minutes do they next ring together?',lcm(a,b),'','Find the LCM of '+a+' and '+b+'.',[a*b,gcd(a,b),a+b,lcm(a,b)*2].filter(x=>x!==lcm(a,b)))}if(k==='temp')return M.intWord();if(k==='ratio')return M.ratio();return M.areaWord()}
  };
+ /* ---- Added question types for the NCF-FS foundational competencies (C-8.1 sorting, C-8.3 counting in groups, C-8.7 equal groups/sharing,
+    C-8.9 measuring, C-8.10 time, C-8.11 money) and the NCERT Joyful Mathematics / Maths Mela chapters on them. See CURRICULUM_MAP.md. ---- */
+ const ANIMALS={'🐱':'cat','🐶':'dog','🐰':'rabbit','🐸':'frog','🐼':'panda','🐯':'tiger'};
+ const CMP_SETS=[['bigger','smaller',[['elephant','🐘','mouse','🐭'],['tree','🌳','flower','🌷'],['bus','🚌','bicycle','🚲'],['whale','🐋','fish','🐟'],['giraffe','🦒','cat','🐱'],['house','🏠','tent','⛺']]],
+  ['taller','shorter',[['giraffe','🦒','dog','🐶'],['tree','🌳','bush','🌿'],['tower','🗼','house','🏠'],['father','👨','baby','👶']]],
+  ['heavier','lighter',[['elephant','🐘','mouse','🐭'],['truck','🚚','car','🚗'],['watermelon','🍉','grape','🍇'],['bus','🚌','kite','🪁']]],
+  ['longer','shorter',[['snake','🐍','bug','🐛'],['train','🚆','car','🚗'],['ladder','🪜','spoon','🥄'],['river','🏞️','pond','💧']]]];
+ const DAY_ACTS=[['you wake up','⏰','morning'],['you eat breakfast','🍞','morning'],['you go to school','🏫','morning'],['you eat lunch','🍛','afternoon'],['you play outside after school','⚽','afternoon'],['the Sun is high in the sky','☀️','afternoon'],['the Sun sets','🌇','evening'],['you have dinner','🍽️','evening'],['you see the Moon and stars','🌙','night'],['you go to sleep','😴','night']];
+ const DAY_ORDER=[['wake up','⏰'],['brush your teeth','🧼'],['eat breakfast','🍞'],['go to school','🏫'],['eat lunch','🍛'],['play outside','⚽'],['eat dinner','🍽️'],['go to sleep','😴']];
+ const NUM_WORDS=['zero','one','two','three','four','five','six','seven','eight','nine','ten','eleven','twelve','thirteen','fourteen','fifteen','sixteen','seventeen','eighteen','nineteen','twenty'];
+ const DAYS=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'],MONTHS=['January','February','March','April','May','June','July','August','September','October','November','December'];
+ const SORT_ITEMS=[['🔴','red','circle'],['🔵','blue','circle'],['🟡','yellow','circle'],['🟥','red','square'],['🟦','blue','square'],['🟨','yellow','square']];
+ Object.assign(M,{
+  /* C-8.1: sort objects by colour and/or shape, then count one group */
+  sortTwo(){const n=R(6,Math.min(14,6+Math.ceil(level/2))),items=Array.from({length:n},()=>P(SORT_ITEMS)),t=P(SORT_ITEMS);items[rand(n)]=t;const mode=tl<.35?rand(2):2;
+   const test=mode===0?x=>x[1]===t[1]:mode===1?x=>x[2]===t[2]:x=>x===t,label=mode===0?t[1]+' shapes':mode===1?t[2]+'s':t[1]+' '+t[2]+'s',cnt=items.filter(test).length;
+   return Q('How many '+label+' are there?',cnt,D(items.map(x=>x[0]).join(' ')),'Look for '+(mode===0?'the colour':mode===1?'the shape':'both the colour and the shape')+', and count only those.')},
+  /* C-8.9: compare size, height, weight and length of familiar things */
+  cmpAttr(){const sets=CMP_SETS.slice(0,tl<.3?1:tl<.55?2:tl<.8?3:4),[hi,lo,pairs]=P(sets),[a,ea,b,eb]=P(pairs),big=Math.random()<.5,word=big?hi:lo,ans=big?a:b,other=big?b:a;
+   return Q('Which is '+word+': the '+a+' or the '+b+'?',ans,D(row([ea,'<span class="vs">vs</span>',eb])),'Think about how big, tall, heavy or long each one really is.',[other,'They are the same','Cannot tell'])},
+  /* C-8.10: parts of the day */
+  dayRoutine(){const [act,em,ans]=P(DAY_ACTS);return Q('Which part of the day is it when '+act+'?',ans,D(em),'Think about when you do this in your day.',['morning','afternoon','evening','night'].filter(x=>x!==ans))},
+  seqDay(){let i=rand(DAY_ORDER.length-1),j=i+1+rand(DAY_ORDER.length-1-i);const A=DAY_ORDER[i],B=DAY_ORDER[j],first=Math.random()<.5;
+   return Q('Which happens '+(first?'first':'last')+' in your day: you '+A[0]+' or you '+B[0]+'?','you '+(first?A[0]:B[0]),D(row([A[1],'<span class="vs">or</span>',B[1]])),'Think about the order of a day, from morning to night.',['you '+(first?B[0]:A[0]),'both at the same time','neither'])},
+  calendar(){const k=rand(5);if(k===0){const d=rand(7),n=R(1,Math.min(3,1+Math.ceil(level/6)));return Q('Today is '+DAYS[d]+'. Which day will it be '+(n===1?'tomorrow':n+' days from now')+'?',DAYS[(d+n)%7],'','Count forward one day at a time.',[DAYS[(d+n+1)%7],DAYS[(d+n+6)%7],DAYS[(d+n+2)%7]])}
+   if(k===1){const d=1+rand(6);return Q('Which day comes just before '+DAYS[d]+'?',DAYS[d-1],'','Count back one day.',[DAYS[(d+1)%7],DAYS[(d+2)%7],DAYS[(d+3)%7]])}
+   if(k===2){const m=rand(11);return Q('Which month comes just after '+MONTHS[m]+'?',MONTHS[m+1],'','Say the months in order.',[MONTHS[(m+2)%12],MONTHS[(m+11)%12],MONTHS[(m+3)%12]])}
+   if(k===3)return Q('How many days are there in one week?',7,'','Say the days from Sunday to Saturday.',[5,6,8]);
+   return Q('How many months are there in one year?',12,'','Say the months from January to December.',[10,11,13])},
+  /* C-8.3: counting backwards and in groups (skip counting) */
+  countBack(){const n=R(4,band<=3?10:20);return Q('Count backwards: '+n+', '+(n-1)+', '+(n-2)+', ___. What comes next?',n-3,'','Say the numbers going down, one at a time.')},
+  skip10(){const st=band<=4?(tl<.5?10:P([10,5,2])):P([2,5,10]),start=st*R(0,Math.max(1,Math.floor(40/st))),seq=[start,start+st,start+st*2,start+st*3];
+   return Q('Count in '+(st===10?'tens':st===5?'fives':'twos')+': '+seq.join(', ')+', ___. What comes next?',start+st*4,'','Add '+st+' each time.')},
+  numWord(){const n=R(0,Math.min(20,4+level));return Q('Which number is "'+NUM_WORDS[n]+'"?',n,D(NUM_WORDS[n]),'Match the number word to its numeral.')},
+  /* Making 10 (and 20): number bonds */
+  bond10(){const T0=band>=5&&tl>.5?20:10,a=R(1,T0-1);return Q(a+' + ___ = '+T0,T0-a,D(dots(T0,'#a8d4f5',10)),'How many more make '+T0+'?')},
+  /* position words */
+  position(){const animals=shuf(Object.keys(ANIMALS)).slice(0,R(3,Math.min(5,3+Math.ceil(level/5)))),vis=D(animals.join('　')),k=rand(3);
+   if(k===0)return Q('Which animal is first from the left?',ANIMALS[animals[0]],vis,'Start from the left side.',animals.slice(1).map(x=>ANIMALS[x]).concat(['none']))
+   if(k===1)return Q('Which animal is last on the right?',ANIMALS[animals[animals.length-1]],vis,'Look at the right end.',animals.slice(0,-1).map(x=>ANIMALS[x]).concat(['none']))
+   const m=1+rand(animals.length-2);return Q('Which animal is between the '+ANIMALS[animals[m-1]]+' and the '+ANIMALS[animals[m+1]]+'?',ANIMALS[animals[m]],vis,'Find the two animals, then look in the middle.',animals.filter((_,i)=>i!==m).map(x=>ANIMALS[x]).concat(['none']))},
+  /* C-8.7: multiplication as repeated addition / equal groups, division as equal sharing and grouping */
+  eqGroups(){const mx=band<=5?Math.min(5,2+Math.ceil(tl*3)):Math.min(9,3+Math.ceil(tl*6)),g=R(2,mx),per=R(2,mx),[e,pl]=fresh();
+   return Q('There are '+g+' plates. Each plate has '+per+' '+pl+'. How many '+pl+' are there in all?',g*per,g*per<=45?D(Array.from({length:g},()=>emo(e,per)).join('')):'','Add '+per+' again and again, '+g+' times.')},
+  repAdd(){const n=R(2,band<=5?5:5+Math.round(tl*5)),t=R(2,band<=5?5:6);return rand(2)?Q(Array(t).fill(n).join(' + ')+' = ?',n*t,'','Add the same number again and again.'):Q(n+' is added '+t+' times. What is the total?',n*t,'','Repeated addition is the same as '+t+' groups of '+n+'.')},
+  eqShare(){const k=R(2,Math.min(5,2+Math.ceil(tl*3))),each=R(1,Math.min(6,2+Math.ceil(tl*4))),[e,pl]=fresh(),nm=P(names);
+   return Q(nm+' shares '+k*each+' '+pl+' equally among '+k+' friends. How many '+pl+' does each friend get?',each,D(emo(e,k*each)),'Give one to each friend again and again until none are left.')},
+  groupInto(){const per=R(2,5),bags=R(2,Math.min(6,2+Math.ceil(tl*4))),[e,pl]=fresh();
+   return Q(per*bags+' '+pl+' are put into bags. Each bag holds '+per+'. How many bags are needed?',bags,D(emo(e,per*bags)),'Make groups of '+per+' and count the groups.')},
+  arrayQ(){const r=R(2,5+Math.round(tl*3)),c=R(2,6+Math.round(tl*3)),k=rand(3);const vis=D(dots(r*c,'#e0573f',c));
+   if(k===0)return Q('The dots are in '+r+' rows. Each row has '+c+' dots. How many dots are there in all?',r*c,vis,'Add '+c+', '+r+' times, or multiply '+r+' × '+c+'.');
+   if(k===1)return Q('How many dots are there in all?',r*c,vis,'Count the rows, then count the dots in one row.');
+   return Q('There are '+r*c+' dots in rows of '+c+'. How many rows are there?',r,vis,'Make rows of '+c+' and count the rows.')},
+  /* money */
+  costCmp(){const it=shuf([['pencil','🖍️'],['eraser','🧽'],['toffee','🍬'],['ball','⚽'],['book','📘'],['bag','🎒']]).slice(0,2),mx=band<=5?20:band<=6?50:99,x=R(2,mx),y=R(2,mx);if(x===y)return M.costCmp();const hi=x>y?it[0][0]:it[1][0],lo=x>y?it[1][0]:it[0][0],more=Math.random()<.5;
+   return Q('A '+it[0][0]+' costs ₹'+x+' and a '+it[1][0]+' costs ₹'+y+'. Which costs '+(more?'more':'less')+'?',more?hi:lo,D(it[0][1]+' ₹'+x+'　'+it[1][1]+' ₹'+y),'Compare the two prices.',[more?lo:hi,'They cost the same','Cannot tell'])},
+  buyTwo(){const mx=band<=6?40:99,a=R(5,mx),b=R(5,mx),i=shuf(['pen','book','toy','bag','cap','kite']);return Q(P(names)+' buys a '+i[0]+' for ₹'+a+' and a '+i[1]+' for ₹'+b+'. How much does '+P(['she','he'])+' spend in all?','₹'+(a+b),'','Add the two prices.',['₹'+(a+b+10),'₹'+Math.abs(a-b),'₹'+(a+b-1)])},
+  /* Class 4-5: leap years, compass directions, number machines; Class 7: congruent triangles */
+  leapYear(){const y=R(1990,2040),leap=y%4===0&&(y%100!==0||y%400===0),k=rand(2);if(k===0){const wrong=[y+1,y+2,y+3].filter(v=>!(v%4===0&&(v%100!==0||v%400===0)));return Q('How many days does February have in the year '+y+'?',leap?29:28,'','A leap year has 29 days in February. Leap years are divisible by 4.',leap?[28,30,31]:[29,30,31])}
+   const L=[2000,2004,2008,2012,2016,2020,2024,2028,2032],N=[2001,2002,2003,2005,2006,2007,2009,2010,2011,2013,2014,2015,2017,2018,2019,2021,2022,2023],ans=P(L);return Q('Which of these is a leap year?',ans,'','Leap years are the years you can divide by 4 (like 2020).',shuf(N).slice(0,3))},
+  directions(){const D4=['north','east','south','west'],f=rand(4),k=rand(3),turn=['right','left','around'][k],d=[1,3,2][k],ans=D4[(f+d)%4];
+   return Q('Manu is facing '+D4[f]+'. He turns '+(turn==='around'?'all the way around':turn)+'. Which direction is he facing now?',ans,'','Turning right moves clockwise: north, east, south, west. Turning left goes the other way.',D4.filter(x=>x!==ans))},
+  funcMachine(){const m=R(2,Math.min(9,3+Math.ceil(tl*6))),a=R(2,9),b=R(2,9+Math.round(tl*10)),ask=rand(2);return ask?Q('A number machine multiplies every number by '+m+'. What comes out when '+a+' goes in?',a*m,'','Multiply the number that goes in by '+m+'.'):Q('A number machine multiplies every number by '+m+'. The answer is '+m*b+'. What number went in?',b,'','Divide the answer by '+m+' to go back.')},
+  congSSS(){const t=[[3,4,5],[5,12,13],[6,8,10],[7,24,25],[4,5,6],[5,6,7],[6,7,8]],[a,b,c]=P(t),same=Math.random()<.5,u=shuf([a,b,c]),v=same?shuf([a,b,c]):(()=>{for(let t=0;t<30;t++){const w=[a,b,c],i=rand(3);w[i]+=P([1,-1]);const q=w.slice().sort((x,y)=>x-y);if(q[0]>0&&q[0]+q[1]>q[2])return w}return [a,b,c+1]})();
+   return Q('Triangle 1 has sides '+a+' cm, '+b+' cm and '+c+' cm. Triangle 2 has sides '+v.join(' cm, ').replace(/, (\d+)$/,' cm and $1')+' cm. Are they congruent by SSS?',same?'Yes':'No',D(row([triS(a,b,c,a+'',b+'',c+''),'<span class="vs">?</span>',triS(v[0],v[1],v[2],v[0]+'',v[1]+'',v[2]+'')])),'Congruent triangles have all three pairs of matching sides equal (SSS).',['Only if the angles are known','Cannot say'].concat(same?['No']:['Yes']).slice(0,3))},
+  /* Class 6-7 (Prime Time / Finding Common Ground): factors, multiples, HCF, LCM in stories */
+  hcfBig(){const g=R(2,4+Math.round(tl*8)),m1=R(2,9),m2=R(2,12),a=g*m1,b=g*m2;if(a===b)return M.hcfBig();const h=gcd(a,b);return Q('What is the HCF of '+a+' and '+b+'?',h,'','Find the biggest number that divides both exactly.',[h*2,h+1,Math.max(1,h-1),lcm(a,b)].filter(x=>x!==h))},
+  lcmBig(){const a=R(3,6+Math.round(tl*8)),b=R(3,9+Math.round(tl*8));if(a===b)return M.lcmBig();const l=lcm(a,b);return Q('What is the LCM of '+a+' and '+b+'?',l,'','Find the smallest number that both numbers divide into.',[a*b===l?l+a:a*b,l+a,l-a,a+b].filter(x=>x!==l))},
+  hcfWord(){const g=R(2,8),m1=R(2,6),m2=R(2,8),a=g*m1,b=g*m2;if(a===b)return M.hcfWord();const h=gcd(a,b);return Q('A '+a+' m rope and a '+b+' m rope are cut into equal pieces, with no rope left over. What is the longest possible piece?',h+' m','','The longest equal piece is the HCF.',[h*2+' m',h+1+' m',Math.max(1,h-1)+' m',lcm(a,b)+' m'].filter(x=>x!==h+' m'))},
+  lcmWord(){const a=R(2,6),b=R(3,9);if(a===b)return M.lcmWord();const l=lcm(a,b);return Q('One bell rings every '+a+' minutes and another every '+b+' minutes. They ring together now. After how many minutes will they ring together again?',l+' minutes','','The first time together again is the LCM.',[a*b===l?l+a:a*b,l+a,l-a].map(x=>x+' minutes'))},
+  commonFactor(){const g=P([2,3,4,5,6]),a=g*R(2,6),b=g*R(2,6)+0;if(a===b)return M.commonFactor();const cf=[...Array(Math.min(a,b)).keys()].map(i=>i+1).filter(i=>a%i===0&&b%i===0),ans=P(cf.filter(x=>x>1).length?cf.filter(x=>x>1):cf),bad=[...Array(30).keys()].map(i=>i+2).filter(i=>!(a%i===0&&b%i===0)&&(a%i===0||b%i===0));if(bad.length<3)return M.commonFactor();return Q('Which number is a common factor of '+a+' and '+b+'?',ans,'','A common factor divides both numbers with no remainder.',shuf(bad).slice(0,3))},
+  coprime(){const A=[[8,15],[9,10],[14,15],[7,12],[16,21],[25,27],[11,13],[20,21]],B=[[6,9],[8,12],[10,15],[14,21],[12,18],[16,24],[20,30]],ya=P(A),nb=shuf(B).slice(0,3);return Q('Which pair of numbers has no common factor other than 1?',ya.join(' and '),'','Co-prime numbers share only the factor 1.',nb.map(x=>x.join(' and ')))},
+  /* Class 8 (Comparing quantities): percentages, profit, interest */
+  findPct(){const b=P([20,25,40,50,80,100,200,250,400,500]),pct=P([5,10,20,25,40,50,60,75]),a=b*pct/100;if(a!==Math.round(a))return M.findPct();return Q(a+' is what percent of '+b+'?',pct+'%','','Percent = part ÷ whole × 100.',[pct+5+'%',pct+10+'%',Math.max(1,pct-5)+'%'])},
+  wholeFromPct(){const pct=P([10,20,25,40,50,60,75]),w=pct*R(2,12)*P([1,2,4])/(pct%10===0?1:1);const part=w*pct/100;if(part!==Math.round(part))return M.wholeFromPct();return Q(pct+'% of a number is '+part+'. What is the number?',w,'','If '+pct+'% is '+part+', find 1% first, then multiply by 100.')},
+  pctChange(){const base=P([200,400,500,800,1000,1200,2000]),pct=P([5,10,15,20,25]),up=Math.random()<.5,val=base*pct/100;return Q('The price of a bag is ₹'+base+'. It '+(up?'rises':'falls')+' by '+pct+'%. What is the new price?','₹'+(up?base+val:base-val),'',(up?'Add':'Subtract')+' the '+pct+'% change to the price.',['₹'+(up?base-val:base+val),'₹'+val,'₹'+(base+val+val)].filter(x=>x!=='₹'+(up?base+val:base-val)))},
+  profitPct(){const cp=P([100,200,250,400,500,800]),pr=P([5,10,20,25,40]),loss=Math.random()<.35,amt=cp*pr/100;if(amt!==Math.round(amt))return M.profitPct();const sp=loss?cp-amt:cp+amt;return Q('A shopkeeper buys a toy for ₹'+cp+' and sells it for ₹'+sp+'. What is the '+(loss?'loss':'profit')+' percent?',pr+'%','',(loss?'Loss':'Profit')+' % = '+(loss?'loss':'profit')+' ÷ cost price × 100.',[pr+5+'%',pr*2+'%',Math.max(1,pr-5)+'%'])},
+  simpleInt(){const p=P([500,1000,2000,2500,4000,5000]),r=P([4,5,6,8,10]),t=P([1,2,3,4,5]),si=p*r*t/100;if(si!==Math.round(si))return M.simpleInt();return Q('What is the simple interest on ₹'+p+' at '+r+'% per year for '+t+' '+(t===1?'year':'years')+'?','₹'+si,'','SI = principal × rate × time ÷ 100.',['₹'+(si+p),'₹'+si*2,'₹'+Math.round(si/2)])},
+  /* Class 4-5: turns and angles */
+  turnFacts(){const F=[['A full turn is how many right angles?',4,[2,3,8]],['A half turn is how many degrees?',180,[90,360,45]],['A quarter turn is how many degrees?',90,[45,180,360]],['A full turn is how many degrees?',360,[180,90,720]],['How many quarter turns make a half turn?',2,[1,3,4]],['How many right angles make a straight line?',2,[1,3,4]]],[p,a,ds]=P(F);return Q(p,a,'','Picture turning around like a clock hand.',ds)},
+  /* 3-D shapes and everyday objects */
+  faces(){const S3=[['cube',6,12,8],['cuboid',6,12,8],['cone',2,1,1],['cylinder',3,2,0],['sphere',1,0,0],['square pyramid',5,8,5]],[nm,f,e,v]=P(S3),k=rand(3),w=['faces','edges','corners'],val=[f,e,v][k];
+   return Q('How many '+w[k]+' does a '+nm+' have?',val,'','Think of a real '+nm+' and count carefully.',[val+1,Math.max(0,val-1),val+2,val+4])},
+  rolls(){const S3=[['ball',true],['can',true],['dice',false],['brick',false],['orange',true],['box',false],['pipe',true],['book',false]],a=P(S3.filter(x=>x[1])),b=P(S3.filter(x=>!x[1])),roll=Math.random()<.5;
+   return Q('Which one can '+(roll?'roll':'only slide, not roll')+'?',roll?a[0]:b[0],'','Round, curved things roll. Flat-faced things slide.',[roll?b[0]:a[0],'both of them','neither of them'])},
+  objShape(){const O=[['a football','⚽','sphere'],['a dice','🎲','cube'],['a tin can','🥫','cylinder'],['a party hat','🥳','cone'],['a brick','🧱','cuboid'],['a coin','🪙','circle'],['a window','🪟','rectangle'],['a slice of pizza','🍕','triangle'],['a ball of wool','🧶','sphere'],['a cake box','📦','cuboid']],[o,em,ans]=P(O);
+   return Q('Which shape does '+o+' look like?',ans,D(em),'Think about the flat faces and curved parts.',['sphere','cube','cylinder','cone','cuboid','circle','rectangle','triangle'].filter(x=>x!==ans))},
+  shapeCmp(){const SH2=[['triangle',3],['square',4],['rectangle',4],['pentagon',5],['hexagon',6]],[a,b]=shuf(SH2.slice()).slice(0,2);if(a[1]===b[1])return M.shapeCmp();const more=Math.random()<.5,ans=(a[1]>b[1])===more?a[0]:b[0];
+   return Q('Which shape has '+(more?'more':'fewer')+' corners: a '+a[0]+' or a '+b[0]+'?',ans,D(row([SH(a[0]),'<span class="vs">vs</span>',SH(b[0])])),'Count the corners of each shape.',[ans===a[0]?b[0]:a[0],'they are the same','cannot tell'])},
+  /* fractions: naming parts, parts of a set, comparing unit fractions */
+  fSetOf(){const d=P([2,3,4,5]),each=R(1,Math.min(5,2+Math.ceil(tl*3))),tot=d*each,[e,pl]=fresh(),nm={2:'half',3:'one-third',4:'one-quarter',5:'one-fifth'}[d];
+   return Q('What is '+nm+' of '+tot+' '+pl+'?',each,D(emo(e,tot)),'Split the '+tot+' into '+d+' equal groups. One group is the answer.')},
+  fMoreLess(){const A=[[1,2],[1,3],[1,4],[1,5],[1,6],[1,8]],[a,b]=shuf(A.slice()).slice(0,2),more=Math.random()<.5,ans=((a[1]<b[1])===more)?'1/'+a[1]:'1/'+b[1];
+   return Q('Which fraction is '+(more?'bigger':'smaller')+': 1/'+a[1]+' or 1/'+b[1]+'?',ans,D(row([pieBar(1,a[1]),'<span class="vs">vs</span>',pieBar(1,b[1])])),'When a whole is cut into more parts, each part is smaller.',['1/'+(ans==='1/'+a[1]?b[1]:a[1]),'they are equal','cannot tell'])},
+  /* measurement: units, facts and short stories */
+  timeFacts(){const F=[['How many minutes are there in one hour?',60,[30,100,24]],['How many hours are there in one day?',24,[12,60,7]],['How many days are there in one week?',7,[5,10,12]],['How many months are there in one year?',12,[10,7,52]],['How many seconds are there in one minute?',60,[30,100,12]],['How many minutes are there in half an hour?',30,[15,60,20]],['How many days are there in a leap-year February?',29,[28,30,31]]],[p,a,ds]=P(F);return Q(p,a,'','Think about a clock and a calendar.',ds)},
+  lenStory(){const a=R(5,S(20,90)),b=R(3,S(10,60)),it=P(['ribbon','rope','string','pipe']),add=Math.random()<.5;return Q(add?'A '+it+' is '+a+' cm long. Another '+it+' is '+b+' cm long. What is their total length?':'A '+it+' is '+(a+b)+' cm long. '+b+' cm is cut off. How long is the rest?',(add?a+b:a)+' cm','','Use addition to join lengths and subtraction to cut them.',[(add?a+b+10:a+10)+' cm',(add?Math.abs(a-b):a+b)+' cm',(add?a+b+1:a-1)+' cm'])},
+  capacityCmp(){const C=[['bucket','cup'],['bathtub','mug'],['water tank','bottle'],['jug','spoon'],['pot','glass']],[a,b]=P(C),more=Math.random()<.5;return Q('Which holds '+(more?'more':'less')+' water: a '+a+' or a '+b+'?',more?a:b,'','Think about the size of each container.',[more?b:a,'they hold the same','cannot tell'])},
+  /* patterns */
+  patCount(){const U=P([['🔴','🔵'],['⭐','🌙'],['🔴','🔵','🟡'],['🟢','🟡','🟡']]),n=U.length*R(2,3)+R(0,U.length-1),seq=Array.from({length:n},(_,i)=>U[i%U.length]),t=P(U),c=seq.filter(x=>x===t).length;
+   return Q('How many '+t+' are there in this pattern?',c,D(seq.join(' ')),'Count only that symbol.')},
+  patOdd(){const E=['🔴','🔵','🟡','🟢','⭐','🌙'],a=shuf(E.slice()).slice(0,2),n=R(7,Math.min(10,7+Math.ceil(level/4))),seq=Array.from({length:n},(_,i)=>a[i%2]),k=2+rand(n-3),wrong=P(E.filter(x=>!a.includes(x)));seq[k]=wrong;
+   return Q('One symbol does not fit the pattern. Which symbol is it?',wrong,D(seq.join(' ')),'Find where the pattern breaks.',a.concat(E.filter(x=>x!==wrong&&!a.includes(x)).slice(0,1)))},
+  patUnit(){const E=['🔴','🔵','🟡','🟢'],len=P([2,3]),u=shuf(E.slice()).slice(0,len),seq=Array.from({length:len*3},(_,i)=>u[i%len]),ans=u.join(' '),alt=[u.slice().reverse().join(' '),u.concat(u[0]).join(' '),u.slice(0,len-1).join(' ')];
+   return Q('Which part keeps repeating in this pattern?',ans,D(seq.join(' ')),'Find the smallest group that repeats again and again.',alt)},
+  /* early addition / subtraction with pictures */
+  addPic(){const mx=Math.min(10,4+Math.ceil(tl*8)),a=R(1,mx-1),b=R(1,mx-a),[e]=fresh();return Q(a+' + '+b+' = ?',a+b,D(row([emo(e,a),'<span class="vs">+</span>',emo(e,b)])),'Count all the pictures together.')},
+  subPic(){const mx=Math.min(10,4+Math.ceil(tl*8)),a=R(2,mx),b=R(1,a-1),[e,pl]=fresh();return Q('There are '+a+' '+pl+'. '+b+' go away. How many are left?',a-b,D(emo(e,a)),'Take away '+b+' and count what is left.')}
+ });
  const T={
-  0:{counting:['countObj','oneMore','tenFrame','countColour','compareGroups'],shapes:['shapeName','oddShape','sides']},
-  1:{counting:['countObj','oneMore','countColour','tenFrame','compareGroups','orderNums'],patterns:['patColor','patShape'],shapes:['shapeName','oddShape','sides']},
-  2:{counting:['countObj','oneMore','countColour','tenFrame','beforeAfter','compareGroups','orderNums'],patterns:['patColor','patShape','patMissing'],shapes:['shapeName','sides','oddShape','solid']},
-  3:{counting:['countObj','countColour','beforeAfter','oneMore','oneLess','compareGroups','tenFrame','orderNums','diffGroups'],shapes:['shapeName','sides','oddShape','solid'],patterns:['patShape','patMissing','patGrow']},
-  4:{counting:['beforeAfter','oneLess','compareGroups','countColour','orderNums','diffGroups','cmpNum'],shapes:['sides','solid','symm','lines'],patterns:['patMissing','patGrow','lenCompare','patNum']},
-  5:{counting:['tensOnes','beforeAfter','cmpNum','orderNums','expanded'],shapes:['sides','solid','symm','oddShape'],measurement:['lenCompare','ruler','unitChoice','clock'],patterns:['patNum','clock','patMissing','patGrow'],mixed:['wordA']},
-  6:{counting:['tensOnes','cmpNum','orderNums','expanded','placeVal'],shapes:['sides','solid','symm','lines'],measurement:['ruler','clock','unitChoice','convert'],money:['coins','change'],mixed:['wordA','wordB']},
-  7:{counting:['placeVal','expanded','cmpNum','orderNums','round'],shapes:['symm','lines','angleType','sides'],measurement:['clock','convert','timeCalc','perimeter','unitChoice'],data:['pictograph','tally','barChart'],fractions:['fPie','fBar','fShadeCount','fLeft','fUnitCmp','fHalf'],mixed:['wordB']},
-  8:{counting:['placeVal','expanded','round','bigForm','cmpNum'],shapes:['angleType','symm','lines','sides'],measurement:['convert','timeCalc','perimeter','area'],data:['pictograph','barChart'],fractions:['fPie','fEq','fEqMissing','fCmpLike','fAddLike','fOfColl','fMixedPie','fSubLike'],mixed:['wordC']},
-  9:{counting:['placeVal','round','roman','factorsMult','bigForm'],geometry:['angleType','triType','angleLine','symm'],measurement:['convert','perimeter','area','timeCalc'],data:['barChart','mmm'],fractions:['fToDec','fFromDec','fAddUnlike','fSubUnlike','fCmpUnlike','fOfQty','fMix2Imp','fPercent'],mixed:['wordD']},
-  10:{counting:['patNum','numPlay','intCmp','intAdd'],addition:['intCmp','intAdd','intSub'],subtraction:['intSub','intWord','intAdd'],multiplication:['factorsMult','prime','divTest','hcf','lcm','primeFact'],division:['fracQty','fracDivWhole'],fractions:['fSimplest','fImp2Mix','fMix2Imp','fCmpUnlike','fAddUnlike','fSubUnlike','fOfQty','fNumLine'],geometry:['angleType','angleLine','triSum','polySides'],measurement:['perimeter','area','areaWord'],data:['barChart','mmm'],mixed:['wordE']},
-  11:{counting:['bigNum','expo'],addition:['orderOps'],subtraction:['intMul','intDiv','rAdd','rCmp'],multiplication:['decMul','decShift'],division:['fracDiv','decDiv','fToDec'],fractions:['fMulWhole','fMul','fRecip','fDiv','fToDec','fPercent'],geometry:['angleRel','triSum','extAngle','pyth'],measurement:['perimeter','areaPar','areaTri','circle'],data:['mmm','prob','barChart'],mixed:['subst','linEq1','algSimple']},
-  12:{counting:['rAddInv','rAdd','rCmp','squares','roots','expo2','sciNot'],addition:['linEq1','linEq2','linEq3'],subtraction:['percent','discount','profit'],multiplication:['simpExp','expand','identity'],division:['factComm','factDiff','factTri'],fractions:['ratio','unitary','invProp','speed'],geometry:['quadAngle','polyAngle','pyth','angleRel'],measurement:['areaTrap','vol','cyl','surf'],data:['coord','mmm','prob'],mixed:['linEqWord','percent','pyth','prob']}
+  0:{counting:['countObj','oneMore','tenFrame','countColour','compareGroups'],shapes:['shapeName','oddShape','sides','position'],measurement:['cmpAttr','dayRoutine']},
+  1:{counting:['countObj','oneMore','countColour','tenFrame','compareGroups','orderNums','sortTwo'],patterns:['patColor','patShape'],shapes:['shapeName','oddShape','sides','position'],measurement:['cmpAttr','dayRoutine','seqDay']},
+  2:{counting:['countObj','oneMore','countColour','tenFrame','beforeAfter','compareGroups','orderNums','sortTwo','numWord'],patterns:['patColor','patShape','patMissing','patCount','patOdd'],shapes:['shapeName','sides','oddShape','solid','position'],measurement:['cmpAttr','dayRoutine','seqDay']},
+  3:{counting:['countObj','countColour','beforeAfter','oneMore','oneLess','compareGroups','tenFrame','orderNums','diffGroups','countBack','numWord','sortTwo'],shapes:['shapeName','sides','oddShape','solid','position','objShape'],patterns:['patShape','patMissing','patGrow','patCount','patOdd','patUnit'],measurement:['cmpAttr','seqDay','dayRoutine','lenCompare']},
+  4:{counting:['beforeAfter','oneLess','compareGroups','countColour','orderNums','diffGroups','cmpNum','countBack','skip10','numWord','bond10'],addition:['addPic','generic','bond10','generic','addPic'],subtraction:['subPic','generic','subPic','generic'],shapes:['sides','solid','symm','lines','position','faces','objShape','rolls'],patterns:['patMissing','patGrow','lenCompare','patNum','patCount','patOdd','patUnit'],measurement:['cmpAttr','seqDay','lenCompare','dayRoutine','clock','timeFacts','capacityCmp'],money:['coins','costCmp','change'],multiplication:['eqGroups','eqShare','repAdd']},
+  5:{counting:['tensOnes','beforeAfter','cmpNum','orderNums','expanded','bond10','skip10'],shapes:['sides','solid','symm','oddShape','position','faces','objShape','rolls','shapeCmp'],measurement:['lenCompare','ruler','unitChoice','clock','cmpAttr','timeFacts','capacityCmp'],patterns:['patNum','clock','patMissing','patGrow','calendar','patCount','patOdd','patUnit'],money:['coins','costCmp','change'],multiplication:['eqGroups','repAdd','eqShare'],mixed:['wordA']},
+  6:{counting:['tensOnes','cmpNum','orderNums','expanded','placeVal','skip10'],shapes:['sides','solid','symm','lines','faces','objShape','rolls','shapeCmp'],patterns:['patCount','patOdd','patUnit','patNum'],measurement:['ruler','clock','unitChoice','convert','calendar','cmpAttr','timeFacts','lenStory','capacityCmp'],money:['coins','change','costCmp','buyTwo'],multiplication:['eqGroups','generic','arrayQ','repAdd','generic'],division:['eqShare','generic','groupInto','generic'],data:['pictograph','tally'],mixed:['wordA','wordB']},
+  7:{patterns:['patCount','patOdd','patUnit','patNum'],money:['coins','change','costCmp','buyTwo'],multiplication:['arrayQ','generic','eqGroups','repAdd','generic'],division:['groupInto','generic','eqShare','generic'],counting:['placeVal','expanded','cmpNum','orderNums','round'],shapes:['symm','lines','angleType','sides','faces','objShape','shapeCmp'],measurement:['clock','convert','timeCalc','perimeter','unitChoice','timeFacts','lenStory','capacityCmp'],data:['pictograph','tally','barChart'],fractions:['fPie','fBar','fShadeCount','fLeft','fUnitCmp','fHalf','fSetOf','fMoreLess'],mixed:['wordB']},
+  8:{multiplication:['funcMachine','generic'],counting:['placeVal','expanded','round','bigForm','cmpNum'],shapes:['angleType','symm','lines','sides','directions','faces','turnFacts'],measurement:['convert','timeCalc','perimeter','area','leapYear','timeFacts'],data:['pictograph','barChart'],fractions:['fPie','fEq','fEqMissing','fCmpLike','fAddLike','fOfColl','fMixedPie','fSubLike'],mixed:['wordC']},
+  9:{multiplication:['funcMachine','generic'],counting:['placeVal','round','roman','factorsMult','bigForm'],geometry:['angleType','triType','angleLine','symm','directions'],measurement:['convert','perimeter','area','timeCalc'],data:['barChart','mmm'],fractions:['fToDec','fFromDec','fAddUnlike','fSubUnlike','fCmpUnlike','fOfQty','fMix2Imp','fPercent'],mixed:['wordD']},
+  10:{counting:['patNum','numPlay','intCmp','intAdd'],addition:['intCmp','intAdd','intSub'],subtraction:['intSub','intWord','intAdd'],multiplication:['factorsMult','prime','divTest','hcf','lcm','primeFact','hcfBig','lcmBig','hcfWord','lcmWord','commonFactor','coprime'],division:['fracQty','fracDivWhole'],fractions:['fSimplest','fImp2Mix','fMix2Imp','fCmpUnlike','fAddUnlike','fSubUnlike','fOfQty','fNumLine'],geometry:['angleType','angleLine','triSum','polySides','symm','lines'],measurement:['perimeter','area','areaWord'],data:['barChart','mmm'],mixed:['wordE']},
+  11:{counting:['bigNum','expo'],addition:['orderOps'],subtraction:['intMul','intDiv','rAdd','rCmp'],multiplication:['decMul','decShift'],division:['fracDiv','decDiv','fToDec'],fractions:['fMulWhole','fMul','fRecip','fDiv','fToDec','fPercent'],geometry:['angleRel','triSum','extAngle','pyth','congSSS'],hcf:['hcf','lcm','primeFact','divTest','hcfBig','lcmBig','hcfWord','lcmWord','commonFactor','coprime'],measurement:['perimeter','areaPar','areaTri','circle'],data:['mmm','prob','barChart'],mixed:['subst','linEq1','algSimple']},
+  12:{counting:['rAddInv','rAdd','rCmp','squares','roots','expo2','sciNot','divTest'],addition:['linEq1','linEq2','linEq3'],subtraction:['percent','discount','profit','findPct','wholeFromPct','pctChange','profitPct','simpleInt'],multiplication:['simpExp','expand','identity'],division:['factComm','factDiff','factTri'],fractions:['ratio','unitary','invProp','speed'],geometry:['quadAngle','polyAngle','pyth','angleRel'],measurement:['areaTrap','vol','cyl','surf'],data:['coord','mmm','prob'],mixed:['linEqWord','percent','pyth','prob']}
  };
  const t2=tid==='shapes'?(T[band]&&T[band].shapes?'shapes':'geometry'):tid,pool=T[band]&&(T[band][t2]||(t2==='geometry'?T[band].shapes:t2==='shapes'?T[band].geometry:null));
  if(!pool)return null;
@@ -1231,7 +1355,7 @@ function curriculumQ(i){
  const hiMax=band<=2?5:band===3?10:band===4?20:band===5?20:band===6?100:band===7?999:band===8?9999:band===9?99999:band===10?999999:band===11?9999999:99999999;
  const tl=(Math.min(20,Math.max(1,level))-1)/19,hi=Math.max(lo+2,Math.min(hiMax,Math.round((lo+1)*Math.pow((hiMax+1)/(lo+1),.18+.82*tl))));
  const rnd=(a,b)=>a+rand(Math.max(1,b-a+1)),shapes=['●','■','▲','◆'],shapeNames=['circle','square','triangle','diamond'];
- let x,y,ans,p,vis='',hint,spoken;
+ let x,y,ans,p,vis='',hint,spoken,riddle=false;
  const setMode=(level+i)%6;
  if(skill==='shape'){
    const n=rand(4);ans=shapeNames[n];p=early?'Which shape is shown?':'Which shape is shown in the picture?';vis='<div class="curriculum-diagram" aria-label="'+ans+'">'+shapes[n]+'</div>';hint='Look carefully at the outline and corners.';spoken=p;
@@ -1265,10 +1389,10 @@ function curriculumQ(i){
    }
    if(skill==='money'){x=rnd(5,50);y=rnd(1,Math.min(20,x));ans=x+y;p='You have ₹'+x+' and receive ₹'+y+'. How much money do you have now?';vis='<div class="curriculum-diagram">'+ico('coin',38)+' ₹'+x+' + ₹'+y+'</div>';hint='Put the two amounts together.';spoken=p;return {p,ans:String(ans),vis,hint,spoken}}
    if(skill==='data'){const vals=[rnd(2,8),rnd(2,8),rnd(2,8)],ix=rand(3),labels=['Apples','Mangoes','Bananas'];ans=vals[ix];p='Which number of '+labels[ix].toLowerCase()+' is shown in the chart?';vis='<div class="curriculum-diagram data-diagram">'+labels.map((v,j)=>'<div>'+v+' <span>'+Array(vals[j]).fill(ico('block',22)).join('')+' '+vals[j]+'</span></div>').join('')+'</div>';hint='Find the named category, then read its count.';spoken=p;return {p,ans:String(ans),vis,hint,spoken}}
-   if(isMul){const mx=Math.min(10,Math.max(3,Math.round(2+tl*10)));x=rnd(2,mx);y=rnd(2,mx);ans=x*y;p='What is '+x+' groups of '+y+'?';vis='<div class="curriculum-diagram">'+Array.from({length:x},()=>'<span class="emo-block">'+Array.from({length:y},()=>emoOne('🔵',40)).join('')+'</span>').join('')+'</div>';hint='Repeated equal groups can be counted by multiplication.'}
-   else if(isDiv){y=rnd(2,Math.min(10,Math.max(2,Math.round(2+tl*8))));ans=rnd(2,Math.min(12,Math.max(3,Math.round(3+tl*9))));x=y*ans;p='Share '+x+' objects equally into '+y+' groups. How many in each group?';vis='<div class="curriculum-diagram">'+ico('apple',38)+' '+x+' objects ÷ '+y+' groups</div>';hint='Divide the total into equal groups.'}
-   else if(isSub){x=rnd(lo+2,Math.max(lo+3,Math.min(max,1000)));y=rnd(1,x);ans=x-y;p='There are '+x+' objects. '+y+' are taken away. How many remain?';vis='<div class="curriculum-diagram">'+Array(Math.min(8,x)).fill(ico('apple',38)).join('')+(x>8?' …':'')+'</div>';hint='Find the difference by taking away.'}
-   else {x=rnd(lo,Math.min(max,1000));y=rnd(lo,Math.min(max,1000));ans=x+y;p='A collection has '+x+' red beads and '+y+' blue beads. How many beads altogether?';vis='<div class="curriculum-diagram">'+ico('dotred',34)+' '+x+'　'+ico('dotblue',34)+' '+y+'</div>';hint='Add both groups to find the total.'}
+   if(isMul){let mxA,mxB;if(band<=6){mxA=mxB=Math.min(10,Math.max(3,Math.round(2+tl*8)))}else if(band===7){mxA=Math.min(10,3+Math.round(tl*7));mxB=tl<.4?10:Math.round(10+(tl-.4)*150)}else if(band===8){mxA=tl<.6?9:30;mxB=Math.round(10+tl*490)}else{mxA=Math.round(10+tl*90);mxB=Math.round(20+tl*980)}x=rnd(2,Math.max(3,mxA));y=rnd(2,Math.max(3,mxB));ans=x*y;{const th=STORY_THINGS[rand(STORY_THINGS.length)],v=rand(3);p=v===0?'What is '+x+' groups of '+y+'?':v===1?'There are '+x+' bags with '+y+' '+th[0]+' in each bag. How many '+th[0]+' are there altogether?':x+' boxes hold '+y+' '+th[0]+' each. How many '+th[0]+' are there in all?'}vis=(x>10||y>10)?'':'<div class="curriculum-diagram">'+Array.from({length:x},()=>'<span class="emo-block">'+Array.from({length:y},()=>emoOne('🔵',40)).join('')+'</span>').join('')+'</div>';hint='Repeated equal groups can be counted by multiplication.'}
+   else if(isDiv){y=rnd(2,band<=7?Math.min(10,Math.max(2,Math.round(2+tl*8))):band===8?12:20);ans=rnd(2,band<=6?Math.min(12,Math.max(3,Math.round(3+tl*9))):band===7?Math.round(12+tl*80):band===8?Math.round(20+tl*480):Math.round(50+tl*950));x=y*ans;{const th=STORY_THINGS[rand(STORY_THINGS.length)],nm=STORY_NAMES[rand(STORY_NAMES.length)],v=rand(3);p=v===0?'Share '+x+' objects equally into '+y+' groups. How many in each group?':v===1?nm+' shares '+x+' '+th[0]+' equally among '+y+' friends. How many '+th[0]+' does each friend get?':x+' '+th[0]+' are packed equally into '+y+' boxes. How many '+th[0]+' are in each box?';vis='<div class="curriculum-diagram">'+ico(th[1],38)+' '+x+' ÷ '+y+'</div>'};hint='Divide the total into equal groups.'}
+   else if(isSub){x=rnd(lo+2,Math.max(lo+3,Math.min(max,1000)));y=rnd(1,x);ans=x-y;{const th=STORY_THINGS[rand(STORY_THINGS.length)],nm=STORY_NAMES[rand(STORY_NAMES.length)],v=rand(6);riddle=v>=4;if(riddle)ans=x;p=v===4?'I am thinking of a number. When I take away '+y+', I get '+(x-y)+'. What is my number?':v===5?nm+' had some '+th[0]+' and gave '+y+' away. Now '+nm+' has '+(x-y)+'. How many '+th[0]+' were there at first?':v===0?'There are '+x+' objects. '+y+' are taken away. How many remain?':v===1?nm+' has '+x+' '+th[0]+' and gives '+y+' away. How many '+th[0]+' are left?':v===2?'A box has '+x+' '+th[0]+'. '+y+' are used. How many '+th[0]+' are left in the box?':x+' − '+y+' = ?';vis='<div class="curriculum-diagram">'+Array(Math.min(8,x)).fill(ico(v===0?'apple':th[1],38)).join('')+(x>8?' …':'')+'</div>'};hint=riddle?'Work backwards: put back what was taken away.':'Find the difference by taking away.'}
+   else {x=rnd(lo,Math.min(max,1000));y=rnd(lo,Math.min(max,1000));ans=x+y;{const th=STORY_THINGS[rand(STORY_THINGS.length)],nm=STORY_NAMES[rand(STORY_NAMES.length)],v=rand(6);riddle=v>=4;if(riddle)ans=x;p=v===4?'I am thinking of a number. When I add '+y+' to it, I get '+(x+y)+'. What is my number?':v===5?nm+' has some '+th[0]+'. After getting '+y+' more, '+nm+' has '+(x+y)+'. How many '+th[0]+' did '+nm+' have at first?':v===0?'A collection has '+x+' red beads and '+y+' blue beads. How many beads altogether?':v===1?nm+' has '+x+' '+th[0]+'. A friend gives '+y+' more. How many '+th[0]+' does '+nm+' have now?':v===2?'A basket has '+x+' '+th[0]+' and another basket has '+y+'. How many '+th[0]+' are there in all?':x+' + '+y+' = ?';vis=v===0?'<div class="curriculum-diagram">'+ico('dotred',34)+' '+x+'　'+ico('dotblue',34)+' '+y+'</div>':'<div class="curriculum-diagram">'+ico(th[1],38)+' '+x+' + '+y+'</div>'};hint=riddle?'Work backwards: take away what was added.':'Add both groups to find the total.'}
    spoken=p;return {p,ans:String(ans),vis,hint,spoken};
  }
  // Age-appropriate foundational quantity and comparison questions
@@ -1284,6 +1408,11 @@ const seenQ={};
    Rejected questions are simply regenerated. */
 /* Singular of the object names used in questions (strawberries -> strawberry, fish stays fish). */
 const singularOf=w=>/fish$/.test(w)?w:/ies$/.test(w)?w.replace(/ies$/,'y'):w.replace(/s$/,'');
+/* Story ingredients for the generic add / subtract / multiply / share questions, so a level is not one repeated sentence. */
+const STORY_THINGS=[['apples','apple'],['stickers','star'],['balloons','balloon'],['marbles','dotblue'],['gifts','gift'],['cookies','cookie'],['flowers','flower'],['stamps','coin'],['beads','dotred'],['donuts','donut']];
+const STORY_NAMES=['Maya','Ravi','Anu','Kabir','Riya','Imran','Meena','Rohan'];
+/* Wording-only fingerprint of a question (numbers, names and objects removed) used to spread a quiz over different question types. */
+const stemOf=q=>String(q.p).replace(/\d[\d,.\/]*/g,'#').replace(new RegExp('\\b('+STORY_NAMES.join('|')+'|'+STORY_THINGS.map(t=>t[0]).join('|')+')\\b','g'),'~').slice(0,60);
 const THING_PLURALS='apples|balloons|chicks|flowers|biscuits|stars|butterflies|cars|puppies|strawberries|turtles|gifts|donuts|ladybirds|balls|fish';
 function fixText(t){if(typeof t!=='string')return t;const thing=new RegExp('\\b1 ('+THING_PLURALS+')\\b','g'),thereAre=new RegExp('\\bThere are 1 ('+THING_PLURALS+')\\b','g');return t.replace(/[ \t]{2,}/g,' ').replace(/(?<=[A-Za-z)])\s+([?.!,])/g,'$1').replace(/\b([Aa]) (?=[aeiou]\w)(?!(?:one|once|uni|use|usu|eu)\b)/g,(m,a)=>a+'n ').replace(/\b([Aa])n (?=[bcdfgjklmnpqrstvwxyz]\w)(?!hour|honest)/g,(m,a)=>a+' ').replace(/\b([A-Za-z]{2,}) \1\b/gi,'$1').replace(thereAre,(m,w)=>'There is 1 '+singularOf(w)).replace(thing,(m,w)=>'1 '+singularOf(w)).replace(/\b1 (cake|pizza|chocolate|sandwich|apple|orange)s? are\b/g,'1 $1 is').replace(/\b1 (cakes|pizzas|chocolates|sandwiches|oranges)\b/g,(m,w)=>'1 '+(w==='sandwiches'?'sandwich':w.slice(0,-1))).replace(/^([a-z])(?=[a-z]+ )/,c=>c.toUpperCase()).trim()}
 function cleanQuestion(q){if(!q||typeof q.p!=='string'||!q.p.trim())return null;q.p=fixText(q.p);q.hint=fixText(q.hint);q.spoken=fixText(q.spoken);if(!q.hint||!q.spoken)return null;
@@ -1296,7 +1425,7 @@ function cleanQuestion(q){if(!q||typeof q.p!=='string'||!q.p.trim())return null;
    The pool never overlaps other levels, so no question can repeat across levels. */
 function createQuestions(){quizUsed=new Set();quizEmo=new Set();const pools=buildPools(),pool=(pools[level]||pools[Object.keys(pools)[0]]||[]).slice(),key=[grade,curriculum,topic,level].join('|'),seen=seenQ[key]||(seenQ[key]=new Set());
  for(let i=pool.length-1;i>0;i--){const j=rand(i+1);[pool[i],pool[j]]=[pool[j],pool[i]]}
- const fresh=pool.filter(q=>!seen.has(normQ(q))),rest=pool.filter(q=>seen.has(normQ(q))),out=fresh.concat(rest).slice(0,QUIZ_LEN);
+ const mix=list=>{const g={};list.forEach(q=>(g[stemOf(q)]=g[stemOf(q)]||[]).push(q));const ks=Object.keys(g),r=[];for(let i=0;r.length<list.length;i++)ks.forEach(k=>{if(g[k][i])r.push(g[k][i])});return r},fresh=mix(pool.filter(q=>!seen.has(normQ(q)))),rest=mix(pool.filter(q=>seen.has(normQ(q)))),out=fresh.concat(rest).slice(0,QUIZ_LEN);
  if(fresh.length<QUIZ_LEN)seen.clear();out.forEach(q=>seen.add(normQ(q)));return out}
 function opts(q){if(q.options){const choices=[...q.options];for(let i=choices.length-1;i>0;i--){const j=rand(i+1);[choices[i],choices[j]]=[choices[j],choices[i]]}return choices}const correct=q.ans,arr=[correct];let tries=0;while(arr.length<4&&tries++<100){let v;if(!isNaN(Number(correct))){const n=Number(correct),d=Math.max(3,Math.ceil(Math.abs(n)*.2));v=String(Math.max(0,n+rand(d*2+1)-d));if(v===correct)continue}else v=pick(['1/2','1/3','1/4','2/3','3/4','0.25','0.5','0.75','25%','50%','75%']);if(!arr.includes(v))arr.push(v)}while(arr.length<4)arr.push(String(rand(20)));for(let i=arr.length-1;i>0;i--){const j=rand(i+1);[arr[i],arr[j]]=[arr[j],arr[i]]}return arr}
 function startQuiz(l){recAsk(l)}
@@ -1309,7 +1438,7 @@ function startIntro(){$('quizPage').classList.add('quiz-showing-intro');let pane
 function themeHue(){const key=(quizGrade||grade)+'|'+quizTopic+'|'+level;let h=7;for(let c=0;c<key.length;c++)h=(h*31+key.charCodeAt(c))>>>0;return h%360}
 function stageScale(){const st=$('recStage');if(!st)return;const pt=(typeof recState!=='undefined'&&recState==='recording')?st.classList.contains('portrait'):window.matchMedia('(max-width:700px)').matches;st.classList.toggle('portrait',pt);const w=st.clientWidth;if(w)st.style.setProperty('--s',(w/(pt?540:960)).toFixed(4))}
 function fitBox(el,box,max,min,pad){if(!el||!box||!box.clientHeight)return;let lo=min,hi=max;const ok=px=>{el.style.fontSize=px+'px';return el.scrollHeight<=box.clientHeight-(pad||0)+1&&el.scrollWidth<=box.clientWidth+1};while(lo<hi){const mid=Math.ceil((lo+hi)/2);if(ok(mid))lo=mid;else hi=mid-1}el.style.fontSize=lo+'px'}
-function fitAll(){const vz0=$('visualCount'),hasVis=!!(vz0&&(vz0.children.length||vz0.textContent.trim()));$('quizPanel').classList.toggle('novis',!hasVis);placeLvl();const st=$('recStage'),pt=st&&st.classList.contains('portrait'),qb=$('questionText');if(!qb||!qb.clientHeight)return;let sp=qb.firstElementChild;if(!sp||sp.tagName!=='SPAN'){const t=qb.textContent;qb.textContent='';sp=document.createElement('span');sp.textContent=t;qb.appendChild(sp)}const cs=getComputedStyle(qb),padV=parseFloat(cs.paddingTop)+parseFloat(cs.paddingBottom),padH=parseFloat(cs.paddingLeft)+parseFloat(cs.paddingRight);let lo=18,hi=pt?58:64;const ok=px=>{qb.style.fontSize=px+'px';return sp.offsetHeight<=qb.clientHeight-padV+1&&sp.scrollWidth<=qb.clientWidth-padH+1};while(lo<hi){const mid=Math.ceil((lo+hi)/2);if(ok(mid))lo=mid;else hi=mid-1}qb.style.fontSize=lo+'px';[...$('answers').children].forEach(b=>{b.style.fontSize='';let l=14,h=pt?34:32;const o=px=>{b.style.fontSize=px+'px';return b.scrollWidth<=b.clientWidth+1&&b.scrollHeight<=b.clientHeight+1};while(l<h){const m=Math.ceil((l+h)/2);if(o(m))l=m;else h=m-1}b.style.fontSize=l+'px'});const vz=$('visualCount');if(vz&&vz.clientHeight){vz.style.zoom=1;/* Icon groups size themselves in the picture-row fitter, so they are never shrunk with zoom here. */if(!vz.querySelector('.emo-block')){const k=Math.min(vz.clientHeight/Math.max(1,vz.scrollHeight),vz.clientWidth/Math.max(1,vz.scrollWidth));if(k<1)vz.style.zoom=k.toFixed(3)}}}
+function fitAll(){const vz0=$('visualCount'),hasVis=!!(vz0&&(vz0.children.length||vz0.textContent.trim()));$('quizPanel').classList.toggle('novis',!hasVis);placeLvl();const st=$('recStage'),pt=st&&st.classList.contains('portrait'),qb=$('questionText');if(!qb||!qb.clientHeight)return;let sp=qb.firstElementChild;if(!sp||sp.tagName!=='SPAN'){const t=qb.textContent;qb.textContent='';sp=document.createElement('span');sp.textContent=t;qb.appendChild(sp)}const cs=getComputedStyle(qb),padV=parseFloat(cs.paddingTop)+parseFloat(cs.paddingBottom),padH=parseFloat(cs.paddingLeft)+parseFloat(cs.paddingRight);let lo=18,hi=pt?58:64;const ok=px=>{qb.style.fontSize=px+'px';return sp.offsetHeight<=qb.clientHeight-padV+1&&sp.scrollWidth<=qb.clientWidth-padH+1};while(lo<hi){const mid=Math.ceil((lo+hi)/2);if(ok(mid))lo=mid;else hi=mid-1}qb.style.fontSize=lo+'px';[...$('answers').children].forEach(b=>{b.style.fontSize='';let l=14,h=pt?34:32;const o=px=>{b.style.fontSize=px+'px';return b.scrollWidth<=b.clientWidth+1&&b.scrollHeight<=b.clientHeight+1};while(l<h){const m=Math.ceil((l+h)/2);if(o(m))l=m;else h=m-1}b.style.fontSize=l+'px'});const vz=$('visualCount');if(vz&&vz.clientHeight){vz.style.zoom=1;/* Icon groups size themselves in the picture-row fitter, so they are never shrunk with zoom here. */if(!vz.querySelector('.emo-block')||vz.querySelector('.pictograph')){const k=Math.min(vz.clientHeight/Math.max(1,vz.scrollHeight),vz.clientWidth/Math.max(1,vz.scrollWidth));if(k<1)vz.style.zoom=k.toFixed(3)}}}
 window.addEventListener('resize',()=>{stageScale();fitAll()});
 if(window.ResizeObserver)new ResizeObserver(()=>{stageScale();fitAll()}).observe($('recStage'));
 stageScale();
