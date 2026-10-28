@@ -720,10 +720,11 @@ function charStopTalk(){clearInterval(charTalkTimer);charTalkTimer=0;charMouth(0
 function charCheer(){charStopTalk();if(!charSvg)return;charSvg.classList.add('big-smile');if(!charRM()){const svg=charSvg;svg.classList.add('cheer');charLater(()=>svg.classList.remove('cheer'),1400)}}
 function charStop(){charToken++;charTimers.forEach(clearTimeout);charTimers=[];charStopTalk();if(charSvg)charSvg.classList.remove('alive','blink','tilt-l','tilt-r','big-smile','cheer','talking');charSvg=null}
 let speakId=0,introGate=Promise.resolve();
-/* Narration voice by class: pitch/rate offsets run from the youngest (IK1) to the oldest class, so the voice
-   gets a little lower and brisker as the character gets older. Edit these numbers to retune. */
+/* Narration voice by topic: each topic is voiced by a character aged 10 to 18 (TOPIC_VOICE_AGE), so the voice
+   gets a little lower and brisker as the age rises. Edit these numbers to retune. */
 const AGE_VOICE={pitchYoung:.15,pitchOld:-.35,rateYoung:-.06,rateOld:.04};
-function ageVoice(){const gi=Math.max(0,GRADE_OPTIONS.findIndex(g=>g.id===(quizGrade||grade))),t=gi/12;return{dp:AGE_VOICE.pitchYoung+(AGE_VOICE.pitchOld-AGE_VOICE.pitchYoung)*t,dr:AGE_VOICE.rateYoung+(AGE_VOICE.rateOld-AGE_VOICE.rateYoung)*t}}
+const TOPIC_VOICE_AGE={counting:10,shapes:11,patterns:12,money:13,addition:13,measurement:14,subtraction:14,multiplication:15,data:16,division:16,geometry:17,fractions:17,hcf:18,mixed:18};
+function ageVoice(){const ya=TOPIC_VOICE_AGE[topic]||14,t=(Math.min(18,Math.max(10,ya))-10)/8;return{dp:AGE_VOICE.pitchYoung+(AGE_VOICE.pitchOld-AGE_VOICE.pitchYoung)*t,dr:AGE_VOICE.rateYoung+(AGE_VOICE.rateOld-AGE_VOICE.rateYoung)*t}}
 /* hooks (optional): onStart() when speech really begins, onWord() on each spoken word - used for lip-sync. */
 function say(text,force=false,onDone=null,hooks=null){
  if(!voiceOn&&!force){if(typeof onDone==='function')onDone();return}
