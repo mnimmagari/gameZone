@@ -593,6 +593,25 @@ body #quizPage #recStage>.quiz-panel[id="quizPanel"]:not(.hidden) .answer.wrong:
 @keyframes gHeadSway{0%,100%{translate:0 0}50%{translate:0 -1.5px}}
 @keyframes gCheer{0%,100%{transform:translateY(0) rotate(0)}40%{transform:translateY(-12px) rotate(-3deg)}70%{transform:translateY(0) rotate(2deg)}}
 @media(prefers-reduced-motion:reduce){.girl-svg.alive .g-head,.girl-svg.cheer{animation:none!important}}
+
+/* ---- Quiz-area polish only ---- */
+.answer:active{transform:scale(.97)}
+.answer{transition:transform .12s,box-shadow .2s,background .2s}.answer:hover{transform:translateY(-2px)}
+.pattern-diagram{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:6px;padding:14px;border-radius:22px;background:linear-gradient(135deg,#f4f0ff,#eaf7f1);box-shadow:inset 0 0 0 2px #e1dbfa}
+.pt{display:inline-grid;place-items:center;width:1.9em;height:1.9em;font-style:normal;line-height:1;border-radius:16px;background:#fff;box-shadow:0 3px 0 #ddd5f7,0 8px 14px -8px #6657c855;animation:ptIn .45s cubic-bezier(.2,1.4,.4,1) both;animation-delay:var(--d,0ms)}
+.pt-link{width:.5em;height:4px;border-radius:4px;background:repeating-linear-gradient(90deg,#b9aef7 0 5px,transparent 5px 9px)}
+.pattern-diagram .pt-q{border:3px dashed #7354df;background:#f4f0ff;color:#7354df;animation:ptIn .45s both,ptPulse 1.6s ease-in-out .6s infinite}
+@keyframes ptIn{from{opacity:0;transform:translateY(10px) scale(.7)}to{opacity:1;transform:none}}
+@keyframes ptPulse{50%{box-shadow:0 0 0 8px #7354df22}}
+@media(prefers-reduced-motion:reduce){.pt,.pattern-diagram .pt-q,.answer{animation:none;transition:none}}
+.quiz-panel[id="quizPanel"] .progress-fill{background-image:linear-gradient(90deg,#ffffff00,#ffffff66,#ffffff00);background-size:200% 100%;background-color:var(--level-accent,#8a7ddd);animation:qShine 2.4s linear infinite;border-radius:99px;transition:width .5s cubic-bezier(.2,.9,.3,1)}
+.quiz-panel[id="quizPanel"] .visual{border-radius:20px;background:linear-gradient(145deg,#ffffffcc,#ffffff55);box-shadow:inset 0 0 0 2px #ffffffaa,0 10px 24px -14px #34295855}
+.quiz-panel[id="quizPanel"] .answer.correct{animation:qCorrect .5s cubic-bezier(.2,1.5,.4,1);box-shadow:0 0 0 4px #19875433,0 8px 20px -6px #198754aa}
+.quiz-panel[id="quizPanel"] .answer.wrong{animation:qShake .35s}
+@keyframes qShine{to{background-position:-200% 0}}
+@keyframes qCorrect{40%{transform:scale(1.07)}}
+@keyframes qShake{25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+@media(prefers-reduced-motion:reduce){.quiz-panel[id="quizPanel"] .progress-fill,.quiz-panel[id="quizPanel"] .answer.correct,.quiz-panel[id="quizPanel"] .answer.wrong{animation:none}}
 </style>
 </head>
 <body>
@@ -937,7 +956,7 @@ function unlocked(l){return true}
    curriculum / topic we now build a fixed pool for every level and keep it exclusive:
    - a question is a duplicate if its normalised text OR its structure (the same numbers + answer, e.g. 3 + 4 and 4 + 3)
      was already taken by an earlier level or earlier in the same level;
-   - each level is a fixed set of exactly 10 unique questions (no more than a few of one wording shape) and is only published if it can be filled with that many - otherwise it is dropped;
+   - each level is a fixed set of exactly 10 unique questions (no more than a few of one wording shape or one diagram) and is only published if it can be filled with that many - otherwise it is dropped;
    - nothing is ever copied from another level, topic or class to fill a gap.
    Pools are cached per selection; levelAudit() reports what was kept and removed. */
 const QUIZ_LEN=10,STEM_CAP=4 /* max questions of one wording shape per level */,STEM_CAP_LOOSE=10 /* only if a topic would otherwise have no level at all */,POOL_CAP=QUIZ_LEN,POOL_DRAWS=250,levelPools={},levelAudits={};
@@ -951,9 +970,9 @@ function buildPools(){const key=[grade,curriculum,topic].join('|');if(levelPools
  /* Seeded random numbers while building: the same class/topic always gets the same levels, so saved progress per level stays meaningful. */
  let seed=0;for(const ch of key)seed=(seed*31+ch.charCodeAt(0))>>>0;Math.random=()=>{seed=(seed+0x6D2B79F5)>>>0;let t=seed;t=Math.imul(t^t>>>15,t|1);t^=t+Math.imul(t^t>>>7,t|61);return((t^t>>>14)>>>0)/4294967296};
  try{for(const cap of [STEM_CAP,STEM_CAP_LOOSE]){texts.clear();structs.clear();audit.levels=[];audit.removed=0;audit.kept=0;for(let l=1;l<=20;l++){level=l;const cand=[],lt=new Set(),ls=new Set();let removed=0;
-   const stems={};for(let n=0;n<POOL_DRAWS&&cand.length<POOL_CAP;n++){quizUsed=new Set();quizEmo=new Set();const q=cleanQuestion(curriculumQ(n));if(!q)continue;const k=normQ(q),sk=structKey(q),st=stemOf(q);if((stems[st]||0)>=cap){removed++;continue}
+   const stems={},visN={};for(let n=0;n<POOL_DRAWS&&cand.length<POOL_CAP;n++){quizUsed=new Set();quizEmo=new Set();const q=cleanQuestion(curriculumQ(n));if(!q)continue;const k=normQ(q),sk=structKey(q),st=stemOf(q);const vh=q.vis?visHash(q.vis):null;if((stems[st]||0)>=cap||(vh&&(visN[vh]||0)>=Math.ceil(cap*.75))){removed++;continue}
     if(texts.has(k)||lt.has(k)||(sk&&(structs.has(sk)||ls.has(sk)))){removed++;continue}
-    lt.add(k);if(sk)ls.add(sk);stems[st]=(stems[st]||0)+1;cand.push(q)}
+    lt.add(k);if(sk)ls.add(sk);stems[st]=(stems[st]||0)+1;if(vh)visN[vh]=(visN[vh]||0)+1;cand.push(q)}
    audit.removed+=removed;
    if(cand.length>=QUIZ_LEN){pools[l]=cand;cand.forEach(q=>{texts.add(normQ(q));const sk=structKey(q);if(sk)structs.add(sk)});audit.levels.push({level:l,questions:cand.length,removed});audit.kept+=cand.length}}if(Object.keys(pools).length)break}}catch(e){}
  Math.random=realRandom;level=keepLevel;quizUsed=keepUsed;quizEmo=keepEmo;levelAudits[key]=audit;return levelPools[key]=pools}
@@ -1363,9 +1382,9 @@ function curriculumQ(i){
    return {p,ans,vis,hint,spoken,options:[ans,...shapeNames.filter(v=>v!==ans).sort(()=>Math.random()-.5).slice(0,3)]};
  }
  if(skill==='pattern'){
-   const seqs=[['🔴','🔵','🔴','🔵','🔴','🔵'],['⭐','⭐','🌙','⭐','⭐','🌙'],['▲','■','▲','■','▲','■'],['🟢','🟡','🟡','🟢','🟡','🟡']];
-   const seq=seqs[(level+i)%seqs.length],missing=seq[seq.length-1];ans=missing;p='Which symbol comes next in the pattern?';vis='<div class="curriculum-diagram pattern-diagram">'+seq.slice(0,-1).join('　')+'　<span>?</span></div>';hint='Look for the part that repeats.';spoken=p;
-   return {p,ans,vis,hint,spoken,options:[ans,...['🔴','🔵','⭐','🌙','▲','■','🟢','🟡'].filter(v=>v!==ans).sort(()=>Math.random()-.5).slice(0,3)]};
+   const seqs=[['🔴','🔵','🔴','🔵','🔴','🔵'],['⭐','⭐','🌙','⭐','⭐','🌙'],['▲','■','▲','■','▲','■'],['🟢','🟡','🟡','🟢','🟡','🟡'],['🍎','🍌','🍇','🍎','🍌','🍇'],['🐱','🐶','🐶','🐱','🐶','🐶'],['🔺','🟦','⭕','🔺','🟦','⭕'],['☀️','🌧️','☀️','🌧️','☀️','🌧️']];
+   const seq=seqs[(level+i)%seqs.length],missing=seq[seq.length-1];ans=missing;p='Which symbol comes next in the pattern?';vis='<div class="curriculum-diagram pattern-diagram" role="img" aria-label="A pattern with one missing item">'+seq.slice(0,-1).map((c,n)=>'<i class="pt" style="--d:'+n*70+'ms">'+c+'</i>').join('<b class="pt-link"></b>')+'<b class="pt-link"></b><span class="pt pt-q">?</span></div>';hint='Look for the part that repeats.';spoken=p;
+   return {p,ans,vis,hint,spoken,options:[ans,...['🔴','🔵','⭐','🌙','▲','■','🟢','🟡','🍎','🍌','🍇','🐱','🐶','🔺','🟦','⭕','☀️','🌧️'].filter(v=>v!==ans).sort(()=>Math.random()-.5).slice(0,3)]};
  }
  if(skill==='count'){
    if(early&&band<=2){ans=rnd(1,Math.min(5,2+level));p='How many objects can you count?';vis='<div class="curriculum-diagram count-diagram">'+Array(ans).fill(ico('star',40)).join(' ')+'</div>';hint='Touch or point to each object once.';spoken=p;return {p,ans:String(ans),vis,hint,spoken}}
