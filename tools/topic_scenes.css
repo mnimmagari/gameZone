@@ -1,0 +1,79 @@
+
+/* topic scenes: welcome + end card follow the topic, the chosen colours and the chosen layout */
+.tz{position:relative;overflow:hidden;isolation:isolate;display:flex!important;align-items:center;justify-content:center;gap:clamp(14px,4vw,44px);padding:26px clamp(16px,4vw,48px)!important;min-height:540px;height:auto!important;background:var(--ib)!important;color:var(--ik)!important;border:0!important;border-radius:28px;animation:none!important;text-align:center}
+.tz.hidden{display:none!important}
+#introPanel.tz,#resultPanel.tz{background:var(--ib)!important;color:var(--ik)!important;border:0!important;box-shadow:0 12px 30px #0002!important}
+.tz.il-grid,.tz.il-stack,.tz.il-hero{flex-direction:column}.tz.il-split{flex-direction:row}.tz.il-splitr{flex-direction:row-reverse}
+.tz.il-stack .tz-text{align-items:flex-start;text-align:left}.tz.iq-bottom{justify-content:flex-end}
+@media(max-width:700px){.tz.il-split,.tz.il-splitr{flex-direction:column}.tz.il-stack .tz-text{align-items:center;text-align:center}}
+.tz>*:not(.tz-sc):not(.tz-burst){position:relative;z-index:2}
+.tz-sc{position:absolute;inset:0;overflow:hidden;pointer-events:none;z-index:0}
+.tz-sc .bl{position:absolute;width:48%;aspect-ratio:1;border-radius:50%;filter:blur(46px);opacity:.55;animation:tzBlob 11s ease-in-out infinite alternate}
+.tz-sc .bl.b1{background:var(--a1);left:-10%;top:-14%}.tz-sc .bl.b2{background:var(--a2);right:-12%;bottom:-18%;animation-delay:-4s}.tz-sc .bl.b3{background:var(--a3);left:34%;top:30%;width:30%;animation-delay:-7s}
+@keyframes tzBlob{to{transform:translate(9%,12%) scale(1.25)}}
+.tz-sc .f{position:absolute;left:var(--x);font-size:var(--s);opacity:.9;filter:drop-shadow(0 6px 6px #0003);animation-duration:var(--d);animation-delay:var(--w);animation-iteration-count:infinite;animation-timing-function:ease-in-out}
+.tz-sc .f.m-rise{bottom:-14%;animation-name:tzRise}.tz-sc .f.m-fall{top:-14%;animation-name:tzFall;animation-timing-function:linear}
+.tz-sc .f.m-twinkle{top:var(--y);animation-name:tzTwinkle}.tz-sc .f.m-bounce{bottom:6%;animation-name:tzBounce}.tz-sc .f.m-drift{top:var(--y);animation-name:tzDrift;animation-timing-function:linear}
+@keyframes tzRise{0%{transform:translateY(0) rotate(-8deg) scale(.7);opacity:0}15%{opacity:.95}50%{transform:translate(18px,-300px) rotate(10deg) scale(1)}100%{transform:translate(-10px,-620px) rotate(-6deg) scale(.9);opacity:0}}
+@keyframes tzFall{0%{transform:translateY(0) rotate(0);opacity:0}10%{opacity:1}100%{transform:translate(40px,640px) rotate(300deg);opacity:.9}}
+@keyframes tzTwinkle{0%,100%{transform:scale(.55) rotate(0);opacity:.35}50%{transform:scale(1.15) rotate(20deg);opacity:1}}
+@keyframes tzBounce{0%,100%{transform:translateY(0) scale(1.1,.9)}45%{transform:translateY(-70px) scale(.95,1.08) rotate(8deg)}70%{transform:translateY(-8px) scale(1.08,.94)}}
+@keyframes tzDrift{from{transform:translateX(-14vw) rotate(-6deg)}to{transform:translateX(112vw) rotate(8deg)}}
+.tz-sc .run{position:absolute;bottom:9%;left:-20%;font-size:clamp(46px,9vw,84px);filter:drop-shadow(0 8px 6px #0004);animation:tzRun 7s linear infinite}
+.tz-sc .run.fly{bottom:auto;top:62%;animation-name:tzFly;animation-duration:6s}
+@keyframes tzRun{0%{transform:translateX(0) translateY(0)}25%{transform:translateX(30vw) translateY(-10px)}50%{transform:translateX(65vw) translateY(0)}75%{transform:translateX(95vw) translateY(-10px)}100%{transform:translateX(135vw)}}
+@keyframes tzFly{0%{transform:translate(0,40px) rotate(-38deg)}100%{transform:translate(135vw,-340px) rotate(-38deg)}}
+.tz-sc .x{position:absolute;inset:0}
+.tz-sc .x-space{background:radial-gradient(2px 2px at 12% 20%,#fff,transparent),radial-gradient(1.5px 1.5px at 38% 70%,#fff,transparent),radial-gradient(2px 2px at 64% 30%,#fff,transparent),radial-gradient(1.5px 1.5px at 82% 80%,#fff,transparent),radial-gradient(2px 2px at 90% 14%,#fff,transparent),radial-gradient(1.5px 1.5px at 24% 88%,#fff,transparent);animation:tzStars 3s ease-in-out infinite alternate}
+@keyframes tzStars{from{opacity:.35}to{opacity:1}}
+.tz-sc .x-space:after{content:"";position:absolute;top:12%;left:-10%;width:120px;height:3px;border-radius:3px;background:linear-gradient(90deg,transparent,#fff);transform:rotate(28deg);animation:tzShoot 4.5s ease-in 1s infinite}
+@keyframes tzShoot{0%{transform:translate(0,0) rotate(28deg);opacity:0}6%{opacity:1}30%,100%{transform:translate(120vw,60vh) rotate(28deg);opacity:0}}
+.tz-sc .x-grid{background-image:linear-gradient(#ffffff26 1px,transparent 1px),linear-gradient(90deg,#ffffff26 1px,transparent 1px);background-size:36px 36px;animation:tzGrid 4s linear infinite}
+@keyframes tzGrid{to{background-position:0 36px,36px 0}}
+.tz-sc .x-grid:after{content:"";position:absolute;left:0;right:0;height:90px;background:linear-gradient(transparent,#ffffff30,transparent);animation:tzScan 3.2s linear infinite}
+@keyframes tzScan{from{top:-90px}to{top:100%}}
+.tz-sc .x-rays{background:repeating-conic-gradient(from 0deg at 85% 8%,#ffffff2e 0 7deg,transparent 7deg 16deg);animation:tzSpin 40s linear infinite;transform-origin:85% 8%;inset:-60%}
+@keyframes tzSpin{to{transform:rotate(360deg)}}
+.tz-sc .x-mandala{background:repeating-conic-gradient(#ffffff26 0 10deg,transparent 10deg 20deg);-webkit-mask:radial-gradient(circle,transparent 20%,#000 21%,#000 62%,transparent 63%);mask:radial-gradient(circle,transparent 20%,#000 21%,#000 62%,transparent 63%);inset:-35%;animation:tzSpin 60s linear infinite}
+.tz-sc .x-road{top:auto;height:20%;background:linear-gradient(#3a3f4d,#2a2e3a);border-top:5px solid #ffffff55}
+.tz-sc .x-road:after{content:"";position:absolute;left:0;right:0;top:46%;height:6px;background:repeating-linear-gradient(90deg,#fff 0 48px,transparent 48px 96px);animation:tzDash .9s linear infinite}
+@keyframes tzDash{to{background-position:96px 0}}
+.tz-sc .light{position:absolute;right:6%;top:10%;display:flex;flex-direction:column;gap:6px;padding:9px;border-radius:16px;background:#1b1d26;box-shadow:0 6px 0 #0006}
+.tz-sc .light i{width:26px;height:26px;border-radius:50%;opacity:.25;animation:tzLight 6s infinite}.tz-sc .light i:nth-child(1){background:#ff3b3b;color:#ff3b3b}.tz-sc .light i:nth-child(2){background:#ffc400;color:#ffc400;animation-delay:2s}.tz-sc .light i:nth-child(3){background:#22d36b;color:#22d36b;animation-delay:4s}
+@keyframes tzLight{0%,30%{opacity:1;box-shadow:0 0 18px currentColor}34%,100%{opacity:.25;box-shadow:none}}
+.tz-sc .x-pulse{background:radial-gradient(circle at 50% 50%,transparent 0 12%,#ffffff22 13% 14%,transparent 15% 24%,#ffffff1c 25% 26%,transparent 27%);animation:tzPulse 2.6s ease-out infinite}
+@keyframes tzPulse{from{transform:scale(.6);opacity:1}to{transform:scale(1.9);opacity:0}}
+.tz-hero{display:flex;flex-direction:column;align-items:center;gap:4px;flex:0 0 auto}
+.tz-hero .ci-girl,.tz-hero .end-girl{margin:0}
+.tz-badge{position:relative;display:grid;place-items:center;width:clamp(78px,13vw,112px);aspect-ratio:1;border-radius:32px;font-size:clamp(44px,8vw,68px);background:#ffffffc8;-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);box-shadow:0 12px 0 #0002,inset 0 0 0 3px #fff;animation:tzBadge 3.2s ease-in-out infinite,tzPop .9s cubic-bezier(.34,1.56,.64,1) both}
+@keyframes tzBadge{0%,100%{transform:translateY(0) rotate(-5deg)}50%{transform:translateY(-12px) rotate(5deg)}}
+@keyframes tzPop{from{scale:0;opacity:0}to{scale:1;opacity:1}}
+.tz-text{display:flex;flex-direction:column;align-items:center;gap:10px;max-width:560px;min-width:0}
+.tz .ci-tag{margin:0;background:var(--ia);color:var(--iat,#fff);box-shadow:0 5px 0 #0002;animation:tzPop .6s .1s cubic-bezier(.34,1.56,.64,1) both}
+.tz .ci-title{margin:0;color:var(--ik);text-shadow:3px 4px 0 var(--ia),0 10px 22px #0002;font-size:clamp(34px,6.6vw,64px);line-height:1.04}
+.tz .ci-title .tzw{display:inline-block;white-space:nowrap}
+.tz .ci-title .tzl{display:inline-block;animation:tzLetter .75s cubic-bezier(.34,1.56,.64,1) both,tzWave 3.2s ease-in-out infinite;animation-delay:calc(var(--i)*.045s),calc(.9s + var(--i)*.08s)}
+@keyframes tzLetter{from{opacity:0;transform:translateY(46px) rotate(14deg) scale(.4);filter:blur(8px)}to{opacity:1;transform:none;filter:none}}
+@keyframes tzWave{0%,100%{translate:0 0}50%{translate:0 -6px}}
+.tz .ci-sub{margin:0;padding:9px 18px;border-radius:999px;background:#ffffffc4;-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);color:#2b1f4d;opacity:1;font-weight:800;box-shadow:0 6px 0 #0001;animation:tzRiseIn .7s .5s cubic-bezier(.2,.9,.3,1.2) both}
+@keyframes tzRiseIn{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:none}}
+.tz .ci-dots i{background:var(--ik);opacity:.4}
+.tz .ci-bubbles{display:none}
+#resultPanel.tz .end-fx{display:none}
+#resultPanel.tz .end-card{background:#ffffffd0;color:#2b1f4d;border:3px solid #fff;box-shadow:0 14px 0 #0001,0 18px 36px #0002;margin:0;animation:tzRiseIn .8s .25s cubic-bezier(.2,.9,.3,1.2) both}
+#resultPanel.tz .end-chip{background:var(--ia);color:var(--iat,#fff)}
+#resultPanel.tz .end-card h3{color:#2b1f4d!important}#resultPanel.tz .end-card p{color:#4d4968!important}
+#resultPanel.tz.il-stack .end-card{text-align:left}
+.tz-score{display:flex;align-items:center;justify-content:center;gap:8px;margin:2px 0 8px}.tz-score b{font:900 15px var(--font);background:var(--ia);color:var(--iat,#fff);border-radius:999px;padding:3px 12px}
+.tz-score span{font-size:34px;filter:grayscale(1) opacity(.35);transform:scale(.6)}.tz-score span.on{filter:none;animation:tzStar .7s cubic-bezier(.34,1.56,.64,1) both;animation-delay:calc(.5s + var(--k)*.28s)}
+@keyframes tzStar{0%{transform:scale(0) rotate(-200deg)}100%{transform:scale(1) rotate(0)}}
+.tz-burst{position:absolute;left:50%;top:42%;font-size:clamp(26px,5vw,40px);z-index:1;pointer-events:none;animation:tzBurst 1.7s cubic-bezier(.15,.8,.3,1) both;animation-delay:var(--w)}
+@keyframes tzBurst{0%{transform:translate(0,0) scale(0)}18%{opacity:1}100%{transform:translate(var(--dx),var(--dy)) scale(1) rotate(var(--r));opacity:0}}
+@media(prefers-reduced-motion:reduce){.tz,.tz *{animation-duration:.01s!important;animation-iteration-count:1!important}}
+#resultPanel.tz>.tz-sc{position:absolute;inset:0;z-index:0}
+#resultPanel.tz>.tz-burst{position:absolute;z-index:3}
+#resultPanel.tz{justify-content:center;align-items:center;padding:20px!important}
+#resultPanel.tz.il-grid,#resultPanel.tz.il-stack,#resultPanel.tz.il-hero{flex-direction:column}
+#resultPanel.tz.il-split{flex-direction:row}#resultPanel.tz.il-splitr{flex-direction:row-reverse}
+@media(max-width:700px){#resultPanel.tz.il-split,#resultPanel.tz.il-splitr{flex-direction:column}}
+#resultPanel.tz .result-emoji{font-size:0;line-height:0}
