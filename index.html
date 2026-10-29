@@ -1019,7 +1019,8 @@ let readAloud={question:true,options:true,hint:false,feedback:true};
 try{const saved=JSON.parse(localStorage.getItem(READ_ALOUD_KEY)||'null');if(saved&&typeof saved==='object')readAloud={question:saved.question!==false,options:saved.options!==false,hint:!!saved.hint,feedback:saved.feedback!==false}}catch(e){}
 function saveReadAloud(){try{localStorage.setItem(READ_ALOUD_KEY,JSON.stringify(readAloud))}catch(e){}}
 function syncReadAloudControls(){const map={question:'readQuestionChoice',options:'readOptionsChoice',hint:'readHintChoice',feedback:'readFeedbackChoice'};Object.entries(map).forEach(([k,id])=>{const el=$(id);if(el)el.checked=!!readAloud[k]})}
-let questionOptions=[];\nfunction speakOptions(values=questionOptions){if(!voiceOn||!readAloud.options||!Array.isArray(values)||!values.length)return;const letters=['A','B','C','D'];say('The answer options are: '+values.map((v,i)=>'Option '+letters[i]+': '+v).join('. ')+'.')}
+let questionOptions=[];
+function speakOptions(values=questionOptions){if(!voiceOn||!readAloud.options||!Array.isArray(values)||!values.length)return;const letters=['A','B','C','D'];say('The answer options are: '+values.map((v,i)=>'Option '+letters[i]+': '+v).join('. ')+'.')}
 
 try{const sv=JSON.parse(localStorage.getItem(STORE)||'{}');if(sv&&typeof sv==='object'){const done={};if(sv.completed&&typeof sv.completed==='object')Object.keys(sv.completed).slice(0,5000).forEach(key=>{const r=sv.completed[key];if(r&&typeof r==='object'&&Number.isFinite(r.score))done[String(key).slice(0,60)]={score:Math.max(0,Math.min(10,Math.floor(r.score))),passed:!!r.passed,stars:Math.max(0,Math.min(3,Math.floor(Number(r.stars)||0)))}});data={stars:Number.isFinite(sv.stars)?Math.max(0,Math.min(100000,Math.floor(sv.stars))):0,completed:done}}}catch(e){}
 try{voiceOn=localStorage.getItem(VOICE)!=='0'}catch(e){}
@@ -1406,7 +1407,7 @@ function xOriginalScene(subject, emoji) {
  const svg='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 260"><defs><linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff8e9"/><stop offset="1" stop-color="#e7f3ff"/></linearGradient></defs><rect width="320" height="260" rx="24" fill="url(#bg)"/><circle cx="40" cy="38" r="13" fill="#f5ce4b" opacity=".65"/><circle cx="278" cy="52" r="8" fill="#f47e9d" opacity=".65"/><circle cx="275" cy="221" r="12" fill="#77b9d9" opacity=".55"/>'+art+'</svg>';
  return 'data:image/svg+xml;charset=utf-8,'+encodeURIComponent(svg);
 }
-function xImg(e,p,sc,subject){if(subject){const src=xOriginalScene(subject,e);return '<img class="ximg xoriginal" alt="'+String(subject).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;')+'" src="'+src+'">';}1const f=e&&XIMG[e],c=e?[...e].map(x=>x.codePointAt(0).toString(16)).filter(h=>h!=='fe0f').join('_'):'',icon=f?'https://cdn.jsdelivr.net/gh/microsoft/fluentui-emoji@main/assets/'+f.split('/').map(encodeURIComponent).join('/'):'',noto=c?NOTO_CDN+c+'.svg':'';
+function xImg(e,p,sc,subject){if(subject){const src=xOriginalScene(subject,e);return '<img class="ximg xoriginal" alt="'+String(subject).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;')+'" src="'+src+'">';}const f=e&&XIMG[e],c=e?[...e].map(x=>x.codePointAt(0).toString(16)).filter(h=>h!=='fe0f').join('_'):'',icon=f?'https://cdn.jsdelivr.net/gh/microsoft/fluentui-emoji@main/assets/'+f.split('/').map(encodeURIComponent).join('/'):'',noto=c?NOTO_CDN+c+'.svg':'';
  const esc=t=>String(t).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;');
  if(p&&p.s){return '<img class="ximg xphoto" alt="" referrerpolicy="no-referrer" src="'+esc(p.s)+'"'+(icon?' data-alt="'+icon+'"':'')+(noto?' data-n="'+noto+'"':'')+(e?' data-t="'+e+'"':'')+'>'}
  if(!f)return e?emoOne(e,96):'';
