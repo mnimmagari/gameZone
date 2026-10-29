@@ -77,7 +77,34 @@ ${P} .visual .curriculum-diagram:not(:has(.ximg)){max-width:100%}
 /* real photos: rounded card that fills the frame height, credit tucked in the corner */
 ${P} .visual .curriculum-diagram{position:relative}
 ${P} .visual .ximg.xphoto{width:100%;height:100%;max-width:none;max-height:none;aspect-ratio:auto;object-fit:cover;object-position:center;border-radius:0;box-shadow:none;display:block}
-${P}.xt .visual:has(.xphoto),${P}.xt .visual:has(.xmystery){padding:0!important}
+${P}.xt .visual:has(.xphoto),${P}.xt .visual:has(.xmystery),${P}.xt .visual:has(.xicon){padding:0!important}
+/* icon-only pictures: fill the frame with a soft backdrop made from the icon's own colours, and a big icon on top */
+${P} .visual .curriculum-diagram:has(.xicon){padding:0;position:relative;overflow:hidden;border-radius:14px;height:100%;width:100%}
+${P} .visual .xicon{--sc1:#cfe9ff;--sc2:#8fc7ff;position:relative;display:flex;align-items:center;justify-content:center;width:100%;height:100%;overflow:hidden;background:linear-gradient(180deg,var(--sc1),var(--sc2))}
+${P} .visual .xi-space{--sc1:#090d2e;--sc2:#3b2a8f}
+${P} .visual .xi-evs,${P} .visual .xi-animals{--sc1:#aee3ff;--sc2:#9fe3a1}
+${P} .visual .xi-eco{--sc1:#d9f6d3;--sc2:#4cc9a0}
+${P} .visual .xi-tech{--sc1:#0d1838;--sc2:#2457d6}
+${P} .visual .xi-india{--sc1:#ffd38a;--sc2:#ff86a8}
+${P} .visual .xi-road{--sc1:#7a8294;--sc2:#2f3441}
+${P} .visual .xi-health{--sc1:#d6fff0;--sc2:#98dcff}
+${P} .visual .xi-my{--sc1:#e5dcff;--sc2:#b9a8ff}
+${P} .visual .xicon:before{content:"";position:absolute;inset:-30px;background:var(--ib) center/cover no-repeat;filter:blur(24px) saturate(1.5);opacity:.4;transform:scale(1.4)}
+${P} .visual .xicon:after{content:"";position:absolute;inset:0;pointer-events:none;background-image:radial-gradient(#fff 1.4px,transparent 2px),radial-gradient(#ffffffcc 1px,transparent 1.6px);background-size:64px 64px,96px 96px;background-position:0 0,30px 44px;animation:xTwinkle 3.2s ease-in-out infinite}
+${P} .visual .xi-evs:after,${P} .visual .xi-animals:after,${P} .visual .xi-eco:after{background-image:radial-gradient(ellipse 60px 22px at 30px 24px,#ffffffd9 60%,transparent 62%),radial-gradient(ellipse 90px 30px at 120px 70px,#ffffffb8 60%,transparent 62%);background-size:260px 110px;background-position:0 0;background-repeat:repeat-x;animation:xDrift 26s linear infinite}
+${P} .visual .xi-tech:after{background-image:linear-gradient(#ffffff26 1px,transparent 1px),linear-gradient(90deg,#ffffff26 1px,transparent 1px);background-size:30px 30px;background-position:0 0;animation:xGrid 5s linear infinite}
+${P} .visual .xi-road:after{background:repeating-linear-gradient(90deg,#fff 0 46px,transparent 46px 92px) 0 72%/100% 7px no-repeat;animation:xRoad 1s linear infinite}
+${P} .visual .xi-india:after,${P} .visual .xi-health:after,${P} .visual .xi-my:after{inset:-60%;background:repeating-conic-gradient(#ffffff38 0 7deg,transparent 7deg 14deg);animation:xSpin 30s linear infinite}
+${P} .visual .xicon .ximg,${P} .visual .xicon .ic-txt{position:relative;z-index:1;animation:xBobIcon 3.4s ease-in-out infinite;transform-origin:50% 90%}
+${P} .visual .xicon .ximg{height:84%;width:auto;max-width:90%;aspect-ratio:1;object-fit:contain;filter:drop-shadow(0 14px 12px #0007)}
+${P} .visual .xicon .ic-txt{font-size:clamp(60px,20vh,150px)!important}
+@keyframes xTwinkle{0%,100%{opacity:.35}50%{opacity:1}}
+@keyframes xDrift{to{background-position:-260px 0}}
+@keyframes xGrid{to{background-position:30px 30px}}
+@keyframes xRoad{to{background-position:92px 72%}}
+@keyframes xSpin{to{transform:rotate(360deg)}}
+@keyframes xBobIcon{0%,100%{transform:translateY(0) rotate(-3deg) scale(1)}50%{transform:translateY(-9%) rotate(3deg) scale(1.04)}}
+@media(prefers-reduced-motion:reduce){${P} .visual .xicon:after,${P} .visual .xicon .ximg,${P} .visual .xicon .ic-txt{animation:none!important}}
 ${P} .visual .curriculum-diagram:has(.xphoto),${P} .visual .curriculum-diagram:has(.xmystery){padding:0;position:relative;overflow:hidden;border-radius:14px}
 ${P} .visual .curriculum-diagram:has(.xphoto):after{content:"";position:absolute;inset:0;pointer-events:none;border-radius:inherit;box-shadow:inset 0 0 0 3px #ffffffb0,inset 0 -46px 46px -46px #0008,inset 0 36px 40px -40px #ffffff55}
 ${P}.xs-cartoon .visual .ximg.xphoto{filter:url(#xCartoon) contrast(1.04)}
@@ -138,6 +165,7 @@ if(jsStart<0||jsEnd<0)throw new Error('js block not found');
 const js=`var XT_META=${JSON.stringify(META)},XT=Object.keys(XT_META),lastXT='',levelXT='',levelLook=null,XT_PICK='candy',XL_PICK='auto',XQ_PICK='top',XS_PICK='cartoon';
 try{const v=localStorage.getItem('xtPick');if(v&&(v==='random'||XT_META[v]))XT_PICK=v;const l=localStorage.getItem('xlPick');if(['auto','grid','stack','split','splitr','hero'].includes(l))XL_PICK=l;const q=localStorage.getItem('xqPick');if(q==='top'||q==='bottom')XQ_PICK=q;const st=localStorage.getItem('xsPick');if(['cartoon','realistic','icon'].includes(st))XS_PICK=st}catch(e){}
 function nextXT(){if(XT_PICK!=='random')return XT_PICK;let t;do{t=XT[Math.floor(Math.random()*XT.length)]}while(t===lastXT);return lastXT=t}
+var XSET_NAMES=['Starter','Explorer','Challenger','Champion','Master','Genius','Legend','Wizard'];
 var XL_OPTS=[['auto','🎯 Theme default','Each theme picks its own'],['grid','4 tiles','Picture, then 4 answers'],['stack','Rows','Small picture, answer rows'],['split','Picture left','Big picture + answers'],['splitr','Picture right','Answers + big picture'],['hero','Big picture on top','Large picture, answers below']],
  XQ_OPTS=[['top','Question on top','The classic place'],['bottom','Question at the bottom','Picture and answers first']],
  XS_OPTS=[['cartoon','🎨 Light cartoon','Real photo, gently illustrated'],['realistic','📷 Realistic','Photos as they are'],['icon','🧸 3D icons','Cute icons only']];
@@ -152,14 +180,16 @@ function xWire(l,qb){const R=(x,y,w,h,c)=>'<rect x="'+x+'" y="'+y+'" width="'+w+
  else if(qb===false){b=R(2,2,56,8,'wq')+R(2,12,56,5,'wp')+R(2,19,56,14,'wa')}
  return '<svg class="xwire" viewBox="0 0 60 37" aria-hidden="true">'+b+'</svg>'}
 function xtSave(k,v){try{localStorage.setItem(k,v)}catch(e){}}
-function renderXtPicker(){let el=document.getElementById('xtPicker');const on=!!exploreOf(topic);if(!el){if(!on)return;el=document.createElement('div');el.id='xtPicker';const h=document.getElementById('levelsHeading');h.parentNode.insertBefore(el,h)}
- el.classList.toggle('hidden',!on);if(!on)return;
+/* the look picker is built by xtPickerHTML() so it can also be shown inside the "My Own Quiz" form */
+function xtPickerHTML(){
  const sec=(title,key,cur,opts,vis)=>'<div class="xt-sec"><strong>'+title+'</strong><div class="xt-chips">'+opts.map(o=>'<button type="button" class="xt-chip'+(cur===o[0]?' on':'')+'" data-k="'+key+'" data-v="'+o[0]+'">'+vis(o[0])+o[1]+(o[2]?'<small>'+o[2]+'</small>':'')+'</button>').join('')+'</div></div>',
   none=()=>'',wire=l=>l==='auto'?'':xWire(l),
-  th=[['random','🎲 Surprise me','A new colour look each level']].concat(XT.map(k=>[k,XT_META[k][0],XT_META[k][2]==='grid'?'':''])),
+  th=[['random','🎲 Surprise me','A new colour look each set']].concat(XT.map(k=>[k,XT_META[k][0],XT_META[k][2]==='grid'?'':''])),
   sw=k=>'<i style="--sw:'+(k==='random'?'conic-gradient(#ff5c8a,#ffc400,#22c55e,#2bb3ff,#8e44ad,#ff5c8a)':XT_META[k][1])+'"></i>';
- el.innerHTML=sec('🎨 Colours ('+XT.length+' looks)','xt',XT_PICK,th,sw)+sec('🧩 Layout: where things go','xl',XL_PICK,XL_OPTS,wire)+sec('❓ Question position','xq',XQ_PICK,XQ_OPTS,k=>xWire('q',k==='bottom'))+sec('🖼️ Picture style','xs',XS_PICK,XS_OPTS,none)+'<p class="xt-note">Your choices stay the same for the whole level and are remembered on this device.</p>';
- el.onclick=e=>{const c=e.target.closest('.xt-chip');if(!c)return;const k=c.dataset.k,v=c.dataset.v;if(k==='xt')XT_PICK=v;else if(k==='xl')XL_PICK=v;else if(k==='xq')XQ_PICK=v;else XS_PICK=v;xtSave({xt:'xtPick',xl:'xlPick',xq:'xqPick',xs:'xsPick'}[k],v);renderXtPicker()}}
+ return sec('🎨 Colours ('+XT.length+' looks)','xt',XT_PICK,th,sw)+sec('🧩 Layout: where things go','xl',XL_PICK,XL_OPTS,wire)+sec('❓ Question position','xq',XQ_PICK,XQ_OPTS,k=>xWire('q',k==='bottom'))+sec('🖼️ Picture style','xs',XS_PICK,XS_OPTS,none)+'<p class="xt-note">Your choices stay the same for the whole set and are remembered on this device.</p>'}
+function xtPickerBind(el,again){el.onclick=e=>{const c=e.target.closest('.xt-chip');if(!c)return;const k=c.dataset.k,v=c.dataset.v;if(k==='xt')XT_PICK=v;else if(k==='xl')XL_PICK=v;else if(k==='xq')XQ_PICK=v;else XS_PICK=v;xtSave({xt:'xtPick',xl:'xlPick',xq:'xqPick',xs:'xsPick'}[k],v);again()}}
+function renderXtPicker(){let el=document.getElementById('xtPicker');const on=!!exploreOf(topic);if(!el){if(!on)return;el=document.createElement('div');el.id='xtPicker';const h=document.getElementById('levelsHeading');h.parentNode.insertBefore(el,h)}
+ el.classList.toggle('hidden',!on);if(!on)return;el.innerHTML=xtPickerHTML();xtPickerBind(el,renderXtPicker)}
 /* a fresh look for a new level: colours, layout, question position and picture style are all fixed until the level ends */
 function xNewLook(){const t=nextXT();return{t:t,l:XL_PICK==='auto'?XT_META[t][2]:XL_PICK,q:XQ_PICK,s:XS_PICK}}
 /* picture style "3D icons": swap a real photo for its icon */
@@ -172,11 +202,11 @@ function xReveal(){const q=questions[qi];if(!q||!q.reveal||!exploreOf(quizTopic)
 /* realistic 3D pictures (Microsoft Fluent Emoji, MIT licence); falls back to Noto, then plain text */
 var XIMG=${JSON.stringify(map)};
 /* e = emoji (3D icon), p = optional real photo {s: url, c: credit}. Fallback chain: photo -> 3D icon -> Noto icon -> text */
-function xImg(e,p){const f=e&&XIMG[e],c=e?[...e].map(x=>x.codePointAt(0).toString(16)).filter(h=>h!=='fe0f').join('_'):'',icon=f?'https://cdn.jsdelivr.net/gh/microsoft/fluentui-emoji@main/assets/'+f.split('/').map(encodeURIComponent).join('/'):'',noto=c?NOTO_CDN+c+'.svg':'';
+function xImg(e,p,sc){const f=e&&XIMG[e],c=e?[...e].map(x=>x.codePointAt(0).toString(16)).filter(h=>h!=='fe0f').join('_'):'',icon=f?'https://cdn.jsdelivr.net/gh/microsoft/fluentui-emoji@main/assets/'+f.split('/').map(encodeURIComponent).join('/'):'',noto=c?NOTO_CDN+c+'.svg':'';
  const esc=t=>String(t).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;');
  if(p&&p.s)return '<img class="ximg xphoto" alt="" referrerpolicy="no-referrer" src="'+esc(p.s)+'"'+(icon?' data-alt="'+icon+'"':'')+(noto?' data-n="'+noto+'"':'')+(e?' data-t="'+e+'"':'')+'>';
  if(!f)return e?emoOne(e,96):'';
- return '<img class="ximg" alt="" data-n="'+noto+'" data-t="'+e+'" src="'+icon+'">'}
+ return '<span class="xicon xi-'+(sc||'my')+'" style="--ib:url(\\''+icon+'\\')"><img class="ximg" alt="" data-n="'+noto+'" data-t="'+e+'" src="'+icon+'"></span>'}
 /* keep every diagram inside its frame: shrink (never enlarge) to the free area, centred, whenever the picture changes or loads */
 function fitVisual(){const v=document.getElementById('visualCount'),d=v&&v.firstElementChild;if(!d||d.querySelector('.ximg'))return;d.style.transform='';d.style.transformOrigin='center center';const cs=getComputedStyle(v),aw=v.clientWidth-parseFloat(cs.paddingLeft)-parseFloat(cs.paddingRight)-16,ah=v.clientHeight-parseFloat(cs.paddingTop)-parseFloat(cs.paddingBottom)-16,w=d.scrollWidth,h=d.scrollHeight;if(w>0&&h>0&&aw>0&&ah>0){const k=Math.min(1,aw/w,ah/h);if(k<1)d.style.transform='scale('+k.toFixed(3)+')'}}
 (function(){const v=document.getElementById('visualCount');if(!v||v.dataset.fitOn)return;v.dataset.fitOn='1';const run=()=>setTimeout(fitVisual,30);new MutationObserver(run).observe(v,{childList:true});v.addEventListener('load',run,true);window.addEventListener('resize',run)})();
@@ -206,6 +236,7 @@ if(s.includes("vis:(r[4]||r[5]?'<div class=\"curriculum-diagram\">'+xImg(r[4],r[
 /* hooks: reveal after answering / timeout; fixed question order for Explore */
 if(!s.includes('xReveal();')){const a1="function answer(btn,val){if(answered)return;answered=true;";if(!s.includes(a1))throw new Error('answer hook');s=s.replace(a1,()=>a1+'xReveal();');const t1="function timeExpired(){if(answered)return;answered=true;";if(!s.includes(t1))throw new Error('timeExpired hook');s=s.replace(t1,()=>t1+'xReveal();')}
 if(!s.includes('return (buildPools()[level]||[]).slice()')){const c1="function createQuestions(){quizUsed=new Set();quizEmo=new Set();";if(!s.includes(c1))throw new Error('createQuestions hook');s=s.replace(c1,()=>c1+'if(exploreOf(topic)){return (buildPools()[level]||[]).slice()}')}
+s=s.split('xImg(r[4],r[5])').join('xImg(r[4],r[5],ex.id.slice(2))');
 fs.writeFileSync(p,s);
 [...s.matchAll(/<script>([\s\S]*?)<\/script>/g)].forEach(x=>new Function(x[1]));
 console.log('patched ok; themes:',THEMES.length,'images:',Object.keys(map).length);

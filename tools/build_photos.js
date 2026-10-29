@@ -12,12 +12,14 @@ let cache=fs.existsSync(cacheFile)?JSON.parse(fs.readFileSync(cacheFile,'utf8'))
 const UA={headers:{'User-Agent':'GameZoneQuiz/1.0 (educational kids quiz)'}};
 const sleep=ms=>new Promise(r=>setTimeout(r,ms));
 const strip=h=>String(h||'').replace(/<[^>]+>/g,'').replace(/&amp;/g,'&').replace(/&quot;/g,'"').replace(/&#039;/g,"'").replace(/\s+/g,' ').trim();
-const FREE=/^(public domain|pd\b|cc0)/i;
+const FREE=/^(public domain|pd\b|cc0|cc by(?!-n)|cc by-sa)/i;   /* free to use; CC BY / CC BY-SA need credit, which goes on the app's Image credits page */
+const NOCREDIT=/^(public domain|pd\b|cc0)/i;
 /* files reviewed by hand and rejected (wrong subject, map, patent, painting, wires, sandwich...) */
-const BLOCK=/purple rain|nagasawa|india and adjacent|patent granted|bicycle helmet protection|peanut-butter|eb1911|swan panasia|light switch wiring|hp deskjet/i;
+const BLOCK=/purple rain|nagasawa|india and adjacent|patent granted|bicycle helmet protection|peanut-butter|eb1911|swan panasia|light switch wiring|hp deskjet|birchwood slavnoe|prodromus|orion[ _]constellation|eagle nebula|r136|ngc 2070|crab nebula|white dove|mars,? as seen|seat belt use|one-way traffic|colou?red|negro|computed tomography|heart frontally|hp tablet pc|[ఀ-౿]/i;
+const BLOCK2=/berann|denali|crater|ocd[ _]handwash|moons[ _]of[ _]solar|night[ _]sky[ _]festival|1861[ _]comet|signature|sunset[ _]over[ _]the[ _]gulf|sharm|ma[ _]mania|mars[,_ ]+as[ _]seen|grand[ _]portage|efta|nebulae|bullae|lady[ _]with[ _]a[ _]parrot|early[ _]view[ _]of[ _]comet|rainier|escalators|broken[ _]heart/i;
 const NOTPHOTO=/(diagram|map of|\bmap\b|logo|icon|svg|drawing|illustration|engraving|sketch|poster|chart|stamp|cartoon|painting|lithograph|schematic|infographic|book|plate|page|screenshot)/i;
 async function getJson(u){for(let t=0;t<3;t++){try{const r=await fetch(u,Object.assign({signal:AbortSignal.timeout(20000)},UA)),x=await r.text();return JSON.parse(x)}catch(e){await sleep(2000*(t+1))}}return null}
-const entry=(ii,fn)=>{const em=ii.extmetadata||{},lic=strip(em.LicenseShortName&&em.LicenseShortName.value);return FREE.test(lic)?{src:ii.thumburl.split('?')[0],license:lic,page:ii.descriptionurl,file:fn}:null};
+const entry=(ii,fn)=>{const em=ii.extmetadata||{},lic=strip(em.LicenseShortName&&em.LicenseShortName.value);return FREE.test(lic)?{src:ii.thumburl.split('?')[0],license:lic,author:strip(em.Artist&&em.Artist.value).slice(0,70)||'Wikimedia Commons contributor',page:ii.descriptionurl,file:fn}:null};
 /* Wikipedia lead image (if public domain / CC0) */
 async function wiki(title){
  const j=await getJson('https://en.wikipedia.org/api/rest_v1/page/summary/'+encodeURIComponent(title));
@@ -39,14 +41,14 @@ async function commons(q){
   const name=p.title.replace(/^File:/,'');if(NOTPHOTO.test(name))continue;
   if(key.length&&!key.some(w=>name.toLowerCase().includes(w.slice(0,Math.max(4,w.length-1)))))continue;
   const e=entry(ii,name);if(e)cands.push(e)}
- return{cands:cands.slice(0,5)};
+ cands.sort((a,b)=>NOCREDIT.test(b.license)-NOCREDIT.test(a.license));return{cands:cands.slice(0,6)};
 }
 const attempts=spec=>{const a=spec.replace(/^!/,'').split('|').filter(x=>/^[PS]:/.test(x));
  if(a.length&&!a.some(x=>x.startsWith('S:'))){const p=a.find(x=>x.startsWith('P:'));if(p){const t=p.slice(2).replace(/_/g,' '),m=t.match(/^(.*?)\s*\((.*)\)\s*$/);a.push('S:'+(m?m[1]+' '+m[2]:t))}}return a};
 const cacheKey=k=>k.startsWith('P:')?'P:'+k.slice(2):k;
 (async()=>{
  /* old-format entries (single photo, or Openverse results) are dropped; Wikipedia ones are upgraded */
- for(const k of Object.keys(cache)){const v=cache[k];if(k.startsWith('S:')||(!v.cands&&!v.src)||(v.src&&!/wikimedia\.org/.test(v.src)))delete cache[k];else if(v.src&&!v.cands){cache['P:'+k]=FREE.test(v.credit||'')?{cands:[{src:v.src,license:'Public domain',page:v.page,file:v.file}]}:{cands:[]};delete cache[k]}else if(!k.startsWith('P:')&&v.cands){cache['P:'+k]=v;delete cache[k]}}
+ for(const k of Object.keys(cache)){const v=cache[k];if((k.startsWith('S:')&&!v.cands)||(!v.cands&&!v.src)||(v.src&&!/wikimedia\.org/.test(v.src)))delete cache[k];else if(v.src&&!v.cands){cache['P:'+k]=FREE.test(v.credit||'')?{cands:[{src:v.src,license:'Public domain',page:v.page,file:v.file}]}:{cands:[]};delete cache[k]}else if(!k.startsWith('P:')&&!k.startsWith('S:')&&v.cands){cache['P:'+k]=v;delete cache[k]}}
  const keys=[...new Set(Object.values(plan).flat().flatMap(attempts))];
  if(!process.argv.includes('--no-fetch'))for(const k of keys){const ck=cacheKey(k);if(cache[ck])continue;
   const r=k.startsWith('P:')?await wiki(k.slice(2)):await commons(k.slice(2));
@@ -54,7 +56,7 @@ const cacheKey=k=>k.startsWith('P:')?'P:'+k.slice(2):k;
   cache[ck]=r;fs.writeFileSync(cacheFile,JSON.stringify(cache,null,1));console.log(k,'->',r.cands.length?r.cands.length+' free photo(s): '+r.cands[0].file.slice(0,50):'none');await sleep(1200)}
  /* assign, never reusing a picture */
  const used=new Set(),out={};
- for(const [tp,arr] of Object.entries(plan))out[tp]=arr.map(spec=>{for(const k of attempts(spec)){const c=cache[cacheKey(k)];if(!c||!c.cands)continue;const e=c.cands.find(x=>!used.has(x.src)&&!BLOCK.test(x.file));if(e){used.add(e.src);return{src:e.src,file:e.file,page:e.page}}}return{}});
+ for(const [tp,arr] of Object.entries(plan))out[tp]=arr.map(spec=>{for(const k of attempts(spec)){const c=cache[cacheKey(k)];if(!c||!c.cands)continue;const e=c.cands.find(x=>NOCREDIT.test(x.license||"")&&!used.has(x.src)&&!BLOCK.test(x.file)&&!BLOCK2.test(x.file));if(e){used.add(e.src);return{src:e.src,file:e.file,page:e.page,author:e.author,license:e.license}}}return{}});
  fs.writeFileSync(path.join(__dirname,'photos.json'),JSON.stringify(out));
  const n=Object.values(out).flat().filter(x=>x.src).length,tot=Object.values(plan).flat().filter(x=>attempts(x).length).length;
  console.log('done: questions with a free photo',n,'of',tot);
