@@ -8,12 +8,12 @@ const cache=fs.existsSync(cacheFile)?JSON.parse(fs.readFileSync(cacheFile,'utf8'
 const UA={headers:{'User-Agent':'GameZoneQuiz/1.0 (educational kids quiz)'}};
 const sleep=ms=>new Promise(r=>setTimeout(r,ms));
 const strip=h=>String(h||'').replace(/<[^>]+>/g,'').replace(/&amp;/g,'&').replace(/&quot;/g,'"').replace(/&#039;/g,"'").replace(/\s+/g,' ').trim();
-const OK=/^(public domain|pd|cc0|cc by(?!-n)|cc by-sa|attribution)/i,BAD=/\b(nc|nd)\b|fair use|non-?free|gfdl only/i;
+const OK=/^(public domain|pd|cc0|cc by(?!-n)|cc by-sa|attribution|godl)/i,BAD=/\b(nc|nd)\b|fair use|non-?free|gfdl only/i;
 async function getJson(u){for(let t=0;t<5;t++){try{const r=await fetch(u,UA),x=await r.text();return JSON.parse(x)}catch(e){await sleep(3000*(t+1))}}return null}
 async function lookup(title){
  const j=await getJson('https://en.wikipedia.org/api/rest_v1/page/summary/'+encodeURIComponent(title));
  if(!j)return{err:'network'};if(j.type==='https://mediawiki.org/wiki/HyperSwitch/errors/not_found')return{skip:'no page'};const src=j.originalimage&&j.originalimage.source;if(!src)return{skip:'no image'};
- const fn=decodeURIComponent(src.split('?')[0].split('/').pop());
+ const parts=src.split('?')[0].split('/'),fn=decodeURIComponent(src.includes('/thumb/')?parts[parts.length-2]:parts.pop());
  if(!/\.(jpe?g|png|webp)$/i.test(fn))return{skip:'not a photo ('+fn.split('.').pop()+')'};
  await sleep(500);
  const m=await getJson('https://commons.wikimedia.org/w/api.php?action=query&format=json&prop=imageinfo&iiprop=extmetadata|url|mime&iiurlwidth=640&titles='+encodeURIComponent('File:'+fn));

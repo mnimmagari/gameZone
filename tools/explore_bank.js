@@ -23,7 +23,7 @@ const EXPLORE=[
 ['In which season do many parts of India get monsoon rains?','Rainy season',['Winter','Autumn','Spring'],'Clouds bring heavy showers from June to September.','🌦️']]},
 {id:'x_space',name:'Space Explorers',icon:'🚀',desc:'Planets, the Moon, ISRO and astronauts',qs:[
 ['Which planet do we live on?','Earth',['Mars','Venus','Jupiter'],'It is the blue and green planet.','🌍'],
-['Which planet is called the Red Planet?','Mars',['Venus','Saturn','Mercury'],'Its dusty soil is rusty red.','🔴'],
+['Which planet is called the Red Planet?','Mars',['Venus','Saturn','Mercury'],'Its dusty soil is rusty red.','🪐'],
 ['Which is the biggest planet in our Solar System?','Jupiter',['Earth','Mars','Mercury'],'It is a giant ball of gas.','🪐'],
 ['Which planet has beautiful rings around it?','Saturn',['Mars','Earth','Mercury'],'Its rings are made of ice and rock.','🪐'],
 ['Chandrayaan-3 landed near the south pole of which body?','The Moon',['Mars','The Sun','Venus'],'India became the first country to land there in 2023.','🌕'],

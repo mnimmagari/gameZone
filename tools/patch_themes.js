@@ -13,7 +13,7 @@ const PP='body #quizPage #recStage.portrait>.quiz-panel[id="quizPanel"]:not(.hid
 
 /* id, label, layout, css variables, extra css (relative to .xt-<id>) */
 const THEMES=[
-['candy','Candy Pop','grid','--xbg:linear-gradient(160deg,#ff8ad8,#ffd86b);--xq:#ff2e93;--xnum:#ff2e93;--x1:#ff3d81;--x2:#ffb300;--x3:#00b8ff;--x4:#8e44ff;--xink:#4a1042;--xfill:#ff3d81','.answer{border-radius:999px;box-shadow:0 6px 0 var(--c)}'],
+['candy','Candy Pop','split','--xbg:linear-gradient(160deg,#ff8ad8,#ffd86b);--xq:#ff2e93;--xnum:#ff2e93;--x1:#ff3d81;--x2:#ffb300;--x3:#00b8ff;--x4:#8e44ff;--xink:#4a1042;--xfill:#ff3d81','.answer{border-radius:999px;box-shadow:0 6px 0 var(--c)}'],
 ['aurora','Aurora Split','split','--xbg:repeating-conic-gradient(from 0deg at 55% 75%,#ffffff12 0 8deg,transparent 8deg 16deg),linear-gradient(155deg,#0fb5ae,#4b3fc4);--xqbg:linear-gradient(90deg,#ff5d73,#ff2f92);--xqink:#fff;--xqts:0 3px 0 #0006;--xq:#9ff3ff;--xnum:#c6f432;--xnumink:#1c2b00;--x1:#c8f4ff;--x2:#c8f4ff;--x3:#c8f4ff;--x4:#c8f4ff;--xmix:100%;--xink:#12264d;--xlet:#ff5d73;--xletink:#fff;--xbd:#fff;--xfill:repeating-linear-gradient(115deg,#c6f432 0 14px,#d9ff62 14px 28px)','.answer{border-radius:16px}.answer:before{border-radius:12px!important}.question{border-radius:26px!important}'],
 ['cloud','Cloud Pop','grid','--xbg:radial-gradient(circle at 12% 22%,#ffffff55 0 42px,transparent 43px),radial-gradient(circle at 88% 74%,#ffffff44 0 58px,transparent 59px),radial-gradient(circle at 60% 12%,#ffffff33 0 30px,transparent 31px),linear-gradient(#4fb3ff,#2f7bff);--xqbg:transparent;--xqink:#fff;--xqts:0 3px 0 #123a9c;--xq:#fff;--xnum:#ff8a3d;--x1:#fff;--x2:#fff;--x3:#fff;--x4:#fff;--xmix:100%;--xink:#12306b;--xlet:#2f7bff;--xletink:#fff;--xbd:#fff;--xfill:#ff8a3d','.question{border-color:transparent!important;box-shadow:none!important}.answer{border-radius:22px;box-shadow:0 6px 0 #0003}'],
 ['sunbeam','Sunbeam','grid','--xbg:repeating-conic-gradient(from 0deg at 50% 110%,#ffffff1c 0 6deg,transparent 6deg 12deg),linear-gradient(#ffd166,#ff9f5a);--xqbg:#fff;--xqink:#5a2a00;--xq:#7a3b00;--xnum:#0f766e;--xnumink:#fff;--x1:#0f766e;--x2:#0f766e;--x3:#0f766e;--x4:#0f766e;--xmix:100%;--xink:#fff;--xats:0 2px 0 #00403a;--xlet:#ffd166;--xletink:#5a2a00;--xbd:#ffe9a8;--xfill:#0f766e','.answer{border-radius:14px;box-shadow:0 5px 0 #00403a}'],
@@ -75,11 +75,43 @@ ${P} .visual .curriculum-diagram:has(.ximg){height:100%;width:100%;min-height:0;
 ${P} .visual .curriculum-diagram:not(:has(.ximg)){max-width:100%}
 /* real photos: rounded card that fills the frame height, credit tucked in the corner */
 ${P} .visual .curriculum-diagram{position:relative}
-${P} .visual .ximg.xphoto{width:auto;height:100%;max-width:100%;aspect-ratio:auto;object-fit:contain;border-radius:14px;background:#1b1b24;box-shadow:0 6px 14px #0006;filter:none}
+${P} .visual .ximg.xphoto{width:auto;height:100%;max-width:100%;aspect-ratio:auto;object-fit:contain;border-radius:14px;background:#1b1b24;box-shadow:0 6px 14px #0006}
+${P}.xs-cartoon .visual .ximg.xphoto{filter:url(#xCartoon) contrast(1.08)}
 ${P} .visual .xcredit{position:absolute;right:6px;bottom:3px;max-width:62%;padding:1px 9px;border-radius:999px;background:#000b;color:#fff;font:700 10px/1.5 var(--font,system-ui);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;pointer-events:none}
 /* a question without a picture: no picture area, answers use the full width */
-${PL}.xl-split.novis,${PL}.xl-stack.novis{grid-template-columns:minmax(0,1fr);grid-template-rows:0 minmax(0,1fr) minmax(0,1.35fr) 34px;column-gap:0}
-${PL}.xl-split.novis .answers,${PL}.xl-stack.novis .answers{grid-row:3;grid-column:1/-1;grid-template-columns:1fr 1fr!important}
+${PL}.xl-split.novis,${PL}.xl-stack.novis,${PL}.xl-splitr.novis{grid-template-columns:minmax(0,1fr);grid-template-rows:0 minmax(0,1fr) minmax(0,1.35fr) 34px;column-gap:0}
+${PL}.xl-split.novis .answers,${PL}.xl-stack.novis .answers,${PL}.xl-splitr.novis .answers{grid-row:3;grid-column:1/-1;grid-template-columns:1fr 1fr!important}
+/* picture on the right, and a big picture on top */
+${PL}.xl-splitr{grid-template-columns:minmax(0,1fr) minmax(0,1fr);grid-template-rows:56px 112px minmax(0,1fr) 34px;column-gap:18px}
+${PL}.xl-splitr>.vid-banner,${PL}.xl-splitr .question,${PL}.xl-splitr .feedback{grid-column:1/-1}
+${PL}.xl-splitr .visual{grid-row:3;grid-column:2}
+${PL}.xl-splitr .answers{grid-row:3;grid-column:1;grid-template-columns:1fr!important}
+${PL}.xl-splitr .feedback{grid-row:4}
+${PP}.xl-splitr .answers{grid-template-columns:1fr!important}
+${PL}.xl-hero{grid-template-rows:56px 92px minmax(0,1fr) 112px 34px}
+${PL}.xl-hero.novis{grid-template-rows:0 250px 0 minmax(0,1fr) 34px}
+/* question at the bottom (landscape) */
+${PL}.xq-bottom.xl-grid,${PL}.xq-bottom.xl-hero{grid-template-rows:56px minmax(0,1fr) 112px 92px 34px}
+${PL}.xq-bottom.xl-grid{grid-template-rows:56px 150px minmax(0,1fr) 100px 34px}
+${PL}.xq-bottom.xl-grid .visual,${PL}.xq-bottom.xl-hero .visual{grid-row:2}
+${PL}.xq-bottom.xl-grid .answers{grid-row:3}
+${PL}.xq-bottom.xl-hero .answers{grid-row:3}
+${PL}.xq-bottom.xl-grid .question,${PL}.xq-bottom.xl-hero .question{grid-row:4}
+${PL}.xq-bottom.xl-grid .feedback,${PL}.xq-bottom.xl-hero .feedback{grid-row:5}
+${PL}.xq-bottom.xl-split,${PL}.xq-bottom.xl-stack,${PL}.xq-bottom.xl-splitr{grid-template-rows:56px minmax(0,1fr) 100px 34px}
+${PL}.xq-bottom.xl-split .visual,${PL}.xq-bottom.xl-stack .visual,${PL}.xq-bottom.xl-splitr .visual,${PL}.xq-bottom.xl-split .answers,${PL}.xq-bottom.xl-stack .answers,${PL}.xq-bottom.xl-splitr .answers{grid-row:2}
+${PL}.xq-bottom.xl-split .question,${PL}.xq-bottom.xl-stack .question,${PL}.xq-bottom.xl-splitr .question{grid-row:3}
+${PL}.xq-bottom.xl-split .feedback,${PL}.xq-bottom.xl-stack .feedback,${PL}.xq-bottom.xl-splitr .feedback{grid-row:4}
+${PL}.xq-bottom.novis{grid-template-columns:minmax(0,1fr);grid-template-rows:0 minmax(0,1.3fr) 130px 34px;column-gap:0}
+${PL}.xq-bottom.novis .answers{grid-row:2;grid-column:1/-1;grid-template-columns:1fr 1fr!important}
+${PL}.xq-bottom.novis .question{grid-row:3;grid-column:1/-1}
+${PL}.xq-bottom.novis .feedback{grid-row:4;grid-column:1/-1}
+${PL}.xq-bottom .question{margin-right:0!important}
+.xt-sec{margin-top:12px}.xt-sec>strong{display:block;color:#3b2f6b}
+.xt-note{margin:12px 2px 0;font-size:12px;opacity:.7}
+.xwire{display:block;width:100%;height:46px;background:#fff;border-radius:11px;box-shadow:inset 0 0 0 2px #e4dcff}
+.xwire .wq{fill:#ff5c8a}.xwire .wp{fill:#6d4dff}.xwire .wa{fill:#c9b8ff}
+${P} .visual .ic-txt{font-size:clamp(48px,11vh,92px)!important;line-height:1}
 ${P}.xt .visual:has(img){background:radial-gradient(circle at 50% 40%,#fff,color-mix(in srgb,var(--xq) 18%,#fff) 80%)!important}
 ${P}.xt-neon .visual:has(img){background:radial-gradient(circle at 50% 40%,#3a36a8,#12104a 80%)!important}
 @keyframes xDiag{50%{box-shadow:0 0 0 10px color-mix(in srgb,var(--xq,var(--level-accent,#8a7ddd)) 18%,transparent),0 0 34px color-mix(in srgb,var(--xq,var(--level-accent,#8a7ddd)) 70%,transparent)}}
@@ -93,14 +125,37 @@ s=s.slice(0,cssStart)+css+s.slice(cssEnd);
 /* ---------- JS: themes + picker ---------- */
 const jsStart=s.indexOf('var XT_META='),jsEnd=s.indexOf('function exploreOf(t){');
 if(jsStart<0||jsEnd<0)throw new Error('js block not found');
-const js=`var XT_META=${JSON.stringify(META)},XT=Object.keys(XT_META),lastXT='',levelXT='',XT_PICK='candy';
-try{const v=localStorage.getItem('xtPick');if(v&&(v==='random'||XT_META[v]))XT_PICK=v}catch(e){}
+const js=`var XT_META=${JSON.stringify(META)},XT=Object.keys(XT_META),lastXT='',levelXT='',levelLook=null,XT_PICK='candy',XL_PICK='auto',XQ_PICK='top',XS_PICK='cartoon';
+try{const v=localStorage.getItem('xtPick');if(v&&(v==='random'||XT_META[v]))XT_PICK=v;const l=localStorage.getItem('xlPick');if(['auto','grid','stack','split','splitr','hero'].includes(l))XL_PICK=l;const q=localStorage.getItem('xqPick');if(q==='top'||q==='bottom')XQ_PICK=q;const st=localStorage.getItem('xsPick');if(['cartoon','realistic','icon'].includes(st))XS_PICK=st}catch(e){}
 function nextXT(){if(XT_PICK!=='random')return XT_PICK;let t;do{t=XT[Math.floor(Math.random()*XT.length)]}while(t===lastXT);return lastXT=t}
-var XT_LAYOUT={grid:'4 tiles',stack:'Rows',split:'Picture + answers'};
+var XL_OPTS=[['auto','🎯 Theme default','Each theme picks its own'],['grid','4 tiles','Picture, then 4 answers'],['stack','Rows','Small picture, answer rows'],['split','Picture left','Big picture + answers'],['splitr','Picture right','Answers + big picture'],['hero','Big picture on top','Large picture, answers below']],
+ XQ_OPTS=[['top','Question on top','The classic place'],['bottom','Question at the bottom','Picture and answers first']],
+ XS_OPTS=[['cartoon','🎨 Cartoon','Real photos turned cartoon'],['realistic','📷 Realistic','Photos as they are'],['icon','🧸 3D icons','Cute icons only']];
+/* tiny wireframes so the layouts can be told apart at a glance */
+function xWire(l,qb){const R=(x,y,w,h,c)=>'<rect x="'+x+'" y="'+y+'" width="'+w+'" height="'+h+'" rx="2" class="'+c+'"/>',A=(x,y,w,n,g,h)=>Array.from({length:n},(_,i)=>R(x,y+i*(h+g),w,h,'wa')).join('');let b='';
+ if(l==='grid'){b=R(2,2,56,7,'wq')+R(2,11,56,10,'wp')+R(2,23,27,5,'wa')+R(31,23,27,5,'wa')+R(2,30,27,5,'wa')+R(31,30,27,5,'wa')}
+ else if(l==='stack'){b=R(2,2,56,7,'wq')+R(2,11,17,24,'wp')+A(21,11,37,4,2,4.5)}
+ else if(l==='split'){b=R(2,2,56,7,'wq')+R(2,11,28,24,'wp')+A(32,11,26,4,2,4.5)}
+ else if(l==='splitr'){b=R(2,2,56,7,'wq')+R(30,11,28,24,'wp')+A(2,11,26,4,2,4.5)}
+ else if(l==='hero'){b=R(2,2,56,6,'wq')+R(2,10,56,16,'wp')+R(2,28,27,3,'wa')+R(31,28,27,3,'wa')+R(2,32,27,3,'wa')+R(31,32,27,3,'wa')}
+ else if(qb){b=R(2,2,56,5,'wp')+R(2,9,56,14,'wa')+R(2,26,56,8,'wq')}
+ else if(qb===false){b=R(2,2,56,8,'wq')+R(2,12,56,5,'wp')+R(2,19,56,14,'wa')}
+ return '<svg class="xwire" viewBox="0 0 60 37" aria-hidden="true">'+b+'</svg>'}
+function xtSave(k,v){try{localStorage.setItem(k,v)}catch(e){}}
 function renderXtPicker(){let el=document.getElementById('xtPicker');const on=!!exploreOf(topic);if(!el){if(!on)return;el=document.createElement('div');el.id='xtPicker';const h=document.getElementById('levelsHeading');h.parentNode.insertBefore(el,h)}
  el.classList.toggle('hidden',!on);if(!on)return;
- el.innerHTML='<strong>🎨 Choose a look ('+XT.length+' themes)</strong><div class="xt-chips">'+['random'].concat(XT).map(k=>'<button type="button" class="xt-chip'+(XT_PICK===k?' on':'')+'" data-xt="'+k+'"><i style="--sw:'+(k==='random'?'conic-gradient(#ff5c8a,#ffc400,#22c55e,#2bb3ff,#8e44ad,#ff5c8a)':XT_META[k][1])+'"></i>'+(k==='random'?'🎲 Surprise me<small>A new look each level</small>':XT_META[k][0]+'<small>'+XT_LAYOUT[XT_META[k][2]]+'</small>')+'</button>').join('')+'</div>';
- el.onclick=e=>{const c=e.target.closest('.xt-chip');if(!c)return;XT_PICK=c.dataset.xt;try{localStorage.setItem('xtPick',XT_PICK)}catch(err){}renderXtPicker()}}
+ const sec=(title,key,cur,opts,vis)=>'<div class="xt-sec"><strong>'+title+'</strong><div class="xt-chips">'+opts.map(o=>'<button type="button" class="xt-chip'+(cur===o[0]?' on':'')+'" data-k="'+key+'" data-v="'+o[0]+'">'+vis(o[0])+o[1]+(o[2]?'<small>'+o[2]+'</small>':'')+'</button>').join('')+'</div></div>',
+  none=()=>'',wire=l=>l==='auto'?'':xWire(l),
+  th=[['random','🎲 Surprise me','A new colour look each level']].concat(XT.map(k=>[k,XT_META[k][0],XT_META[k][2]==='grid'?'':''])),
+  sw=k=>'<i style="--sw:'+(k==='random'?'conic-gradient(#ff5c8a,#ffc400,#22c55e,#2bb3ff,#8e44ad,#ff5c8a)':XT_META[k][1])+'"></i>';
+ el.innerHTML=sec('🎨 Colours ('+XT.length+' looks)','xt',XT_PICK,th,sw)+sec('🧩 Layout: where things go','xl',XL_PICK,XL_OPTS,wire)+sec('❓ Question position','xq',XQ_PICK,XQ_OPTS,k=>xWire('q',k==='bottom'))+sec('🖼️ Picture style','xs',XS_PICK,XS_OPTS,none)+'<p class="xt-note">Your choices stay the same for the whole level and are remembered on this device.</p>';
+ el.onclick=e=>{const c=e.target.closest('.xt-chip');if(!c)return;const k=c.dataset.k,v=c.dataset.v;if(k==='xt')XT_PICK=v;else if(k==='xl')XL_PICK=v;else if(k==='xq')XQ_PICK=v;else XS_PICK=v;xtSave({xt:'xtPick',xl:'xlPick',xq:'xqPick',xs:'xsPick'}[k],v);renderXtPicker()}}
+/* a fresh look for a new level: colours, layout, question position and picture style are all fixed until the level ends */
+function xNewLook(){const t=nextXT();return{t:t,l:XL_PICK==='auto'?XT_META[t][2]:XL_PICK,q:XQ_PICK,s:XS_PICK}}
+/* picture style "3D icons": swap a real photo for its icon */
+function xApplyStyle(){const L=levelLook;if(!L||!exploreOf(quizTopic)||L.s!=='icon')return;const im=document.querySelector('#visualCount .xphoto');if(im&&im.dataset.alt){const a=im.dataset.alt;delete im.dataset.alt;im.classList.remove('xphoto');const cr=im.parentElement&&im.parentElement.querySelector('.xcredit');if(cr)cr.remove();im.src=a}}
+/* cartoon effect for real photos: soften, boost colour, flatten into a few tones and draw dark outlines */
+if(!document.getElementById('xCartoonSvg'))document.body.insertAdjacentHTML('beforeend','<svg id="xCartoonSvg" width="0" height="0" style="position:absolute" aria-hidden="true"><defs><filter id="xCartoon" x="0" y="0" width="100%" height="100%" color-interpolation-filters="sRGB"><feGaussianBlur in="SourceGraphic" stdDeviation="1.2" result="b"/><feColorMatrix in="b" type="saturate" values="1.9" result="s"/><feComponentTransfer in="s" result="p"><feFuncR type="discrete" tableValues="0 .17 .34 .52 .7 .86 1"/><feFuncG type="discrete" tableValues="0 .17 .34 .52 .7 .86 1"/><feFuncB type="discrete" tableValues="0 .17 .34 .52 .7 .86 1"/></feComponentTransfer><feColorMatrix in="b" type="matrix" values=".33 .33 .33 0 0 .33 .33 .33 0 0 .33 .33 .33 0 0 0 0 0 1 0" result="g"/><feConvolveMatrix in="g" order="3" kernelMatrix="-1 -1 -1 -1 8 -1 -1 -1 -1" divisor="1" preserveAlpha="true" result="e"/><feColorMatrix in="e" type="matrix" values="-7 0 0 0 1 -7 0 0 0 1 -7 0 0 0 1 0 0 0 1 0" result="ink"/><feBlend in="p" in2="ink" mode="multiply"/></filter></defs></svg>');
 /* realistic 3D pictures (Microsoft Fluent Emoji, MIT licence); falls back to Noto, then plain text */
 var XIMG=${JSON.stringify(map)};
 /* e = emoji (3D icon), p = optional real photo {s: url, c: credit}. Fallback chain: photo -> 3D icon -> Noto icon -> text */
@@ -116,7 +171,7 @@ function fitVisual(){const v=document.getElementById('visualCount'),d=v&&v.first
 s=s.slice(0,jsStart)+js+s.slice(jsEnd);
 
 /* picture from the new source */
-if(!s.includes('xImg(r[4])')){const a=s.indexOf("'<div class=\"curriculum-diagram\">'+emoOne(r[4],96)"),b=s.indexOf("+'</div>',hint:r[3]",a);
+if(!s.includes('xImg(r[4]')){const a=s.indexOf("'<div class=\"curriculum-diagram\">'+emoOne(r[4],96)"),b=s.indexOf("+'</div>',hint:r[3]",a);
 if(a<0||b<0)throw new Error('pool picture not found');
 s=s.slice(0,a)+"'<div class=\"curriculum-diagram\">'+xImg(r[4])"+s.slice(b)}
 {const o=`'<div class="curriculum-diagram">'+xImg(r[4])+'</div>'`,n=`(r[4]||r[5]?'<div class="curriculum-diagram">'+xImg(r[4],r[5])+'</div>':'')`;if(s.includes(o))s=s.replace(o,()=>n)}
@@ -128,7 +183,11 @@ if(!s.includes('im.dataset.n){const n='))rep("if(im&&im.tagName==='IMG'&&im.data
 const NEWQ="['grid','stack','split'].forEach(n=>panel.classList.remove('xl-'+n));panel.classList.remove('xt');if(exploreOf(quizTopic)){if(qi===0||!levelXT||!XT_META[levelXT])levelXT=nextXT();const n=levelXT;panel.classList.add('xt','xt-'+n,'xl-'+XT_META[n][2])}";
 const OLDQ1="['grid','stack','split'].forEach(n=>panel.classList.remove('xl-'+n));panel.classList.remove('xt');if(exploreOf(quizTopic)){const n=nextXT();panel.classList.add('xt','xt-'+n,'xl-'+XT_META[n][2])}";
 const OLDQ0="panel.classList.remove('xt');if(exploreOf(quizTopic)){panel.classList.add('xt','xt-'+nextXT())}";
-if(s.includes(OLDQ1))rep(OLDQ1,NEWQ);else if(s.includes(OLDQ0))rep(OLDQ0,NEWQ);else if(!s.includes('levelXT=nextXT()'))throw new Error('showQ hook not found');
+if(s.includes(OLDQ1))rep(OLDQ1,NEWQ);else if(s.includes(OLDQ0))rep(OLDQ0,NEWQ);else if(!s.includes('levelXT=nextXT()')&&!s.includes('levelLook=xNewLook()'))throw new Error('showQ hook not found');
+/* colours + layout + question position + picture style, all chosen once per level */
+const NEW2="XT.forEach(n=>panel.classList.remove('xt-'+n));['grid','stack','split','splitr','hero'].forEach(n=>panel.classList.remove('xl-'+n));['cartoon','realistic','icon'].forEach(n=>panel.classList.remove('xs-'+n));panel.classList.remove('xt','xq-bottom');if(exploreOf(quizTopic)){if(qi===0||!levelLook||!XT_META[levelLook.t])levelLook=xNewLook();const L=levelLook;panel.classList.add('xt','xt-'+L.t,'xl-'+L.l,'xs-'+L.s);if(L.q==='bottom')panel.classList.add('xq-bottom')}";
+if(s.includes(NEWQ))rep(NEWQ,NEW2);
+if(!s.includes('xApplyStyle();'))rep("$('questionText').textContent=q.p;","$('questionText').textContent=q.p;xApplyStyle();");
 
 fs.writeFileSync(p,s);
 [...s.matchAll(/<script>([\s\S]*?)<\/script>/g)].forEach(x=>new Function(x[1]));
