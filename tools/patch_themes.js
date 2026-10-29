@@ -6,7 +6,7 @@ const map=JSON.parse(fs.readFileSync(process.argv[2],'utf8'));
 const plan=require('./visual_plan.js'),photos=require('./photos.json');
 const colors={x_evs:'#22c55e',x_space:'#7c4dff',x_animals:'#ff8a00',x_eco:'#00c2a8',x_tech:'#2979ff',x_india:'#ff4d6d',x_road:'#ffc400',x_health:'#ff5c8a'};
 const bank=require('./explore_bank.js').concat(require('./explore_bank2.js'));
-bank.forEach(t=>{t.color=colors[t.id];t.qs=t.qs.map((q,i)=>{const sp=plan[t.id][i],ph=photos[t.id][i];return[q[0],q[1],q[2],q[3],sp==='N'?'':q[4],ph&&ph.src?{s:ph.src,c:ph.credit}:0]})});
+bank.forEach(t=>{t.color=colors[t.id];t.qs=t.qs.map((q,i)=>{const sp0=plan[t.id][i],rev=sp0.startsWith('!'),sp=rev?sp0.slice(1):sp0,ph=photos[t.id][i];return[q[0],q[1],q[2],q[3],sp==='N'?'':q[4],ph&&ph.src?{s:ph.src}:0,rev&&sp!=='N'?1:0]})});
 const P='body #quizPage #recStage .quiz-panel[id="quizPanel"]';
 const PL='body #quizPage #recStage:not(.portrait)>.quiz-panel[id="quizPanel"]:not(.hidden)';
 const PP='body #quizPage #recStage.portrait>.quiz-panel[id="quizPanel"]:not(.hidden)';
@@ -57,6 +57,7 @@ ${P}.xt #questionCount{background:var(--xnum,var(--xq))!important;border-color:v
 ${P}.xt .progress-fill{background:var(--xfill,var(--x2))!important}
 ${P}.xt .answer{background:var(--bg)!important;border:4px solid var(--xbd,var(--c))!important;color:var(--xink)!important;text-shadow:var(--xats,none);font-weight:900}
 ${P}.xt .answer:before{background:var(--xlet,var(--c))!important;color:var(--xletink,#fff)!important}
+${P}.xt .answer{white-space:normal!important;text-align:center;line-height:1.1;text-wrap:balance;padding-top:3px!important;padding-bottom:3px!important}
 ${[1,2,3,4].map(n=>`${P}.xt.xt .answer:nth-child(${n}){--c:var(--x${n});--bg:color-mix(in srgb,var(--x${n}) var(--xmix,26%),var(--xbase,#fff))}`).join('\n')}
 ${P}.xt.xt .answer.correct{--c:#12b550!important;--bg:#c9ffdc!important;--xbd:#12b550;color:#073d1b!important;text-shadow:none}
 ${P}.xt.xt .answer.wrong{--c:#ff3b3b!important;--bg:#ffd3d3!important;--xbd:#ff3b3b;color:#5b0909!important;text-shadow:none}
@@ -75,9 +76,11 @@ ${P} .visual .curriculum-diagram:has(.ximg){height:100%;width:100%;min-height:0;
 ${P} .visual .curriculum-diagram:not(:has(.ximg)){max-width:100%}
 /* real photos: rounded card that fills the frame height, credit tucked in the corner */
 ${P} .visual .curriculum-diagram{position:relative}
-${P} .visual .ximg.xphoto{width:auto;height:100%;max-width:100%;aspect-ratio:auto;object-fit:contain;border-radius:14px;background:#1b1b24;box-shadow:0 6px 14px #0006}
-${P}.xs-cartoon .visual .ximg.xphoto{filter:url(#xCartoon) contrast(1.08)}
-${P} .visual .xcredit{position:absolute;right:6px;bottom:3px;max-width:62%;padding:1px 9px;border-radius:999px;background:#000b;color:#fff;font:700 10px/1.5 var(--font,system-ui);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;pointer-events:none}
+${P} .visual .ximg.xphoto{width:100%;height:100%;max-width:none;max-height:none;aspect-ratio:auto;object-fit:cover;object-position:center;border-radius:0;box-shadow:none;display:block}
+${P}.xt .visual:has(.xphoto),${P}.xt .visual:has(.xmystery){padding:0!important}
+${P} .visual .curriculum-diagram:has(.xphoto),${P} .visual .curriculum-diagram:has(.xmystery){padding:0;position:relative;overflow:hidden;border-radius:14px}
+${P} .visual .curriculum-diagram:has(.xphoto):after{content:"";position:absolute;inset:0;pointer-events:none;border-radius:inherit;box-shadow:inset 0 0 0 3px #ffffffb0,inset 0 -46px 46px -46px #0008,inset 0 36px 40px -40px #ffffff55}
+${P}.xs-cartoon .visual .ximg.xphoto{filter:url(#xCartoon) contrast(1.04)}
 /* a question without a picture: no picture area, answers use the full width */
 ${PL}.xl-split.novis,${PL}.xl-stack.novis,${PL}.xl-splitr.novis{grid-template-columns:minmax(0,1fr);grid-template-rows:0 minmax(0,1fr) minmax(0,1.35fr) 34px;column-gap:0}
 ${PL}.xl-split.novis .answers,${PL}.xl-stack.novis .answers,${PL}.xl-splitr.novis .answers{grid-row:3;grid-column:1/-1;grid-template-columns:1fr 1fr!important}
@@ -110,6 +113,13 @@ ${PL}.xq-bottom .question{margin-right:0!important}
 .xt-sec{margin-top:12px}.xt-sec>strong{display:block;color:#3b2f6b}
 .xt-note{margin:12px 2px 0;font-size:12px;opacity:.7}
 .xwire{display:block;width:100%;height:46px;background:#fff;border-radius:11px;box-shadow:inset 0 0 0 2px #e4dcff}
+@keyframes xBob{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+@keyframes xPop{from{opacity:0;transform:scale(.8)}to{opacity:1;transform:none}}
+${P} .visual .curriculum-diagram:has(.xmystery){height:100%;width:100%;display:flex;align-items:center;justify-content:center;padding:6px}
+${P} .visual .xmystery{display:flex;flex-direction:column;align-items:center;justify-content:center;width:100%;height:100%;border-radius:14px;border:4px dashed var(--xq,#8a7ddd);background:repeating-linear-gradient(45deg,#fff,#fff 10px,color-mix(in srgb,var(--xq,#8a7ddd) 14%,#fff) 10px 20px);color:var(--xq,#6d4dff)}
+${P} .visual .xmystery b{font:900 clamp(34px,8vh,70px)/1 var(--font,system-ui);animation:xBob 1.4s ease-in-out infinite}
+${P} .visual .xmystery span{font:800 12px var(--font,system-ui);opacity:.8}
+${P} .visual .xrev{animation:xPop .55s cubic-bezier(.2,.9,.3,1.4)}
 .xwire .wq{fill:#ff5c8a}.xwire .wp{fill:#6d4dff}.xwire .wa{fill:#c9b8ff}
 ${P} .visual .ic-txt{font-size:clamp(48px,11vh,92px)!important;line-height:1}
 ${P}.xt .visual:has(img){background:radial-gradient(circle at 50% 40%,#fff,color-mix(in srgb,var(--xq) 18%,#fff) 80%)!important}
@@ -130,7 +140,7 @@ try{const v=localStorage.getItem('xtPick');if(v&&(v==='random'||XT_META[v]))XT_P
 function nextXT(){if(XT_PICK!=='random')return XT_PICK;let t;do{t=XT[Math.floor(Math.random()*XT.length)]}while(t===lastXT);return lastXT=t}
 var XL_OPTS=[['auto','🎯 Theme default','Each theme picks its own'],['grid','4 tiles','Picture, then 4 answers'],['stack','Rows','Small picture, answer rows'],['split','Picture left','Big picture + answers'],['splitr','Picture right','Answers + big picture'],['hero','Big picture on top','Large picture, answers below']],
  XQ_OPTS=[['top','Question on top','The classic place'],['bottom','Question at the bottom','Picture and answers first']],
- XS_OPTS=[['cartoon','🎨 Cartoon','Real photos turned cartoon'],['realistic','📷 Realistic','Photos as they are'],['icon','🧸 3D icons','Cute icons only']];
+ XS_OPTS=[['cartoon','🎨 Light cartoon','Real photo, gently illustrated'],['realistic','📷 Realistic','Photos as they are'],['icon','🧸 3D icons','Cute icons only']];
 /* tiny wireframes so the layouts can be told apart at a glance */
 function xWire(l,qb){const R=(x,y,w,h,c)=>'<rect x="'+x+'" y="'+y+'" width="'+w+'" height="'+h+'" rx="2" class="'+c+'"/>',A=(x,y,w,n,g,h)=>Array.from({length:n},(_,i)=>R(x,y+i*(h+g),w,h,'wa')).join('');let b='';
  if(l==='grid'){b=R(2,2,56,7,'wq')+R(2,11,56,10,'wp')+R(2,23,27,5,'wa')+R(31,23,27,5,'wa')+R(2,30,27,5,'wa')+R(31,30,27,5,'wa')}
@@ -155,13 +165,16 @@ function xNewLook(){const t=nextXT();return{t:t,l:XL_PICK==='auto'?XT_META[t][2]
 /* picture style "3D icons": swap a real photo for its icon */
 function xApplyStyle(){const L=levelLook;if(!L||!exploreOf(quizTopic)||L.s!=='icon')return;const im=document.querySelector('#visualCount .xphoto');if(im&&im.dataset.alt){const a=im.dataset.alt;delete im.dataset.alt;im.classList.remove('xphoto');const cr=im.parentElement&&im.parentElement.querySelector('.xcredit');if(cr)cr.remove();im.src=a}}
 /* cartoon effect for real photos: soften, boost colour, flatten into a few tones and draw dark outlines */
-if(!document.getElementById('xCartoonSvg'))document.body.insertAdjacentHTML('beforeend','<svg id="xCartoonSvg" width="0" height="0" style="position:absolute" aria-hidden="true"><defs><filter id="xCartoon" x="0" y="0" width="100%" height="100%" color-interpolation-filters="sRGB"><feGaussianBlur in="SourceGraphic" stdDeviation="1.2" result="b"/><feColorMatrix in="b" type="saturate" values="1.9" result="s"/><feComponentTransfer in="s" result="p"><feFuncR type="discrete" tableValues="0 .17 .34 .52 .7 .86 1"/><feFuncG type="discrete" tableValues="0 .17 .34 .52 .7 .86 1"/><feFuncB type="discrete" tableValues="0 .17 .34 .52 .7 .86 1"/></feComponentTransfer><feColorMatrix in="b" type="matrix" values=".33 .33 .33 0 0 .33 .33 .33 0 0 .33 .33 .33 0 0 0 0 0 1 0" result="g"/><feConvolveMatrix in="g" order="3" kernelMatrix="-1 -1 -1 -1 8 -1 -1 -1 -1" divisor="1" preserveAlpha="true" result="e"/><feColorMatrix in="e" type="matrix" values="-7 0 0 0 1 -7 0 0 0 1 -7 0 0 0 1 0 0 0 1 0" result="ink"/><feBlend in="p" in2="ink" mode="multiply"/></filter></defs></svg>');
+if(!document.getElementById('xCartoonSvg'))document.body.insertAdjacentHTML('beforeend','<svg id="xCartoonSvg" width="0" height="0" style="position:absolute" aria-hidden="true"><defs><filter id="xCartoon" x="0" y="0" width="100%" height="100%" color-interpolation-filters="sRGB"><feGaussianBlur in="SourceGraphic" stdDeviation="0.7" result="b"/><feColorMatrix in="b" type="saturate" values="1.3" result="s"/><feComponentTransfer in="s" result="p"><feFuncR type="discrete" tableValues="0 .1 .2 .3 .4 .5 .6 .7 .8 .9 1"/><feFuncG type="discrete" tableValues="0 .1 .2 .3 .4 .5 .6 .7 .8 .9 1"/><feFuncB type="discrete" tableValues="0 .1 .2 .3 .4 .5 .6 .7 .8 .9 1"/></feComponentTransfer><feComposite in="p" in2="s" operator="arithmetic" k1="0" k2=".5" k3=".5" k4="0" result="m"/><feColorMatrix in="b" type="matrix" values=".33 .33 .33 0 0 .33 .33 .33 0 0 .33 .33 .33 0 0 0 0 0 1 0" result="g"/><feConvolveMatrix in="g" order="3" kernelMatrix="-1 -1 -1 -1 8 -1 -1 -1 -1" divisor="1" preserveAlpha="true" result="e"/><feColorMatrix in="e" type="matrix" values="-3.5 0 0 0 1 -3.5 0 0 0 1 -3.5 0 0 0 1 0 0 0 1 0" result="ink"/><feBlend in="m" in2="ink" mode="multiply"/></filter></defs></svg>');
+var XMYST='<div class="curriculum-diagram"><div class="xmystery"><b>?</b><span>Think first!</span></div></div>';
+/* a picture that would give the answer away is hidden until the child has answered */
+function xReveal(){const q=questions[qi];if(!q||!q.reveal||!exploreOf(quizTopic))return;const v=document.getElementById('visualCount');v.innerHTML=q.reveal;if(v.firstElementChild)v.firstElementChild.classList.add('xrev');xApplyStyle()}
 /* realistic 3D pictures (Microsoft Fluent Emoji, MIT licence); falls back to Noto, then plain text */
 var XIMG=${JSON.stringify(map)};
 /* e = emoji (3D icon), p = optional real photo {s: url, c: credit}. Fallback chain: photo -> 3D icon -> Noto icon -> text */
 function xImg(e,p){const f=e&&XIMG[e],c=e?[...e].map(x=>x.codePointAt(0).toString(16)).filter(h=>h!=='fe0f').join('_'):'',icon=f?'https://cdn.jsdelivr.net/gh/microsoft/fluentui-emoji@main/assets/'+f.split('/').map(encodeURIComponent).join('/'):'',noto=c?NOTO_CDN+c+'.svg':'';
  const esc=t=>String(t).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;');
- if(p&&p.s)return '<img class="ximg xphoto" alt="" referrerpolicy="no-referrer" src="'+esc(p.s)+'"'+(icon?' data-alt="'+icon+'"':'')+(noto?' data-n="'+noto+'"':'')+(e?' data-t="'+e+'"':'')+'><span class="xcredit">📷 '+esc(p.c)+'</span>';
+ if(p&&p.s)return '<img class="ximg xphoto" alt="" referrerpolicy="no-referrer" src="'+esc(p.s)+'"'+(icon?' data-alt="'+icon+'"':'')+(noto?' data-n="'+noto+'"':'')+(e?' data-t="'+e+'"':'')+'>';
  if(!f)return e?emoOne(e,96):'';
  return '<img class="ximg" alt="" data-n="'+noto+'" data-t="'+e+'" src="'+icon+'">'}
 /* keep every diagram inside its frame: shrink (never enlarge) to the free area, centred, whenever the picture changes or loads */
@@ -189,6 +202,10 @@ const NEW2="XT.forEach(n=>panel.classList.remove('xt-'+n));['grid','stack','spli
 if(s.includes(NEWQ))rep(NEWQ,NEW2);
 if(!s.includes('xApplyStyle();'))rep("$('questionText').textContent=q.p;","$('questionText').textContent=q.p;xApplyStyle();");
 
+if(s.includes("vis:(r[4]||r[5]?'<div class=\"curriculum-diagram\">'+xImg(r[4],r[5])+'</div>':''),hint:r[3]"))s=s.replace("vis:(r[4]||r[5]?'<div class=\"curriculum-diagram\">'+xImg(r[4],r[5])+'</div>':''),hint:r[3]",()=>"vis:(r[6]&&(r[4]||r[5])?XMYST:(r[4]||r[5]?'<div class=\"curriculum-diagram\">'+xImg(r[4],r[5])+'</div>':'')),reveal:(r[6]&&(r[4]||r[5]))?'<div class=\"curriculum-diagram\">'+xImg(r[4],r[5])+'</div>':'',hint:r[3]");
+/* hooks: reveal after answering / timeout; fixed question order for Explore */
+if(!s.includes('xReveal();')){const a1="function answer(btn,val){if(answered)return;answered=true;";if(!s.includes(a1))throw new Error('answer hook');s=s.replace(a1,()=>a1+'xReveal();');const t1="function timeExpired(){if(answered)return;answered=true;";if(!s.includes(t1))throw new Error('timeExpired hook');s=s.replace(t1,()=>t1+'xReveal();')}
+if(!s.includes('return (buildPools()[level]||[]).slice()')){const c1="function createQuestions(){quizUsed=new Set();quizEmo=new Set();";if(!s.includes(c1))throw new Error('createQuestions hook');s=s.replace(c1,()=>c1+'if(exploreOf(topic)){return (buildPools()[level]||[]).slice()}')}
 fs.writeFileSync(p,s);
 [...s.matchAll(/<script>([\s\S]*?)<\/script>/g)].forEach(x=>new Function(x[1]));
 console.log('patched ok; themes:',THEMES.length,'images:',Object.keys(map).length);
