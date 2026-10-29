@@ -1,0 +1,233 @@
+{
+ "Root": {
+  "src": "https://upload.wikimedia.org/wikipedia/commons/a/ab/Primary_and_secondary_cotton_roots.jpg",
+  "credit": "Wikimedia Commons · Public domain",
+  "page": "https://commons.wikimedia.org/wiki/File:Primary_and_secondary_cotton_roots.jpg",
+  "file": "Primary_and_secondary_cotton_roots.jpg"
+ },
+ "Human_nose": {
+  "src": "https://upload.wikimedia.org/wikipedia/commons/d/d8/Fort_Ross_Elena_wearing_Traditional_Russian_Costume_%28cropped%29.jpg",
+  "credit": "Franco Folini · CC BY-SA 2.0",
+  "page": "https://commons.wikimedia.org/wiki/File:Fort_Ross_Elena_wearing_Traditional_Russian_Costume_(cropped).jpg",
+  "file": "Fort_Ross_Elena_wearing_Traditional_Russian_Costume_(cropped).jpg"
+ },
+ "Apple": {
+  "skip": "licence GFDL 1.2"
+ },
+ "Hand_washing": {
+  "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/1b/OCD_handwash.jpg/960px-OCD_handwash.jpg",
+  "credit": "Lars Klintwall Malmqvist (Larsklintwallmalmqvist) · Public domain",
+  "page": "https://commons.wikimedia.org/wiki/File:OCD_handwash.jpg",
+  "file": "OCD_handwash.jpg"
+ },
+ "Tree": {
+  "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/7f/Usamljeni_jasen_-_panoramio_%28cropped%29.jpg/960px-Usamljeni_jasen_-_panoramio_%28cropped%29.jpg",
+  "credit": "menergo · CC BY-SA 3.0",
+  "page": "https://commons.wikimedia.org/wiki/File:Usamljeni_jasen_-_panoramio_(cropped).jpg",
+  "file": "Usamljeni_jasen_-_panoramio_(cropped).jpg"
+ },
+ "Human_eye": {
+  "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/8/8f/Human_eye_with_blood_vessels.jpg/960px-Human_eye_with_blood_vessels.jpg",
+  "credit": "ROTFLOLEB · CC BY-SA 3.0",
+  "page": "https://commons.wikimedia.org/wiki/File:Human_eye_with_blood_vessels.jpg",
+  "file": "Human_eye_with_blood_vessels.jpg"
+ },
+ "Ant": {
+  "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/db/Red_Ant_-_March_2025.jpg/960px-Red_Ant_-_March_2025.jpg",
+  "credit": "Samantha Henneke from Seagrove, North Carolina, USA · CC BY 2.0",
+  "page": "https://commons.wikimedia.org/wiki/File:Red_Ant_-_March_2025.jpg",
+  "file": "Red_Ant_-_March_2025.jpg"
+ },
+ "Deer": {
+  "src": "https://upload.wikimedia.org/wikipedia/commons/d/d9/Family_Cervidae_five_species.jpg",
+  "credit": "This image is a derivative work of the following images: Fil · CC BY-SA 3.0",
+  "page": "https://commons.wikimedia.org/wiki/File:Family_Cervidae_five_species.jpg",
+  "file": "Family_Cervidae_five_species.jpg"
+ },
+ "Monsoon": {
+  "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/2d/Monsoon_clouds_near_Nagercoil.jpg/960px-Monsoon_clouds_near_Nagercoil.jpg",
+  "credit": "w:user:PlaneMad · CC BY-SA 3.0",
+  "page": "https://commons.wikimedia.org/wiki/File:Monsoon_clouds_near_Nagercoil.jpg",
+  "file": "Monsoon_clouds_near_Nagercoil.jpg"
+ },
+ "Mars": {
+  "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/0c/Mars_-_August_30_2021_-_Flickr_-_Kevin_M._Gill.png/960px-Mars_-_August_30_2021_-_Flickr_-_Kevin_M._Gill.png",
+  "credit": "Kevin Gill from Los Angeles, CA, United States · CC BY 2.0",
+  "page": "https://commons.wikimedia.org/wiki/File:Mars_-_August_30_2021_-_Flickr_-_Kevin_M._Gill.png",
+  "file": "Mars_-_August_30_2021_-_Flickr_-_Kevin_M._Gill.png"
+ },
+ "Jupiter": {
+  "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/e2/Jupiter_OPAL_2024.png/960px-Jupiter_OPAL_2024.png",
+  "credit": "NASA/STSCI (S.T.A.R.S) · Public domain",
+  "page": "https://commons.wikimedia.org/wiki/File:Jupiter_OPAL_2024.png",
+  "file": "Jupiter_OPAL_2024.png"
+ },
+ "Sun": {
+  "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/8/83/The_Sun_in_white_light.jpg/960px-The_Sun_in_white_light.jpg",
+  "credit": "Matúš Motlo · CC BY-SA 4.0",
+  "page": "https://commons.wikimedia.org/wiki/File:The_Sun_in_white_light.jpg",
+  "file": "The_Sun_in_white_light.jpg"
+ },
+ "Mercury_(planet)": {
+  "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/4a/Mercury_in_true_color.jpg/960px-Mercury_in_true_color.jpg",
+  "credit": "NASA/Johns Hopkins University Applied Physics Laboratory/Ari · Public domain",
+  "page": "https://commons.wikimedia.org/wiki/File:Mercury_in_true_color.jpg",
+  "file": "Mercury_in_true_color.jpg"
+ },
+ "Moon": {
+  "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/e1/FullMoon2010.jpg/960px-FullMoon2010.jpg",
+  "credit": "Gregory H. Revera · CC BY-SA 3.0",
+  "page": "https://commons.wikimedia.org/wiki/File:FullMoon2010.jpg",
+  "file": "FullMoon2010.jpg"
+ },
+ "Solar_System": {
+  "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/28/Solar_System_True_Color_EN.png/960px-Solar_System_True_Color_EN.png",
+  "credit": "Omarius257 · CC BY-SA 4.0",
+  "page": "https://commons.wikimedia.org/wiki/File:Solar_System_True_Color_EN.png",
+  "file": "Solar_System_True_Color_EN.png"
+ },
+ "Cattle": {
+  "skip": "no metadata"
+ },
+ "Rain": {
+  "skip": "no metadata"
+ },
+ "Sheep": {
+  "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/2c/Flock_of_sheep.jpg/960px-Flock_of_sheep.jpg",
+  "credit": "Keith Weller · Public domain",
+  "page": "https://commons.wikimedia.org/wiki/File:Flock_of_sheep.jpg",
+  "file": "Flock_of_sheep.jpg"
+ },
+ "Fish": {
+  "skip": "no metadata"
+ },
+ "Carrot": {
+  "skip": "no metadata"
+ },
+ "Honey_bee": {
+  "skip": "no metadata"
+ },
+ "Calf": {
+  "skip": "no image"
+ },
+ "Earth": {
+  "skip": "no metadata"
+ },
+ "Saturn": {
+  "skip": "no metadata"
+ },
+ "Chandrayaan-3": {
+  "skip": "licence GODL-India"
+ },
+ "Polar_Satellite_Launch_Vehicle": {
+  "skip": "no metadata"
+ },
+ "Milky_Way": {
+  "skip": "no metadata"
+ },
+ "Rocket": {
+  "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/9a/Soyuz_TMA-9_launch.jpg/960px-Soyuz_TMA-9_launch.jpg",
+  "credit": "Bill Ingalls · Public domain",
+  "page": "https://commons.wikimedia.org/wiki/File:Soyuz_TMA-9_launch.jpg",
+  "file": "Soyuz_TMA-9_launch.jpg"
+ },
+ "Neil_Armstrong": {
+  "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/0d/Neil_Armstrong_pose.jpg/960px-Neil_Armstrong_pose.jpg",
+  "credit": "Unknown authorUnknown author · Public domain",
+  "page": "https://commons.wikimedia.org/wiki/File:Neil_Armstrong_pose.jpg",
+  "file": "Neil_Armstrong_pose.jpg"
+ },
+ "Rakesh_Sharma": {
+  "src": "https://upload.wikimedia.org/wikipedia/commons/3/3a/Rakesh_Sharma.jpg",
+  "credit": "Subhav Sharma · Public domain",
+  "page": "https://commons.wikimedia.org/wiki/File:Rakesh_Sharma.jpg",
+  "file": "Rakesh_Sharma.jpg"
+ },
+ "Meteoroid": {
+  "skip": "not a photo (gif)"
+ },
+ "Orbit": {
+  "skip": "not a photo (gif)"
+ },
+ "Astronaut": {
+  "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/91/Bruce_McCandless_II_during_EVA_in_1984.jpg/960px-Bruce_McCandless_II_during_EVA_in_1984.jpg",
+  "credit": "NASA · Public domain",
+  "page": "https://commons.wikimedia.org/wiki/File:Bruce_McCandless_II_during_EVA_in_1984.jpg",
+  "file": "Bruce_McCandless_II_during_EVA_in_1984.jpg"
+ },
+ "Great_Red_Spot": {
+  "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/dd/Jupiter_-_Great_Red_Spot_-_PJ7-60_61_62_-_Balanced_%2849803032983%29.png/960px-Jupiter_-_Great_Red_Spot_-_PJ7-60_61_62_-_Balanced_%2849803032983%29.png",
+  "credit": "Kevin Gill from Los Angeles, CA, United States · CC BY 2.0",
+  "page": "https://commons.wikimedia.org/wiki/File:Jupiter_-_Great_Red_Spot_-_PJ7-60_61_62_-_Balanced_(49803032983).png",
+  "file": "Jupiter_-_Great_Red_Spot_-_PJ7-60_61_62_-_Balanced_(49803032983).png"
+ },
+ "Blue_whale": {
+  "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/1c/Anim1754_-_Flickr_-_NOAA_Photo_Library.jpg/960px-Anim1754_-_Flickr_-_NOAA_Photo_Library.jpg",
+  "credit": "NOAA Photo Library · Public domain",
+  "page": "https://commons.wikimedia.org/wiki/File:Anim1754_-_Flickr_-_NOAA_Photo_Library.jpg",
+  "file": "Anim1754_-_Flickr_-_NOAA_Photo_Library.jpg"
+ },
+ "Penguin": {
+  "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/08/South_Shetland-2016-Deception_Island%E2%80%93Chinstrap_penguin_%28Pygoscelis_antarctica%29_04.jpg/960px-South_Shetland-2016-Deception_Island%E2%80%93Chinstrap_penguin_%28Pygoscelis_antarctica%29_04.jpg",
+  "credit": "Godot13 · CC BY-SA 4.0",
+  "page": "https://commons.wikimedia.org/wiki/File:South_Shetland-2016-Deception_Island%E2%80%93Chinstrap_penguin_(Pygoscelis_antarctica)_04.jpg",
+  "file": "South_Shetland-2016-Deception_Island–Chinstrap_penguin_(Pygoscelis_antarctica)_04.jpg"
+ },
+ "Indian_peafowl": {
+  "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/7f/Peacock_on_tree_%2852077240794%29.jpg/960px-Peacock_on_tree_%2852077240794%29.jpg",
+  "credit": "Kandukuru Nagarjun from Bangalore, India · CC BY 2.0",
+  "page": "https://commons.wikimedia.org/wiki/File:Peacock_on_tree_(52077240794).jpg",
+  "file": "Peacock_on_tree_(52077240794).jpg"
+ },
+ "Elephant": {
+  "skip": "licence GFDL 1.2"
+ },
+ "Cheetah": {
+  "skip": "no metadata"
+ },
+ "Tadpole": {
+  "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/0e/RanaTemporariaLarva2.jpg/960px-RanaTemporariaLarva2.jpg",
+  "credit": "Viridiflavus · CC BY-SA 3.0",
+  "page": "https://commons.wikimedia.org/wiki/File:RanaTemporariaLarva2.jpg",
+  "file": "RanaTemporariaLarva2.jpg"
+ },
+ "Bat": {
+  "src": "https://upload.wikimedia.org/wikipedia/commons/7/77/Big-eared-townsend-fledermaus.jpg",
+  "credit": "PD-USGov, exact author unknown · Public domain",
+  "page": "https://commons.wikimedia.org/wiki/File:Big-eared-townsend-fledermaus.jpg",
+  "file": "Big-eared-townsend-fledermaus.jpg"
+ },
+ "Octopus": {
+  "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/57/Octopus2.jpg/960px-Octopus2.jpg",
+  "credit": "albert kok · CC BY-SA 3.0",
+  "page": "https://commons.wikimedia.org/wiki/File:Octopus2.jpg",
+  "file": "Octopus2.jpg"
+ },
+ "Giraffe": {
+  "skip": "licence GFDL 1.2"
+ },
+ "Camel": {
+  "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/43/07._Camel_Profile%2C_near_Silverton%2C_NSW%2C_07.07.2007.jpg/960px-07._Camel_Profile%2C_near_Silverton%2C_NSW%2C_07.07.2007.jpg",
+  "credit": "Jjron · CC BY-SA 3.0",
+  "page": "https://commons.wikimedia.org/wiki/File:07._Camel_Profile,_near_Silverton,_NSW,_07.07.2007.jpg",
+  "file": "07._Camel_Profile,_near_Silverton,_NSW,_07.07.2007.jpg"
+ },
+ "Dolphin": {
+  "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/10/Tursiops_truncatus_01.jpg/960px-Tursiops_truncatus_01.jpg",
+  "credit": "NASA · Public domain",
+  "page": "https://commons.wikimedia.org/wiki/File:Tursiops_truncatus_01.jpg",
+  "file": "Tursiops_truncatus_01.jpg"
+ },
+ "Butterfly": {
+  "src": "https://upload.wikimedia.org/wikipedia/commons/3/3d/Fesoj_-_Papilio_machaon_%28by%29.jpg",
+  "credit": "fesoj · CC BY 2.0",
+  "page": "https://commons.wikimedia.org/wiki/File:Fesoj_-_Papilio_machaon_(by).jpg",
+  "file": "Fesoj_-_Papilio_machaon_(by).jpg"
+ },
+ "Owl": {
+  "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/56/Bubo_bubo_sibiricus_-_01.JPG/960px-Bubo_bubo_sibiricus_-_01.JPG",
+  "credit": "Carlos Delgado · CC BY-SA 4.0",
+  "page": "https://commons.wikimedia.org/wiki/File:Bubo_bubo_sibiricus_-_01.JPG",
+  "file": "Bubo_bubo_sibiricus_-_01.JPG"
+ }
+}
