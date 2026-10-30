@@ -1390,7 +1390,7 @@ Object.keys(ANIMAL_PHOTO_TOPICS).forEach(function(id){
  t.qs=t.questions.map(function(pair){
   const baby=id==='animal_babies';
   const query=baby?pair[0].replace('A baby ','')+' photograph':pair[0]+' photograph';
-  const revealQuery=baby?pair[0].replace('A baby ','')+' with its baby '+pair[0].replace('A baby ','')+' calf photograph':pair[0]+' close-up photograph';
+  const animalName=pair[0].replace('A baby ','');const revealQuery=baby?'adult '+animalName+' with its baby '+animalName+' photograph':pair[0]+' close-up photograph';
   return [baby?'What is a baby '+pair[0].replace('A baby ','')+' called?':'Which '+(id==='animal_birds'?'bird':id==='animal_domestic'?'domestic animal':'wild animal')+' is shown?',pair[1],[],baby?'Look at the adult animal. Think of the special name for its baby.':'Look carefully at the animal’s features.',t.icon,{query:query,revealQuery:revealQuery},0];
  });
  EXPLORE.push({id:id,name:t.name,icon:t.icon,desc:t.desc,qs:t.qs});
