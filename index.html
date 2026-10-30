@@ -1048,6 +1048,64 @@ body #quizPage #recStage>.quiz-panel[id="quizPanel"]:not(.hidden) .answer.wrong:
 #quizPanel.animal-photo-mode>#answers.reveal-self-check{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:12px!important}
 @media(max-width:600px){#quizPanel.animal-photo-mode{gap:8px!important;padding:10px!important}#quizPanel.animal-photo-mode>#timerRing{width:56px!important;height:56px!important}#quizPanel.animal-photo-mode .animal-photo-frame{height:clamp(220px,42vh,350px)!important;min-height:210px!important;border-radius:18px!important}#quizPanel.animal-photo-mode .animal-pair-photos{gap:8px!important}#quizPanel.animal-photo-mode .animal-pair-item .animal-photo-frame{height:180px!important}}
 
+
+/* v2.4: question-first layout with a horizontal countdown bar */
+body #quizPage #recStage>.quiz-panel[id="quizPanel"]:not(.hidden){
+  display:flex!important;flex-direction:column!important;align-items:stretch!important;
+  justify-content:flex-start!important;gap:0!important;
+  height:auto!important;min-height:560px;overflow:visible!important;
+}
+body #quizPage #recStage>.quiz-panel[id="quizPanel"]:not(.hidden)>.quiz-top{order:0!important;width:100%;flex:0 0 auto}
+body #quizPage #recStage>.quiz-panel[id="quizPanel"]:not(.hidden) .question{
+  order:1!important;grid-row:auto!important;grid-column:1/-1!important;
+  width:100%;margin:8px auto 12px!important;
+  padding:clamp(16px,2.6vw,24px)!important;
+  border-radius:22px!important;
+  background:linear-gradient(135deg,#fffdfb 0%,#fff 58%,color-mix(in srgb,var(--level-accent,#8a7ddd) 12%,#fff) 100%)!important;
+  border:3px solid color-mix(in srgb,var(--level-accent,#8a7ddd) 45%,#fff)!important;
+  box-shadow:0 6px 0 color-mix(in srgb,var(--level-accent,#8a7ddd) 18%,transparent),0 12px 24px #34295812!important;
+}
+body #quizPage #recStage>.quiz-panel[id="quizPanel"]:not(.hidden) .timer-ring{
+  order:2!important;position:relative!important;inset:auto!important;
+  width:100%!important;height:38px!important;min-height:38px!important;
+  margin:0 auto 12px!important;padding:0 12px!important;
+  display:flex!important;align-items:center!important;justify-content:flex-start!important;
+  border:2px solid #ffffff!important;border-radius:999px!important;
+  background:linear-gradient(90deg,var(--level-accent,#8a7ddd) var(--timer-progress,100%),#ffffffc9 0)!important;
+  box-shadow:0 3px 9px #34295818!important;overflow:hidden!important;
+}
+body #quizPage #recStage>.quiz-panel[id="quizPanel"]:not(.hidden) .timer-ring:before{display:none!important}
+body #quizPage #recStage>.quiz-panel[id="quizPanel"]:not(.hidden) .timer-ring-inner{
+  position:relative!important;z-index:1!important;display:flex!important;
+  flex-direction:row!important;align-items:center!important;gap:5px!important;
+  padding:3px 10px!important;border-radius:999px!important;
+  background:#fffdf8ed!important;box-shadow:0 1px 4px #34295820!important;
+}
+body #quizPage #recStage>.quiz-panel[id="quizPanel"]:not(.hidden) .timer-ring strong{
+  font-size:17px!important;line-height:1!important;color:var(--level-ink,#35324a)!important;
+}
+body #quizPage #recStage>.quiz-panel[id="quizPanel"]:not(.hidden) .timer-ring small{
+  font-size:10px!important;letter-spacing:.2px!important;color:var(--level-ink,#35324a)!important;
+}
+body #quizPage #recStage>.quiz-panel[id="quizPanel"]:not(.hidden) .timer-ring.soon{
+  background:linear-gradient(90deg,#e58a5a var(--timer-progress,30%),#fff0e6 0)!important;
+}
+body #quizPage #recStage>.quiz-panel[id="quizPanel"]:not(.hidden) .visual{
+  order:3!important;grid-row:auto!important;grid-column:1/-1!important;
+  width:100%;margin:0 auto 12px!important;
+}
+body #quizPage #recStage>.quiz-panel[id="quizPanel"]:not(.hidden) .hintline{order:4!important;grid-row:auto!important;grid-column:1/-1!important}
+body #quizPage #recStage>.quiz-panel[id="quizPanel"]:not(.hidden) .answers{
+  order:5!important;grid-row:auto!important;grid-column:1/-1!important;
+  width:100%;grid-template-columns:repeat(2,minmax(0,1fr))!important;
+}
+body #quizPage #recStage>.quiz-panel[id="quizPanel"]:not(.hidden) .feedback{order:6!important;grid-row:auto!important;grid-column:1/-1!important}
+@media(max-width:600px){
+  body #quizPage #recStage>.quiz-panel[id="quizPanel"]:not(.hidden){min-height:560px;padding:16px 12px 20px!important}
+  body #quizPage #recStage>.quiz-panel[id="quizPanel"]:not(.hidden) .question{font-size:clamp(23px,6vw,34px)!important}
+  body #quizPage #recStage>.quiz-panel[id="quizPanel"]:not(.hidden) .answers{grid-template-columns:1fr!important;gap:10px!important}
+  body #quizPage #recStage>.quiz-panel[id="quizPanel"]:not(.hidden) .answer{min-height:62px!important}
+}
 </style>
 </head>
 <body>
@@ -1096,7 +1154,7 @@ body #quizPage #recStage>.quiz-panel[id="quizPanel"]:not(.hidden) .answer.wrong:
  <section id="agesPage" class="hidden"><div class="section-head"><div><h3>Choose your class</h3><p>Choose a foundational stage or primary class.</p></div></div><div class="age-grid" id="gradeGrid"></div></section>
  <section id="topicPage" class="hidden"><div class="section-head"><div><h3 id="topicHeading">Choose a game</h3><p id="topicSub">Choose a chapter and question set.</p></div><button class="secondary" id="backHome">← Home</button></div><div class="topic-grid" id="topicChooser"></div><div class="section-head"><div><h3 id="levelsHeading">Choose any question set</h3><p id="setDescription">20 distinct practice sets. Progress is saved separately for each class, curriculum, chapter and set on this device.</p></div><button class="primary" id="continueLevel">▶ Continue</button></div><div class="level-grid" id="levelGrid"></div></section>
  <section id="customPage" class="hidden"></section>
- <section id="quizPage" class="hidden"><div class="quiz-wrap"><div class="quiz-exit-row"><button class="secondary" id="exitQuiz">← Games</button></div><div id="recStage"><div class="quiz-panel" id="quizPanel"><div class="quiz-top"><div class="progress-track"><div class="progress-fill" id="progressFill"></div></div><strong id="questionCount">1/10</strong></div><div class="coach" id="coach" aria-hidden="true"></div><div class="quiz-label hidden" id="quizLabel"></div><div class="timer-ring" id="timerRing" role="timer" aria-label="10 seconds remaining" style="--timer-progress:100%"><div class="timer-ring-inner"><strong id="timerNumber">10</strong><small>seconds</small></div></div><div class="visual" id="visualCount"></div><div class="question" id="questionText">2 + 1 = ?</div><div class="hintline" id="hintLine">Choose an answer.</div><div class="answers" id="answers"></div><div class="feedback" id="feedback" aria-live="polite"></div></div><div class="quiz-panel result hidden" id="resultPanel"><div class="result-emoji" id="resultEmoji">🌟</div><h3 id="resultTitle">Well done!</h3><p id="resultText"></p></div></div><div class="quiz-controls-panel" id="quizControls"><button class="secondary" id="repeatQuestion">🔊 Read question</button><button class="secondary" id="hintBtn">💡 Hint</button><div class="result-actions hidden" id="nextArea"><button class="primary" id="nextQuestion">Next →</button></div><div class="quiz-controls-note" id="controlsNote">You can take your time. Have fun!</div></div>
+ <section id="quizPage" class="hidden"><div class="quiz-wrap"><div class="quiz-exit-row"><button class="secondary" id="exitQuiz">← Games</button></div><div id="recStage"><div class="quiz-panel" id="quizPanel"><div class="quiz-top"><div class="progress-track"><div class="progress-fill" id="progressFill"></div></div><strong id="questionCount">1/10</strong></div><div class="coach" id="coach" aria-hidden="true"></div><div class="quiz-label hidden" id="quizLabel"></div><div class="question" id="questionText">2 + 1 = ?</div><div class="timer-ring" id="timerRing" role="timer" aria-label="10 seconds remaining" style="--timer-progress:100%"><div class="timer-ring-inner"><strong id="timerNumber">10</strong><small>seconds</small></div></div><div class="visual" id="visualCount"></div><div class="hintline" id="hintLine">Choose an answer.</div><div class="answers" id="answers"></div><div class="feedback" id="feedback" aria-live="polite"></div></div><div class="quiz-panel result hidden" id="resultPanel"><div class="result-emoji" id="resultEmoji">🌟</div><h3 id="resultTitle">Well done!</h3><p id="resultText"></p></div></div><div class="quiz-controls-panel" id="quizControls"><button class="secondary" id="repeatQuestion">🔊 Read question</button><button class="secondary" id="hintBtn">💡 Hint</button><div class="result-actions hidden" id="nextArea"><button class="primary" id="nextQuestion">Next →</button></div><div class="quiz-controls-note" id="controlsNote">You can take your time. Have fun!</div></div>
   <div class="quiz-controls-panel hidden" id="endControls"><div class="result-actions"><span class="rec-note hidden" id="recNote">🔴 Finishing your video…</span><a class="primary" id="exportEnd" href="#" download>⬇ Download video</a><button class="primary" id="continueBtn">Next set →</button><button class="secondary" id="retryBtn">Try again</button><button class="secondary" id="resultLevels">All sets</button></div></div>
  </div></section>
  <section id="progressPage" class="hidden"><div class="section-head"><div><h3>My progress 🏆</h3><p>See what you have learned on this device.</p></div><button class="secondary" id="resetProgress">Reset</button></div><div class="stats"><div class="stat"><div class="stat-ico">⭐</div><div><strong id="pStars">0</strong><small>Stars earned</small></div></div><div class="stat"><div class="stat-ico">📘</div><div><strong id="pLevels">0</strong><small>Sets completed</small></div></div><div class="stat"><div class="stat-ico">🎯</div><div><strong id="pBest">—</strong><small>Best score</small></div></div></div><div class="section-head"><div><h3>My badges</h3><p>Small steps count.</p></div></div><div class="badge-grid" id="badges"></div></section>
