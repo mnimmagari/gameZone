@@ -1025,6 +1025,29 @@ body #quizPage #recStage>.quiz-panel[id="quizPanel"]:not(.hidden) .answer.wrong:
  #quizPanel.animal-photo-mode #animalAnswerVisual .animal-photo-frame{height:220px!important}
 }
 
+
+#quizPanel.animal-photo-mode{display:grid!important;grid-template-columns:minmax(0,1fr) 70px!important;grid-template-areas:"progress timer" "question question" "picture picture" "hint hint" "reveal reveal" "choices choices"!important;align-items:center!important;gap:10px!important;padding:clamp(12px,2.5vw,26px)!important}
+#quizPanel.animal-photo-mode>.quiz-top{grid-area:progress!important;grid-column:1!important;width:100%!important}
+#quizPanel.animal-photo-mode>#timerRing{grid-area:timer!important;grid-column:2!important;position:relative!important;inset:auto!important;width:64px!important;height:64px!important;margin:0!important;justify-self:end!important}
+#quizPanel.animal-photo-mode>#coach,#quizPanel.animal-photo-mode>#quizLabel{display:none!important}
+#quizPanel.animal-photo-mode>#questionText{grid-area:question!important;grid-column:1/-1!important;width:100%!important;margin:0!important;padding:8px!important;text-align:center!important;font-size:clamp(20px,3vw,30px)!important;line-height:1.2!important;background:transparent!important;border:0!important;box-shadow:none!important}
+#quizPanel.animal-photo-mode>#visualCount{grid-area:picture!important;grid-column:1/-1!important;position:relative!important;inset:auto!important;float:none!important;display:flex!important;align-items:center!important;justify-content:center!important;width:100%!important;max-width:780px!important;min-height:0!important;margin:0 auto!important}
+#quizPanel.animal-photo-mode .animal-photo-frame{width:100%!important;max-width:780px!important;height:clamp(250px,48vh,460px)!important;min-height:220px!important;aspect-ratio:4/3!important;margin:0 auto!important;border:0!important;border-radius:24px!important;overflow:hidden!important;background:#edf3f8!important;box-shadow:0 12px 30px #182b4422!important}
+#quizPanel.animal-photo-mode .animal-real-photo{display:block!important;width:100%!important;height:100%!important;max-height:none!important;object-fit:contain!important;background:#edf3f8!important}
+#quizPanel.animal-photo-mode .animal-real-photo[hidden]{display:none!important}
+#quizPanel.animal-photo-mode .animal-photo-loading{width:100%!important;height:100%!important;min-height:220px!important;display:flex!important;align-items:center!important;justify-content:center!important;padding:24px!important;background:linear-gradient(135deg,#e7f4ff,#f7f0ff)!important}
+#quizPanel.animal-photo-mode>#hintLine{grid-area:hint!important;grid-column:1/-1!important;text-align:center!important;margin:0!important}
+#quizPanel.animal-photo-mode>#feedback{grid-area:reveal!important;grid-column:1/-1!important;display:none!important;flex-direction:column!important;align-items:center!important;gap:12px!important;width:100%!important;max-width:780px!important;margin:0 auto!important;padding:0!important;background:transparent!important;box-shadow:none!important}
+#quizPanel.animal-photo-mode>#feedback:has(#animalAnswerVisual){display:flex!important}
+#quizPanel.animal-photo-mode .animal-revealed-name{font-size:clamp(30px,4vw,44px)!important;font-weight:950!important;color:#087f8c!important;text-align:center!important}
+#quizPanel.animal-photo-mode #animalAnswerVisual{width:100%!important;max-width:780px!important}
+#quizPanel.animal-photo-mode .animal-pair-photos{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:12px!important;width:100%!important}
+#quizPanel.animal-photo-mode .animal-pair-item{text-align:center!important;font-size:17px!important;font-weight:900!important}
+#quizPanel.animal-photo-mode .animal-pair-item .animal-photo-frame{height:clamp(150px,25vh,250px)!important;min-height:140px!important}
+#quizPanel.animal-photo-mode>#answers{grid-area:choices!important;grid-column:1/-1!important;display:none!important;width:100%!important;margin:0 auto!important}
+#quizPanel.animal-photo-mode>#answers.reveal-self-check{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:12px!important}
+@media(max-width:600px){#quizPanel.animal-photo-mode{gap:8px!important;padding:10px!important}#quizPanel.animal-photo-mode>#timerRing{width:56px!important;height:56px!important}#quizPanel.animal-photo-mode .animal-photo-frame{height:clamp(220px,42vh,350px)!important;min-height:210px!important;border-radius:18px!important}#quizPanel.animal-photo-mode .animal-pair-photos{gap:8px!important}#quizPanel.animal-photo-mode .animal-pair-item .animal-photo-frame{height:180px!important}}
+
 </style>
 </head>
 <body>
@@ -1429,31 +1452,37 @@ function isAnimalPhotoTopic(id){return ['animal_birds','animal_domestic','animal
 function animalPhotoPlaceholder(query,kind){const q=String(query||'animal').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;');return '<div class="animal-photo-frame '+(kind==='reveal'?'animal-reveal-frame':'animal-question-frame')+'"><div class="animal-photo-loading" aria-live="polite"><span>📷</span><b>Loading photo…</b></div><img class="animal-real-photo" data-photo-query="'+q+'" alt="Real animal photograph" hidden></div>'}
 const animalPhotoCache=Object.create(null);
 async function findAnimalPhoto(query){
- if(animalPhotoCache[query]!==undefined)return animalPhotoCache[query];
- const url='https://commons.wikimedia.org/w/api.php?action=query&generator=search&gsrsearch='+encodeURIComponent(query)+'&gsrnamespace=6&gsrlimit=20&prop=imageinfo&iiprop=url|extmetadata&iiurlwidth=960&format=json&origin=*';
- const response=await fetch(url,{mode:'cors',credentials:'omit'});if(!response.ok)throw new Error('Photo search unavailable');
- const json=await response.json(),pages=Object.values(json.query&&json.query.pages||{});
- const candidates=pages.map(function(p){
-  const info=p.imageinfo&&p.imageinfo[0],m=info&&info.extmetadata||{},lic=String(m.LicenseShortName&&m.LicenseShortName.value||'').replace(/<[^>]*>/g,'').trim(),title=String(p.title||'');
-  return {title:title,url:info&&(info.thumburl||info.url),license:lic,page:'https://commons.wikimedia.org/wiki/'+encodeURIComponent(title.replace(/ /g,'_')),author:String(m.Artist&&m.Artist.value||'').replace(/<[^>]*>/g,'').trim(),mime:info&&info.mime};
- }).filter(function(x){const l=x.license.toLowerCase();return x.url&&/^image\/(jpeg|png|webp)$/i.test(x.mime||'')&&(l==='cc0'||l==='pdm'||l.includes('public domain')||l.includes('cc by'))&&!/logo|map|diagram|drawing|illustration|chart|stamp|painting|sculpture|icon|coat of arms|specimen label/i.test(x.title)});
- const exact=candidates.find(function(x){return /cow|calf|bird|animal|peafowl|sparrow|parakeet|pigeon|crow|myna|kingfisher|owl|flamingo|heron|koel|barbet|bulbul|sunbird|tailorbird|coucal|stork|hornbill|buffalo|goat|sheep|horse|donkey|camel|dog|cat|rabbit|hen|duck|pig|turkey|goose|ox|mule|yak|tiger|lion|elephant|giraffe|zebra|bear|deer|fox|wolf|leopard|cheetah|rhinoceros|hippopotamus|monkey|gorilla|panda|kangaroo|sloth|bison|crocodile|puppy|kitten|lamb|piglet|chick|duckling|cub|fawn|joey|cygnet|gosling|foal/i.test(x.title)});
- const result=exact||candidates[0]||null;animalPhotoCache[query]=result;return result;
+ const clean=String(query||'animal').replace(/\s+(real\s+)?photograph$/i,'').replace(/\s+animal$/i,'').trim(),key=clean.toLowerCase(),slug=clean.replace(/ /g,'_');
+ if(Object.prototype.hasOwnProperty.call(animalPhotoCache,key))return animalPhotoCache[key];
+ let found=null;
+ for(const url of ['https://en.wikipedia.org/api/rest_v1/page/summary/'+encodeURIComponent(slug),'https://en.wikipedia.org/w/rest.php/v1/search/page?q='+encodeURIComponent(clean)+'&limit=8']){
+  try{const r=await fetch(url,{mode:'cors',credentials:'omit',headers:{'Accept':'application/json'}});if(!r.ok)continue;const d=await r.json();
+   if(d.thumbnail&&d.thumbnail.source&&d.type==='standard')found={url:d.originalimage&&d.originalimage.source||d.thumbnail.source,page:d.content_urls&&d.content_urls.desktop&&d.content_urls.desktop.page||'https://en.wikipedia.org/wiki/'+encodeURIComponent(slug),title:d.title||clean};
+   if(!found&&d.pages){const p=d.pages.find(x=>x.thumbnail&&x.thumbnail.url)||null;if(p)found={url:p.thumbnail.url.startsWith('//')?'https:'+p.thumbnail.url:p.thumbnail.url,page:'https://en.wikipedia.org/wiki/'+encodeURIComponent((p.key||p.title||clean).replace(/ /g,'_')),title:p.title||clean};}
+   if(found)break;
+  }catch(e){}
+ }
+ animalPhotoCache[key]=found;return found;
 }
+function animalBabyArticle(answer){const map={Calf:'Calf',Foal:'Foal',Puppy:'Puppy',Kitten:'Kitten',Lamb:'Lamb',Kid:'Goat',Piglet:'Piglet',Chick:'Chick',Duckling:'Duckling',Cub:'Lion',Fawn:'Fawn',Joey:'Kangaroo',Kit:'Rabbit',Cygnet:'Swan',Gosling:'Goose'};return map[String(answer||'').trim()]||String(answer||'').trim();}
 async function loadAnimalPhoto(img){
- if(!img||img.dataset.loading==='1'||img.dataset.loaded==='1')return;
- img.dataset.loading='1';
- try{
-  const rec=await findAnimalPhoto(img.dataset.photoQuery||'animal');
-  if(!rec)throw new Error('No suitably licensed photograph found');
-  img.onload=function(){const frame=img.closest('.animal-photo-frame'),loading=frame&&frame.querySelector('.animal-photo-loading');if(loading)loading.remove();img.hidden=false;};
-  img.onerror=function(){img.dataset.failed='1';const frame=img.closest('.animal-photo-frame'),loading=frame&&frame.querySelector('.animal-photo-loading');if(loading)loading.innerHTML='<span>📷</span><b>Photo unavailable</b><small>Please try another question.</small>';};
-  img.dataset.source=rec.page;img.dataset.license=rec.license;img.dataset.author=rec.author;img.src=rec.url;
-  if(img.complete&&img.naturalWidth>0){const frame=img.closest('.animal-photo-frame'),loading=frame&&frame.querySelector('.animal-photo-loading');if(loading)loading.remove();img.hidden=false;}
- }catch(err){img.dataset.failed='1';const frame=img.closest('.animal-photo-frame'),loading=frame&&frame.querySelector('.animal-photo-loading');if(loading)loading.innerHTML='<span>📷</span><b>Photo unavailable</b><small>Could not find a reusable real photo.</small>'}
- finally{delete img.dataset.loading}
+ if(!img||img.dataset.loading==='1'||img.dataset.loaded==='1')return;img.dataset.loading='1';
+ const frame=img.closest('.animal-photo-frame'),loading=frame&&frame.querySelector('.animal-photo-loading');
+ try{const rec=await findAnimalPhoto(img.dataset.photoQuery||'animal');if(!rec||!rec.url)throw new Error('No image');
+  img.onload=function(){img.hidden=false;img.dataset.loaded='1';if(loading)loading.remove();};
+  img.onerror=function(){img.dataset.failed='1';img.hidden=true;if(loading)loading.innerHTML='<span>📷</span><b>Image unavailable</b><small>Please try again later.</small>';};
+  img.alt=rec.title+' photograph';img.dataset.source=rec.page;img.src=rec.url;
+  if(img.complete&&img.naturalWidth>0){img.hidden=false;img.dataset.loaded='1';if(loading)loading.remove();}
+ }catch(e){img.dataset.failed='1';if(loading)loading.innerHTML='<span>📷</span><b>Image could not load</b><small>Please check your connection.</small>';}
+ finally{delete img.dataset.loading;}
 }
-function loadCurrentAnimalPhoto(q){if(!q||!q.photoQuiz)return;const img=document.querySelector('#visualCount img.animal-real-photo');if(img)loadAnimalPhoto(img)}
+function loadCurrentAnimalPhoto(q){if(!q||!q.photoQuiz)return;const img=document.querySelector('#visualCount img.animal-real-photo');if(img)loadAnimalPhoto(img);}
+function revealAnimalPhoto(q){
+ if(!q||!q.photoQuiz)return;const wrap=document.getElementById('animalAnswerVisual');if(!wrap)return;
+ if(quizTopic==='animal_babies'){wrap.innerHTML='<div class="animal-pair-photos"><div class="animal-pair-item"><b>Adult</b>'+animalPhotoPlaceholder(q.photoQuery||'cow','reveal')+'</div><div class="animal-pair-item"><b>Baby</b>'+animalPhotoPlaceholder(animalBabyArticle(q.ans),'reveal')+'</div></div>';}
+ else{wrap.innerHTML=animalPhotoPlaceholder(q.photoRevealQuery||q.photoQuery||'animal','reveal');}
+ wrap.querySelectorAll('img.animal-real-photo').forEach(loadAnimalPhoto);
+}
 function revealAnimalPhoto(q){
  if(!q||!q.photoQuiz)return;
  const query=q.photoRevealQuery||'animal with baby photograph';
@@ -1596,7 +1625,7 @@ function cqCreate(){const d=cqDraft,id=cqEditId||('x_my_'+Date.now().toString(36
  renderMyNav();levelLook=null;openTopic(id)}
 renderMyNav();
 /* custom quiz end */
-function buildExplorePools(ex){const pools={},photoMode=isAnimalPhotoTopic(ex.id),mkQ=r=>{const image=photoMode?animalPhotoPlaceholder(r[5]&&r[5].query):'<div class="curriculum-diagram">'+xImg(r[4],r[5],ex.id.slice(2),r[0],r[1],!!r[6])+'</div>';return {p:r[0],ans:r[1],vis:r[6]?XMYST:image,reveal:r[6]?image:'',hint:r[3],spoken:r[0],options:[r[1]].concat(r[2]),photoQuiz:photoMode,photoRevealQuery:r[5]&&r[5].revealQuery};};for(let i=0;i*10<ex.qs.length;i++){const c=ex.qs.slice(i*10,i*10+10);if(c.length===10)pools[i+1]=c.map(mkQ);}return pools;}
+function buildExplorePools(ex){const pools={},photoMode=isAnimalPhotoTopic(ex.id),mkQ=r=>{const image=photoMode?animalPhotoPlaceholder(r[5]&&r[5].query):'<div class="curriculum-diagram">'+xImg(r[4],r[5],ex.id.slice(2),r[0],r[1],!!r[6])+'</div>';return {p:r[0],ans:r[1],vis:r[6]?XMYST:image,reveal:r[6]?image:'',hint:r[3],spoken:r[0],options:[r[1]].concat(r[2]),photoQuiz:photoMode,photoQuery:r[5]&&r[5].query,photoRevealQuery:r[5]&&r[5].revealQuery};};for(let i=0;i*10<ex.qs.length;i++){const c=ex.qs.slice(i*10,i*10+10);if(c.length===10)pools[i+1]=c.map(mkQ);}return pools;}
 function buildPools(){const exq=exploreOf(topic);if(exq)return levelPools['x|'+topic]||(levelPools['x|'+topic]=buildExplorePools(exq));const key=[grade,curriculum,topic].join('|');if(levelPools[key])return levelPools[key];
  const keepLevel=level,keepUsed=quizUsed,keepEmo=quizEmo,pools={},audit={levels:[],removed:0,kept:0},texts=new Set(),structs=new Set(),realRandom=Math.random;
  /* Seeded random numbers while building: the same class/topic always gets the same levels, so saved progress per level stays meaningful. */
