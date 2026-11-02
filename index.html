@@ -1106,6 +1106,60 @@ body #quizPage #recStage>.quiz-panel[id="quizPanel"]:not(.hidden) .feedback{orde
   body #quizPage #recStage>.quiz-panel[id="quizPanel"]:not(.hidden) .answers{grid-template-columns:1fr!important;gap:10px!important}
   body #quizPage #recStage>.quiz-panel[id="quizPanel"]:not(.hidden) .answer{min-height:62px!important}
 }
+
+/* Final quiz composition: question, countdown bar, photograph/diagram, then answers */
+#quizPage #recStage #quizPanel{
+ display:flex!important;flex-direction:column!important;align-items:stretch!important;
+ justify-content:flex-start!important;gap:12px!important;overflow:visible!important;
+ min-height:0!important;height:auto!important;padding:20px clamp(14px,3vw,28px) 24px!important;
+}
+#quizPage #recStage #quizPanel>.quiz-top{order:0!important;position:relative!important;inset:auto!important;width:100%!important;margin:0 0 2px!important}
+#quizPage #recStage #quizPanel>.coach,#quizPage #recStage #quizPanel>.quiz-label{display:none!important}
+#quizPage #recStage #quizPanel>#questionText{
+ order:1!important;position:relative!important;inset:auto!important;float:none!important;
+ width:100%!important;max-width:none!important;margin:0!important;padding:18px 20px!important;
+ text-align:center!important;line-height:1.22!important;font-size:clamp(24px,3.4vw,38px)!important;
+ border-radius:18px!important;background:linear-gradient(115deg,#fff8df,#f1eaff 55%,#e5f6ff)!important;
+ border:2px solid #d8c9ff!important;box-shadow:0 5px 0 #d9d0f0!important;
+}
+#quizPage #recStage #quizPanel>#timerRing{
+ order:2!important;position:relative!important;inset:auto!important;float:none!important;
+ display:flex!important;align-items:center!important;justify-content:flex-start!important;
+ width:100%!important;height:34px!important;min-height:34px!important;margin:0!important;padding:0 8px!important;
+ border:2px solid #fff!important;border-radius:999px!important;overflow:hidden!important;
+ background:linear-gradient(90deg,#54c7a5 var(--timer-progress,100%),#e9e5f4 0)!important;
+ box-shadow:inset 0 0 0 1px #d8d2e9,0 2px 5px #39256f12!important;
+}
+#quizPage #recStage #quizPanel>#timerRing:before{display:none!important}
+#quizPage #recStage #quizPanel>#timerRing .timer-ring-inner{
+ position:relative!important;inset:auto!important;display:flex!important;flex-direction:row!important;
+ gap:4px!important;padding:3px 9px!important;border-radius:999px!important;background:#fff!important;
+ box-shadow:0 1px 4px #34295820!important;
+}
+#quizPage #recStage #quizPanel>#timerRing strong{font-size:16px!important;line-height:1!important;color:#312b50!important}
+#quizPage #recStage #quizPanel>#timerRing small{font-size:9px!important;color:#51496b!important}
+#quizPage #recStage #quizPanel>#timerRing.soon{background:linear-gradient(90deg,#ed805c var(--timer-progress,30%),#f8e9e4 0)!important}
+#quizPage #recStage #quizPanel>#visualCount{
+ order:3!important;position:relative!important;inset:auto!important;float:none!important;
+ width:100%!important;max-width:780px!important;min-height:0!important;margin:0 auto!important;
+ display:flex!important;align-items:center!important;justify-content:center!important;
+}
+#quizPage #recStage #quizPanel .animal-photo-frame{
+ width:100%!important;max-width:780px!important;height:clamp(220px,42vh,390px)!important;
+ min-height:210px!important;aspect-ratio:16/9!important;border-radius:18px!important;
+ border:2px solid #fff!important;box-shadow:0 5px 0 #2d31501a,0 10px 24px #2d315012!important;
+ background:linear-gradient(135deg,#e9f7ff,#f5efff)!important;overflow:hidden!important;
+}
+#quizPage #recStage #quizPanel .animal-real-photo{display:block!important;width:100%!important;height:100%!important;max-height:none!important;object-fit:contain!important}
+#quizPage #recStage #quizPanel .animal-photo-loading{position:absolute;inset:0;display:grid;place-content:center;gap:8px;text-align:center;color:#59647b}
+#quizPage #recStage #quizPanel>#hintLine{order:4!important;margin:0!important;text-align:center!important}
+#quizPage #recStage #quizPanel>#answers{order:5!important;width:100%!important;margin:0!important}
+#quizPage #recStage #quizPanel>#feedback{order:6!important}
+@media(max-width:600px){
+ #quizPage #recStage #quizPanel{gap:10px!important;padding:14px 10px 18px!important}
+ #quizPage #recStage #quizPanel .animal-photo-frame{height:clamp(190px,34vh,300px)!important;min-height:180px!important}
+ #quizPage #recStage #quizPanel>#questionText{font-size:clamp(21px,5.8vw,30px)!important;padding:14px!important}
+}
 </style>
 </head>
 <body>
@@ -1510,14 +1564,43 @@ function isAnimalPhotoTopic(id){return ['animal_birds','animal_domestic','animal
 function animalPhotoPlaceholder(query,kind){const q=String(query||'animal').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;');return '<div class="animal-photo-frame '+(kind==='reveal'?'animal-reveal-frame':'animal-question-frame')+'"><div class="animal-photo-loading" aria-live="polite"><span>📷</span><b>Loading photo…</b></div><img class="animal-real-photo" data-photo-query="'+q+'" alt="Real animal photograph" hidden></div>'}
 const animalPhotoCache=Object.create(null);
 async function findAnimalPhoto(query){
- const clean=String(query||'animal').replace(/\s+(real\s+)?photograph$/i,'').replace(/\s+animal$/i,'').trim(),key=clean.toLowerCase(),slug=clean.replace(/ /g,'_');
+ const clean=String(query||'animal').replace(/\\s+(real\\s+)?photograph$/i,'').replace(/\\s+animal$/i,'').trim();
+ const key=clean.toLowerCase();
  if(Object.prototype.hasOwnProperty.call(animalPhotoCache,key))return animalPhotoCache[key];
  let found=null;
- for(const url of ['https://en.wikipedia.org/api/rest_v1/page/summary/'+encodeURIComponent(slug),'https://en.wikipedia.org/w/rest.php/v1/search/page?q='+encodeURIComponent(clean)+'&limit=8']){
-  try{const r=await fetch(url,{mode:'cors',credentials:'omit',headers:{'Accept':'application/json'}});if(!r.ok)continue;const d=await r.json();
-   if(d.thumbnail&&d.thumbnail.source&&d.type==='standard')found={url:d.originalimage&&d.originalimage.source||d.thumbnail.source,page:d.content_urls&&d.content_urls.desktop&&d.content_urls.desktop.page||'https://en.wikipedia.org/wiki/'+encodeURIComponent(slug),title:d.title||clean};
-   if(!found&&d.pages){const p=d.pages.find(x=>x.thumbnail&&x.thumbnail.url)||null;if(p)found={url:p.thumbnail.url.startsWith('//')?'https:'+p.thumbnail.url:p.thumbnail.url,page:'https://en.wikipedia.org/wiki/'+encodeURIComponent((p.key||p.title||clean).replace(/ /g,'_')),title:p.title||clean};}
-   if(found)break;
+ /* Search Wikimedia Commons for an actual photograph whose title matches the requested animal.
+    This avoids Wikipedia's broad "Bird" or unrelated search-result thumbnails. */
+ try{
+  const api='https://commons.wikimedia.org/w/api.php?action=query&generator=search&gsrsearch='+encodeURIComponent('filetype:bitmap '+clean)+'&gsrnamespace=6&gsrlimit=12&prop=imageinfo&iiprop=url|extmetadata&iiurlwidth=1200&format=json&origin=*';
+  const response=await fetch(api,{mode:'cors',credentials:'omit'});
+  if(response.ok){
+   const data=await response.json(),pages=Object.values(data.query&&data.query.pages||{});
+   const words=key.split(/\\s+/).filter(w=>w.length>2);
+   const ranked=pages.map(p=>{
+    const title=String(p.title||'').replace(/^File:/,'').toLowerCase();
+    const info=p.imageinfo&&p.imageinfo[0],meta=info&&info.extmetadata||{};
+    const isPhoto=/photograph|photo|\.(jpe?g)$/i.test(title)&&!/drawing|diagram|logo|icon|map|painting|illustration|svg/i.test(title);
+    const matches=words.filter(w=>title.includes(w)).length;
+    return {p,info,score:matches*10+(isPhoto?5:0)+(info&&info.thumburl?2:0)};
+   }).filter(x=>x.info&&x.info.thumburl&&x.score>=10&&/image\\/(jpeg|png|webp)/i.test(x.info.mime||''));
+   ranked.sort((a,b)=>b.score-a.score);
+   if(ranked.length){
+    const best=ranked[0],meta=best.info.extmetadata||{};
+    found={url:best.info.thumburl,page:'https://commons.wikimedia.org/wiki/'+encodeURIComponent(best.p.title.replace(/ /g,'_')),title:best.p.title.replace(/^File:/,''),license:(meta.LicenseShortName&&meta.LicenseShortName.value)||'Wikimedia Commons'};
+   }
+  }
+ }catch(e){}
+ /* Exact Wikipedia page is a secondary fallback, never a broad search for "bird". */
+ if(!found){
+  try{
+   const url='https://en.wikipedia.org/api/rest_v1/page/summary/'+encodeURIComponent(clean.replace(/ /g,'_'));
+   const response=await fetch(url,{mode:'cors',credentials:'omit',headers:{'Accept':'application/json'}});
+   if(response.ok){
+    const d=await response.json();
+    if(d.thumbnail&&d.thumbnail.source&&d.type==='standard'&&String(d.title||'').toLowerCase().includes(key.split(/\\s+/)[0])){
+     found={url:d.thumbnail.source,page:d.content_urls&&d.content_urls.desktop&&d.content_urls.desktop.page||'https://en.wikipedia.org/wiki/'+encodeURIComponent(clean.replace(/ /g,'_')),title:d.title};
+    }
+   }
   }catch(e){}
  }
  animalPhotoCache[key]=found;return found;
