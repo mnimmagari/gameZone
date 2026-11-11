@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <link rel="icon" href="data:,">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src data:; media-src blob:; connect-src 'none'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src data: https: blob:; media-src blob:; connect-src https:; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="no-referrer">
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -1626,11 +1626,14 @@ function revealAnimalPhoto(q){
 }
 function revealAnimalPhoto(q){
  if(!q||!q.photoQuiz)return;
- const query=q.photoRevealQuery||'animal with baby photograph';
  const wrap=document.getElementById('animalAnswerVisual');
  if(!wrap)return;
- wrap.innerHTML=animalPhotoPlaceholder(query,'reveal');
- const img=wrap.querySelector('img.animal-real-photo');if(img)loadAnimalPhoto(img);
+ if(quizTopic==='animal_babies'){
+  wrap.innerHTML='<div class="animal-pair-photos"><div class="animal-pair-item"><b>Adult</b>'+animalPhotoPlaceholder(q.photoQuery||'cow','reveal')+'</div><div class="animal-pair-item"><b>Baby</b>'+animalPhotoPlaceholder(animalBabyArticle(q.ans),'reveal')+'</div></div>';
+ }else{
+  wrap.innerHTML=animalPhotoPlaceholder(q.photoRevealQuery||q.photoQuery||'animal','reveal');
+ }
+ wrap.querySelectorAll('img.animal-real-photo').forEach(loadAnimalPhoto);
 }
 
 var XT_META={"candy":["Candy Pop","linear-gradient(135deg,#ff8ad8,#ffd86b)","split"],"aurora":["Aurora Split","linear-gradient(135deg,#0fb5ae,#4b3fc4)","split"],"cloud":["Cloud Pop","linear-gradient(135deg,#4fb3ff,#fff)","grid"],"sunbeam":["Sunbeam","linear-gradient(135deg,#ffd166,#0f766e)","grid"],"midnight":["Midnight Plum","linear-gradient(135deg,#1d0b3b,#ff4fa3)","stack"],"ember":["Ember Teal","linear-gradient(135deg,#0f2a3d,#ffb020)","split"],"lemon":["Lemon Zest","linear-gradient(135deg,#fff6bf,#ff9f1c)","grid"],"jungle":["Jungle Fun","linear-gradient(135deg,#7be495,#25c7b5)","grid"],"sunset":["Sunset Show","linear-gradient(135deg,#ff9966,#8e44ad)","stack"],"ocean":["Ocean Splash","linear-gradient(135deg,#a8edff,#0077ff)","grid"],"neon":["Neon Night","linear-gradient(135deg,#14123d,#ff2bd6)","grid"],"sticker":["Comic Sticker","linear-gradient(135deg,#ffe94d,#ff5c8a)","grid"],"gameshow":["Game Show","linear-gradient(135deg,#0b1450,#ffd54a)","stack"],"pastel":["Soft Pastel","linear-gradient(135deg,#c9f7e6,#ffb3ba)","grid"]},XT=Object.keys(XT_META),lastXT='',levelXT='',levelLook=null,XT_PICK='candy',XL_PICK='auto',XQ_PICK='top',XS_PICK='cartoon';
