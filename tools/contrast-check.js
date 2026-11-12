@@ -3,7 +3,9 @@
 const fs = require('fs');
 const path = require('path');
 const MIN = 4.5;
-const html = fs.readFileSync(path.join(__dirname, '..', 'index.html'), 'utf8');
+// theme rules are short single lines; skip the huge embedded data lines (they make the regex crawl)
+const html = fs.readFileSync(path.join(__dirname, '..', 'index.html'), 'utf8')
+  .split('\n').filter(l => l.length < 3000).join('\n');
 
 const hex = h => {
   h = h.replace('#', '');
