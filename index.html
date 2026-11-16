@@ -1308,6 +1308,37 @@ body #quizPage #recStage .quiz-panel[id="quizPanel"].xt-sunshine{--xnum:#b83400}
 #exerciseRecStage .exercise-stage h3{font-size:clamp(27px,4vw,40px)}
 #exerciseRecStage .exercise-stage-top{font-size:clamp(13px,1.6vw,17px)}
 #exerciseRecStage .exercise-coach{font-size:clamp(13px,1.5vw,16px)!important}
+
+/* Simple, low-distraction scenery for the recorded movement screen */
+.exercise-world-scene{position:relative;width:min(82%,760px);height:clamp(88px,15vh,132px);margin:0 auto 8px;border-radius:18px;overflow:hidden;background:linear-gradient(180deg,#c9ecff 0%,#eaf8ff 67%,#c7e6b0 68%,#a9d58f 100%);box-shadow:inset 0 -5px 0 #8ebd78}
+.exercise-world-scene:before,.exercise-world-scene:after{content:"";position:absolute;bottom:0;width:120%;height:36%;left:-10%;border-radius:50% 50% 0 0;background:#9dce87}
+.exercise-world-scene:after{height:25%;background:#80bd75;left:28%;opacity:.8}
+.world-tree,.world-butterfly,.world-log,.world-firefly{position:absolute;z-index:2;display:block;line-height:1}
+.world-tree{bottom:13%;font-size:clamp(38px,6vw,66px);filter:drop-shadow(0 3px 2px #244b2730)}
+.tree-one{left:5%}.tree-two{left:42%;font-size:clamp(32px,5vw,56px)}.tree-three{right:5%}
+.world-butterfly{top:18%;left:24%;font-size:27px;animation:forestFlutter 4s ease-in-out infinite}
+.world-log{bottom:8%;right:26%;font-size:clamp(24px,4vw,38px);animation:forestLog 7s linear infinite}
+.world-firefly{top:28%;right:17%;font-size:19px;animation:forestGlow 2.5s ease-in-out infinite}
+@keyframes forestFlutter{0%,100%{transform:translate(0,0) rotate(-8deg)}50%{transform:translate(22px,-13px) rotate(10deg)}}
+@keyframes forestLog{0%,100%{transform:translateX(0)}50%{transform:translateX(-24px)}}
+@keyframes forestGlow{0%,100%{opacity:.45;transform:scale(.8)}50%{opacity:1;transform:scale(1.2)}}
+#exerciseWorldScene[data-world="desert"]{background:linear-gradient(#bfe7ff 0 62%,#f4d18a 63% 100%);box-shadow:inset 0 -5px 0 #d6a75e}
+#exerciseWorldScene[data-world="desert"]:before{background:#e9bd70}
+#exerciseWorldScene[data-world="desert"]:after{background:#dca957}
+#exerciseWorldScene[data-world="ocean"]{background:linear-gradient(#8cdbf5 0 48%,#3eacd5 49% 100%);box-shadow:inset 0 -5px 0 #278bbd}
+#exerciseWorldScene[data-world="ocean"]:before{background:#65c7e5}
+#exerciseWorldScene[data-world="ocean"]:after{background:#2e9bc8}
+#exerciseWorldScene[data-world="snow"]{background:linear-gradient(#bfe7ff 0 55%,#fff 56% 100%);box-shadow:inset 0 -5px 0 #d8e9f7}
+#exerciseWorldScene[data-world="snow"]:before{background:#fff}
+#exerciseWorldScene[data-world="snow"]:after{background:#e6f2fb}
+#exerciseWorldScene[data-world="space"]{background:radial-gradient(circle at 75% 25%,#fff4ad 0 3px,transparent 4px),radial-gradient(circle at 25% 35%,#fff 0 2px,transparent 3px),linear-gradient(135deg,#28366e,#6b5db4);box-shadow:inset 0 -5px 0 #423c83}
+#exerciseWorldScene[data-world="space"]:before{background:#6557a9}
+#exerciseWorldScene[data-world="space"]:after{background:#51458f}
+#exerciseWorldScene[data-phase="warm"] .world-log{opacity:.35}
+#exerciseWorldScene[data-phase="cool"] .world-butterfly{animation-duration:7s}
+#exerciseRecStage[data-level="1"] .exercise-stage-top:after{content:"LEVEL 1";font-size:11px;letter-spacing:1px;font-weight:900;color:#4f765b;background:#e7f5e8;border-radius:99px;padding:6px 10px}
+@media(max-width:600px){.exercise-world-scene{width:96%;height:90px}.world-tree{font-size:38px}.world-butterfly{font-size:20px}}
+@media(prefers-reduced-motion:reduce){.world-butterfly,.world-log,.world-firefly,.exercise-action-emoji{animation:none!important}}
 </style>
 </head>
 <body>
@@ -1374,6 +1405,10 @@ body #quizPage #recStage .quiz-panel[id="quizPanel"].xt-sunshine{--xnum:#b83400}
    <div class="exercise-stage-top"><span id="exerciseRound">MOVE 1 OF 8</span><span id="exerciseClock">15</span></div>
    <div class="exercise-progress"><span id="exerciseProgress"></span></div>
    <div class="exercise-action-emoji" id="exerciseMoveEmoji">🙆</div>
+   <div class="exercise-world-scene" id="exerciseWorldScene" aria-hidden="true">
+    <span class="world-tree tree-one">🌲</span><span class="world-tree tree-two">🌳</span><span class="world-tree tree-three">🌲</span>
+    <span class="world-butterfly">🦋</span><span class="world-log">🪵</span><span class="world-firefly">✨</span>
+   </div>
    <h3 id="exerciseMoveTitle">Reach for the leaves</h3>
    <p id="exerciseMoveText">Stand tall and slowly reach both hands up, then bring them down.</p>
    <div class="exercise-timer-track"><span id="exerciseTimerBar"></span></div>
@@ -2523,7 +2558,7 @@ function recStageEl(){return $(exerciseRecording?'exerciseRecStage':'recStage')}
 function stopExerciseClock(){if(exerciseInterval){clearInterval(exerciseInterval);exerciseInterval=null}}
 function formatExerciseTime(n){const v=Math.max(0,Math.ceil(n));return String(Math.floor(v/60)).padStart(2,'0')+':'+String(v%60).padStart(2,'0')}
 function chooseExerciseWorld(key){if(!EXERCISE_WORLDS[key])return;stopExerciseClock();exerciseTheme=key;const w=EXERCISE_WORLDS[key];$('exerciseTitle').textContent=w.title;$('exerciseSubtitle').textContent=w.subtitle;$('exerciseScene').textContent=w.scene;document.querySelectorAll('.exercise-theme').forEach(b=>b.classList.toggle('selected',b.dataset.theme===key));$('exerciseStage').classList.add('hidden');$('exerciseFinish').classList.add('hidden');$('exerciseThemes').classList.remove('hidden');$('exerciseHero').scrollIntoView({behavior:'smooth',block:'start'})}
-function renderExercisePhase(){const phase=EXERCISE_PHASES[exercisePhase],w=EXERCISE_WORLDS[exerciseTheme],list=w[phase.list],slot=Math.min(list.length-1,Math.floor(exerciseElapsed/phase.seconds*list.length));const movementIcons={forest:['🙆','🚶','🪵','🦋','🐻','🌼','🐦','🌱'],desert:['☀️','🐪','🌵','🏜️','🦎','💧','🌬️','🌅'],ocean:['🐠','🦀','🐬','🌊','🐢','🐙','🐚','⭐'],snow:['⛄','🎿','❄️','🥾','🧣','🐧','🧤','🏔️'],space:['🚀','👩‍🚀','🪐','⭐','🛰️','🌙','☄️','🌟']};$('exerciseRound').textContent=phase.name+' · '+(exercisePhase+1)+' OF 3';$('exerciseClock').textContent=formatExerciseTime(phase.seconds-exerciseElapsed);$('exerciseProgress').style.width=((exercisePhase*100/3)+(exerciseElapsed/phase.seconds*100/3))+'%';$('exerciseMoveEmoji').textContent=exercisePhase===0?'🌱':exercisePhase===1?movementIcons[exerciseTheme][Math.min(slot,movementIcons[exerciseTheme].length-1)]:'🌙';$('exerciseMoveTitle').textContent=list[slot];$('exerciseRecStage').dataset.world=exerciseTheme;$('exerciseRecStage').dataset.phase=phase.id;$('exerciseMoveText').textContent=exercisePhase===0?'Follow the gentle movement shown. Keep your feet comfortable and move at your own pace.':exercisePhase===1?'Follow the on-screen movement. Keep a little space around you and choose the easy version whenever you need.':'Move slowly, breathe comfortably and let your body relax.';$('exerciseTimerBar').style.width=((phase.seconds-exerciseElapsed)/phase.seconds*100)+'%';$('exerciseTimerBar').style.background=phase.colour;$('exerciseCoach').textContent=exercisePaused?'Paused. Take your time.':'You can pause or stop whenever you need.';if(slot!==exerciseLastCue){exerciseLastCue=slot;if(voiceOn&&exerciseElapsed>0&&exerciseElapsed%30===0)say(list[slot],true)}}
+function renderExercisePhase(){const phase=EXERCISE_PHASES[exercisePhase],w=EXERCISE_WORLDS[exerciseTheme],list=w[phase.list],slot=Math.min(list.length-1,Math.floor(exerciseElapsed/phase.seconds*list.length));const movementIcons={forest:['🙆','🚶','🪵','🦋','🐻','🌼','🐦','🌱'],desert:['☀️','🐪','🌵','🏜️','🦎','💧','🌬️','🌅'],ocean:['🐠','🦀','🐬','🌊','🐢','🐙','🐚','⭐'],snow:['⛄','🎿','❄️','🥾','🧣','🐧','🧤','🏔️'],space:['🚀','👩‍🚀','🪐','⭐','🛰️','🌙','☄️','🌟']};$('exerciseRound').textContent=phase.name+' · '+(exercisePhase+1)+' OF 3';$('exerciseClock').textContent=formatExerciseTime(phase.seconds-exerciseElapsed);$('exerciseProgress').style.width=((exercisePhase*100/3)+(exerciseElapsed/phase.seconds*100/3))+'%';$('exerciseMoveEmoji').textContent=exercisePhase===0?'🌱':exercisePhase===1?movementIcons[exerciseTheme][Math.min(slot,movementIcons[exerciseTheme].length-1)]:'🌙';$('exerciseMoveTitle').textContent=list[slot];$('exerciseRecStage').dataset.world=exerciseTheme;$('exerciseRecStage').dataset.phase=phase.id;$('exerciseRecStage').dataset.level='1';$('exerciseWorldScene').dataset.world=exerciseTheme;$('exerciseWorldScene').dataset.phase=phase.id;$('exerciseMoveText').textContent=exercisePhase===0?'Follow the gentle movement shown. Keep your feet comfortable and move at your own pace.':exercisePhase===1?'Follow the on-screen movement. Keep a little space around you and choose the easy version whenever you need.':'Move slowly, breathe comfortably and let your body relax.';$('exerciseTimerBar').style.width=((phase.seconds-exerciseElapsed)/phase.seconds*100)+'%';$('exerciseTimerBar').style.background=phase.colour;$('exerciseCoach').textContent=exercisePaused?'Paused. Take your time.':'You can pause or stop whenever you need.';if(slot!==exerciseLastCue){exerciseLastCue=slot;if(voiceOn&&exerciseElapsed>0)say(list[slot],true)}}
 function startExerciseClock(){stopExerciseClock();exerciseInterval=setInterval(tickExercise,1000)}
 function tickExercise(){if(exercisePaused)return;exerciseElapsed++;const phase=EXERCISE_PHASES[exercisePhase];if(exerciseElapsed>=phase.seconds){exercisePhase++;exerciseElapsed=0;exerciseLastCue=-1;if(exercisePhase>=EXERCISE_PHASES.length){finishExercise();return}renderExercisePhase();if(voiceOn)say(EXERCISE_PHASES[exercisePhase].intro,true);return}renderExercisePhase()}
 async function startExerciseNow(){exerciseRecording=true;exercisePhase=0;exerciseElapsed=0;exercisePaused=false;exerciseLastCue=-1;stopExerciseClock();$('exerciseThemes').classList.add('hidden');$('exerciseFinish').classList.add('hidden');$('exerciseStage').classList.remove('hidden');page('exercise');renderExercisePhase();$('exercisePause').textContent='Ⅱ Pause';$('exerciseNext').textContent='Skip move →';await Promise.resolve(recOnStart());if(voiceOn)say('Welcome to Move and Explore! '+EXERCISE_WORLDS[exerciseTheme].title+'. '+EXERCISE_PHASES[0].intro);startExerciseClock()}
