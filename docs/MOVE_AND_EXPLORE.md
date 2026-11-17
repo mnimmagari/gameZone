@@ -53,6 +53,24 @@ with cheers ("Super!", "Wow!"), and a soft screen pulse on each beat, in each th
 There is no fail state and no scoring of the child: the app cannot see the child's body (no camera),
 so the combo only counts beats of movement and always goes up. The end screen shows "N beats moved".
 
+## Recording crop fix
+When recording with voice (screen share), the recorder finds the stage by flashing magenta corner
+squares and scanning the shared video for magenta. Glowing magenta/pink in the neon scene and HUD
+fooled that scan, so the stage position fell back to a rough guess and the video was cropped.
+`recCalibrate()` now (1) takes a marker-free reference frame first and ignores magenta already
+there, (2) accepts a result only if it has the stage's own 16:9 shape, (3) retries up to 20 times,
+and (4) the adventure freezes its picture while measuring. Proven with a synthetic frame test
+(old method failed on the neon scene, new method found the exact stage). Not yet confirmed on a
+real screen share, because the preview browser cannot do screen capture.
+
+## Real art support
+Layered scene pictures, background video, per-movement pose sheets or green-screen clips can be
+dropped into `assets/move/<theme>/` (see `docs/MOVE_ASSETS.md`, including AI prompts). Tested with
+placeholder art (removed). The page security policy now also allows this site's own images,
+media and manifest files. No real art is included, so the built-in drawing is still what plays.
+Built-in drawing got more depth: blurred far layers, framing ferns, a glow halo behind the child,
+tube shading on limbs, hair highlights and mushroom gills.
+
 ## Safety
 Safety screen before every start (grown-up nearby, clear space, comfy footwear, pause/stop any
 time, water, skip any move). Every movement is low impact and done in place, shows an "easy
