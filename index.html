@@ -1334,6 +1334,25 @@ body.mx-active #quizPage .quiz-exit-row,body.mx-active #quizPage #quizControls{d
 .mx-yoga .mx-mp{display:none}
 .mx-yoga .mx-banner{font-size:30px;padding:8px 28px;top:92px;border-radius:26px}
 .mx-yoga .mx-easy{font-size:13px;margin-top:1px;color:#8b5a4a}
+.mx-yoga{font-family:"Trebuchet MS","Comic Sans MS",system-ui,sans-serif}
+.mx-yoga .mx-instr{background:linear-gradient(135deg,#ff8fb0,#ffb86b);color:#fff;box-shadow:0 6px 0 rgba(180,70,100,.35),0 0 0 4px #fff;border-radius:30px;padding:7px 26px 8px}
+.mx-yoga .mx-it{color:#fff;font-size:25px;text-shadow:0 3px 0 rgba(150,50,80,.45)}
+.mx-yoga .mx-easy{color:#fff;opacity:.95;font-size:14px;text-shadow:0 1px 0 rgba(150,50,80,.4)}
+.mx-yoga .mx-chip{background:linear-gradient(135deg,#fff,#ffe3f0);border:3px solid #ff8fb0;color:#8a3a68}
+.mx-yoga .mx-phase{border:3px solid #fff;box-shadow:0 4px 0 rgba(0,0,0,.18)}
+.mx-yoga .mx-banner{background:linear-gradient(135deg,#ff6fa0,#ffb04a);border:4px solid #fff;font-size:34px}
+.mx-ys{background:linear-gradient(160deg,#fff7fb,#ffe6f1 55%,#fff0d6)!important;border:5px solid #fff;box-shadow:0 10px 0 rgba(200,90,130,.35),0 0 40px rgba(255,150,190,.6)!important;position:relative;overflow:hidden}
+.mx-ys h2{background:linear-gradient(90deg,#ff5c8a,#ffa43a,#3bb89a,#6a7cff);-webkit-background-clip:text;background-clip:text;color:transparent;font-size:46px!important}
+.mx-ys p{color:#8a3a68}
+.mx-sunb{animation:mxSun 3s ease-in-out infinite;display:inline-block}
+@keyframes mxSun{0%,100%{transform:translateY(0) rotate(-6deg) scale(1)}50%{transform:translateY(-10px) rotate(6deg) scale(1.08)}}
+.mx-fl{position:absolute;font-size:30px;animation:mxFl 4s ease-in-out infinite}.mx-fl.f1{left:16px;top:20px}.mx-fl.f2{right:24px;top:30px;animation-delay:.6s}.mx-fl.f3{left:26px;bottom:18px;animation-delay:1.2s}.mx-fl.f4{right:18px;bottom:24px;animation-delay:1.8s}
+@keyframes mxFl{0%,100%{transform:translateY(0) rotate(-8deg)}50%{transform:translateY(-12px) rotate(8deg)}}
+.mx-ys .mx-chips span{background:#fff;border:2px solid #ffb0cc;color:#8a3a68}
+.mx-yw2{background:linear-gradient(135deg,#fff,#ffe9f3);border:3px solid #ff8fb0;box-shadow:0 5px 0 rgba(200,90,130,.35)}
+.mx-yw2 i.on{filter:drop-shadow(0 0 8px #ffb800)}
+.mx-yw2 button{background:linear-gradient(135deg,#ff6fa0,#ffb04a);box-shadow:0 3px 0 rgba(150,50,80,.3)}
+.mx-yw2 button#mxYVoiceBtn{background:linear-gradient(135deg,#7a8cff,#58c4a8)}
 .mx-over.yprep{background:none;align-items:flex-end}
 .mx-yw2{display:flex;gap:12px;align-items:center;background:rgba(255,246,238,.92);padding:8px 18px;border-radius:999px;margin-bottom:22px;box-shadow:0 5px 0 rgba(160,100,80,.25)}
 .mx-yw2 i{font-style:normal;font-size:26px;opacity:.45;transition:transform .2s}.mx-yw2 i.on{opacity:1;transform:scale(1.35)}.mx-yw2 i.ok{opacity:.9}
@@ -1532,7 +1551,7 @@ function say(text,force=false,onDone=null,hooks=null){
  if(!('speechSynthesis'in window)){finish();return}
  try{
   speechSynthesis.cancel();
-  const gv=girlVoice(),kid=/ana|child|kid/i.test(gv?gv.name:''),base=(hooks&&hooks.pitch)||(1.2+ageVoice().dp*.2),parts=(String(text).match(/[^.!?]+[.!?]*/g)||[String(text)]).map(p=>p.trim()).filter(Boolean);
+  const gv=(hooks&&hooks.voice)||girlVoice(),kid=/ana|child|kid/i.test(gv?gv.name:''),base=(hooks&&hooks.pitch)||(1.2+ageVoice().dp*.2),parts=(String(text).match(/[^.!?]+[.!?]*/g)||[String(text)]).map(p=>p.trim()).filter(Boolean);
   let called=false;const done=()=>{if(!called){called=true;finish()}};
   parts.forEach((t,k)=>{const u=new SpeechSynthesisUtterance(t);u.volume=1;if(gv){u.voice=gv;u.lang=gv.lang}else u.lang='en-IN';
    /* cartoon style: squeaky pitch, bouncy rate, extra sparkle on exclamations, curious lift on questions */
@@ -2680,6 +2699,7 @@ const MXY_P=[
  {n:'Forward bend',s:'Hastapadasana',b:'out',e:'Bend your knees as much as you like.',teach:'Pose ten, Forward bend. Breathe out, bring both feet together, and fold forward.',full:'Feet together. Fold forward. Breathe out.',short:'Fold down. Breathe out.'},
  {n:'Raised arms pose',s:'Hasta Uttanasana',b:'in',e:'Keep your arms in front if your shoulders feel tight.',teach:'Pose eleven, Raised arms pose. Breathe in, rise up slowly, and reach high.',full:'Rise up. Arms high. Breathe in.',short:'Arms up. Breathe in.'},
  {n:'Prayer pose',s:'Pranamasana',b:'out',e:'Just stand tall with your hands together.',teach:'Pose twelve, Prayer pose. Breathe out and bring your hands back to your heart. That is one round! Well done.',full:'Hands to your heart. Breathe out.',short:'Prayer pose. Breathe out.'}];
+const MXY_EM=['🙏','🌞','🧸','🐴','⛰️','🐛','🐍','⛰️','🐴','🧸','🌞','🙏'];MXY_P.forEach((p,i)=>{p.m=MXY_EM[i]});
 const mxYLead=r=>r%2?'left':'right';
 function mxYCue(i,r,mode){const p=MXY_P[i],lead=mxYLead(r),oth=lead==='left'?'right':'left',f=i===3?lead:i===8?oth:'',b=f==='left'?'right':'left';return p[mode].replace('{F}',f.charAt(0).toUpperCase()+f.slice(1)).replace('{f}',f).replace('{b}',b)}
 function mxYBuild(){
@@ -2687,7 +2707,7 @@ function mxYBuild(){
  /* warm-up: 24 + 36 + 12x14 + 24 + 48 = 300 s */
  warm.push(ST('ystill',24,'Stand tall at the front of your mat',{pose:12,say:'First we learn the twelve sun poses, slowly. Stand tall at the front of your mat. Put your feet together, relax your shoulders, and let your arms hang down. Look straight ahead.',easy:'Your feet can be a little apart.'}));
  warm.push(ST('breathe',36,'Three slow breaths',{bp:[12,1],br:[4,2,4],lead:9,say:'Let us breathe together. Breathe in for four, hold for two, and breathe out for four. Raise your arms as you breathe in.',easy:'Arms are optional. Just breathe slowly.',cues:[{t:30,text:'Lovely breathing!'}]}));
- for(let i=0;i<12;i++)warm.push(ST('ypose',14,'Pose '+(i+1)+': '+MXY_P[i].n,{pose:i,tr:2.2,round:0,say:mxYCue(i,1,'teach'),easy:MXY_P[i].e}));
+ for(let i=0;i<12;i++)warm.push(ST('ypose',14,MXY_EM[i]+' Pose '+(i+1)+': '+MXY_P[i].n,{pose:i,tr:2.2,round:0,say:mxYCue(i,1,'teach'),easy:MXY_P[i].e}));
  warm.push(ST('ypose',24,'Practise slowly',{seq:[0,1,2,1,0],tr:1.8,say:'Now let us practise slowly, breathing with each move.',easy:'Take your time. Skip anything that does not feel good.',cues:[{t:5,text:'Arms up. Breathe in.'},{t:9.8,text:'Fold down. Breathe out.'},{t:14.6,text:'Arms up. Breathe in.'},{t:19.4,text:'Hands to your heart. Breathe out.'}]}));
  warm.push(ST('breathe',48,'Breathe with the sun',{bp:[0,1],br:[4,2,4],lead:10,say:'Now breathe with your arms. Arms up as you breathe in. Hands to your heart as you breathe out.',easy:'Arms are optional. Just breathe slowly.',cues:[{t:41,text:'Beautiful! Now we begin the six sun salutations.'}]}));
  /* main: 2 rounds + water break + 2 rounds + rest break + 2 rounds = 420 s. The leading foot alternates: L R L R L R */
@@ -2717,9 +2737,9 @@ const MXY_PREP=[
  ['🧑','Tell a grown-up and ask them to stay nearby.','Tell a grown-up that you are starting, and ask them to stay close by.'],
  ['🛑','Rest any time. There is a water break and a rest break. You can press pause.','Listen to your body. If you feel tired, dizzy or sore, stop and rest. There is a water break and a rest break, and you can press pause any time.'],
  ['🌅','Stand at the front of your mat with your feet together.','Now stand at the front of your mat with your feet together. Here comes the sun!']];
-function mxYSplash(){return'<div class="mx-wel mx-ys"><div class="mx-wi">🌅</div><h2>Daily Yoga Practice</h2><p>Surya Namaskar · the sun salutation for kids</p><div class="mx-chips"><span>15 minutes</span><span>12 poses</span><span>6 rounds</span></div></div>'}
+function mxYSplash(){return'<div class="mx-wel mx-ys"><span class="mx-fl f1">🦋</span><span class="mx-fl f2">⭐</span><span class="mx-fl f3">🌈</span><span class="mx-fl f4">🦋</span><div class="mx-wi mx-sunb">🌞</div><h2>Daily Yoga Practice</h2><p>Surya Namaskar · say hello to the sun!</p><div class="mx-chips"><span>⏱️ 15 minutes</span><span>🧘 12 poses</span><span>⭐ 6 rounds</span></div></div>'}
 function mxYWelcomeOld(){return'<div class="mx-wel mx-yw"><div class="mx-wi">🌅</div><h2>Surya Namaskar</h2><p>The sun salutation for kids · 6 rounds · 15 minutes</p><ul class="mx-yl">'+MXY_PREP.map((s,i)=>'<li id="mxYL'+i+'"><i>'+s[0]+'</i><span>'+s[1]+'</span></li>').join('')+'</ul><div class="mx-yb"><button type="button" id="mxYReady">I am ready ▶</button></div></div>'}
-function mxYWelcome(){return'<div class="mx-yw2">'+MXY_PREP.map((p,i)=>'<i id="mxYL'+i+'">'+p[0]+'</i>').join('')+'<button type="button" id="mxYReady">I am ready ▶</button></div>'}
+function mxYWelcome(){return'<div class="mx-yw2">'+MXY_PREP.map((p,i)=>'<i id="mxYL'+i+'">'+p[0]+'</i>').join('')+'<button type="button" id="mxYVoiceBtn">🎤 Change voice</button><button type="button" id="mxYReady">I am ready ▶</button></div>'}
 function mxYLoad(){if(MXY.loading)return MXY.loading;
  const add=src=>new Promise(res=>{const s=document.createElement('script');s.src=src;s.onload=()=>res(true);s.onerror=()=>res(false);document.head.appendChild(s)});
  MXY.loading=(async()=>{if(!(await mx3Load()))return false;for(const[g,f]of[['MXYoga','yoga-kid'],['MXYogaPoses','yoga-poses'],['MXYogaRoom','yoga-room']]){if(!window[g])await add('assets/move/yoga/'+f+'.js');if(!window[g])return false}return true})();return MXY.loading}
@@ -2778,10 +2798,10 @@ function mxYWant(seg,tl){
  if(x.seq){const n=x.seq.length,per=x.ps||seg.dur/n,k=Math.min(n-1,Math.floor(tl/per)),i=x.seq[k];return{key:i+':'+(rd%2),spec:mxYSpecFor(i,rd),i,tr:x.tr||2,k}}
  const i=x.pose!==undefined?x.pose:12;return{key:i+':'+(rd%2),spec:mxYSpecFor(i,rd),i,tr:x.tr||2}}
 const MXogaBlend=(a,b,u)=>window.MXYogaPoses.blend(a,b,u);
-function mxYPaint(c,k,at,seg,tl){const Y=MXY,T=Y.T,K=Y.K,R=Y.R,P=window.MXYogaPoses,now=performance.now(),dt=Math.min(.1,Math.max(.001,(now-(Y.lastT||now))/1000));Y.lastT=now;
+function mxYPaint(c,k,at,seg,tl){const Y=MXY,T=Y.T,K=Y.K,R=Y.R,P=window.MXYogaPoses,now=performance.now(),dt=Math.min(.1,Math.max(.001,(now-(Y.lastT||now))/1000));Y.lastT=now;Y.hdt=dt;
  const w=mxYWant(seg,tl),x=(seg&&seg.x)||{};
  if(w.key!==Y.key){Y.from=Y.last||w.spec;Y.key=w.key;Y.t0=at;Y.tr=w.tr;
-  if(seg&&x.round&&w.i<12){$('mxText').textContent='Pose '+(w.i+1)+': '+MXY_P[w.i].n;$('mxEasy').textContent='Easy way: '+MXY_P[w.i].e;$('mxEasy').style.display=''}}
+  if(seg&&x.round&&w.i<12){$('mxText').textContent=MXY_P[w.i].m+' Pose '+(w.i+1)+': '+MXY_P[w.i].n;if(w.i===11){mxYBurst();const bn=$('mxBanner');bn.textContent='⭐ Round '+x.round+' done!';bn.style.setProperty('--pc','#ff6fa0');bn.classList.remove('on');void bn.offsetWidth;bn.classList.add('on')}$('mxEasy').textContent='Easy way: '+MXY_P[w.i].e;$('mxEasy').style.display=''}}
  const u=Y.tr>0?Math.min(1,(at-Y.t0)/Y.tr):1,S=u<1?P.blend(Y.from,w.spec,u):w.spec;Y.last=S;
  K.setEyes(x.eyes==='closed'&&tl<(x.eyesUntil||999)?'closed':'open');
  const pl=w.plan||null;P.solve(T,K,S,pl?pl.ry:0);if(pl){K.root.position.x=pl.x;K.root.position.z=pl.z;K.root.updateMatrixWorld(true)}K.idle(at);
@@ -2795,20 +2815,25 @@ function mxYPaint(c,k,at,seg,tl){const Y=MXY,T=Y.T,K=Y.K,R=Y.R,P=window.MXYogaPo
  const cc=c.canvas;c.setTransform(1,0,0,1,0,0);c.clearRect(0,0,cc.width,cc.height);c.setTransform(k,0,0,k,0,0);
  if(mx.active&&mx.state==='play'&&seg)mxYHud2(c,seg,tl,w,at)}
 function mxYRR(c,x,y,w,h,r){c.beginPath();if(c.roundRect)c.roundRect(x,y,w,h,r);else c.rect(x,y,w,h)}
-function mxYPanel(c,x,y,w,h){c.save();c.fillStyle='rgba(255,246,238,.9)';c.strokeStyle='#e5805f';c.lineWidth=3;c.shadowColor='rgba(120,60,40,.25)';c.shadowBlur=8;mxYRR(c,x,y,w,h,16);c.fill();c.stroke();c.restore()}
+const MXY_F='"Trebuchet MS","Comic Sans MS",system-ui,sans-serif';
+function mxYPanel(c,x,y,w,h,col){c.save();const g=c.createLinearGradient(0,y,0,y+h);g.addColorStop(0,'rgba(255,255,255,.96)');g.addColorStop(1,'rgba(255,232,244,.94)');c.fillStyle=g;c.strokeStyle=col||'#ff6fa0';c.lineWidth=4;c.shadowColor='rgba(120,40,90,.3)';c.shadowBlur=10;mxYRR(c,x,y,w,h,20);c.fill();c.stroke();c.restore()}
+function mxYBurst(){const a=[],cols=['#ff6fa0','#ffb04a','#ffd54a','#58c4a8','#7a8cff','#c88cff'];for(let i=0;i<46;i++){const an=Math.random()*6.283,sp=120+Math.random()*260;a.push({x:200+Math.random()*560,y:70,vx:Math.cos(an)*sp*.4,vy:Math.abs(Math.sin(an))*sp*.4,c:cols[i%6],l:1.6+Math.random()*.8,r:Math.random()*6})}MXY.conf=a}
 function mxYHud2(c,seg,tl,w,at){
- const x=seg.x||{},r=x.round||0,i=w.i,INK='#6a3b2e',ACC='#e5805f',F='system-ui,sans-serif';c.textAlign='center';
- mxYPanel(c,14,214,158,r?176:160);
- c.fillStyle=ACC;c.font='bold 14px '+F;c.fillText(r?'ROUND '+r+' / 6':seg.phase===0?'LEARN THE POSES':seg.phase===2?'COOL DOWN':'BREAK',93,236);
- if(r){c.fillStyle=INK;c.font='bold 12px '+F;c.fillText((mxYLead(r)==='left'?'Left':'Right')+' foot goes first',93,254)}
- for(let q=0;q<12;q++){const cx=93+((q%6)-2.5)*24,cy=(r?276:258)+Math.floor(q/6)*28,cur=q===i,dn=i<12&&q<i;c.beginPath();c.arc(cx,cy,10,0,7);c.fillStyle=cur?ACC:dn?'#f3b9a1':'rgba(160,100,80,.16)';c.fill();c.fillStyle=cur?'#fff':INK;c.font='bold 11px '+F;c.fillText(String(q+1),cx,cy+4)}
- if(i<12){const by=r?340:322;c.fillStyle=INK;c.font='bold 14px '+F;c.fillText(MXY_P[i].n,93,by);c.font='italic 12px '+F;c.fillStyle='#8b5a4a';c.fillText(MXY_P[i].s,93,by+17)}
- else if(!r){c.fillStyle='#8b5a4a';c.font='bold 13px '+F;c.fillText(seg.move==='breathe'?'Breathe with me':'Stand tall',93,322)}
+ const x=seg.x||{},r=x.round||0,i=w.i,INK='#7a3566',ACC='#ff4f8e',F=MXY_F,dt=MXY.hdt||.03;c.textAlign='center';
+ mxYPanel(c,12,206,166,r?188:170,'#ff6fa0');
+ c.fillStyle=ACC;c.font='bold 15px '+F;c.fillText(r?'⭐ ROUND '+r+' of 6':seg.phase===0?'📖 LEARN THE POSES':seg.phase===2?'🌙 COOL DOWN':'💧 BREAK TIME',95,229);
+ if(r){c.fillStyle=INK;c.font='bold 12px '+F;c.fillText((mxYLead(r)==='left'?'👈 Left':'Right 👉')+' foot goes first',95,247)}
+ for(let q=0;q<12;q++){const cx=95+((q%6)-2.5)*25,cy=(r?272:252)+Math.floor(q/6)*30,cur=q===i,dn=i<12&&q<i,rr=cur?13+Math.sin(at*6)*1.5:10;mxStar(c,cx,cy,rr,0,cur?'#ffb800':dn?'#ffd54a':'rgba(170,130,210,.32)');c.fillStyle=cur?'#fff':INK;c.font='bold 10px '+F;c.fillText(String(q+1),cx,cy+4)}
+ if(i<12){const by=r?340:322;c.font='26px '+F;c.fillText(MXY_P[i].m,95,by+2);c.fillStyle=INK;c.font='bold 14px '+F;c.fillText(MXY_P[i].n,95,by+22);c.font='italic 11px '+F;c.fillStyle='#a06a95';c.fillText(MXY_P[i].s,95,by+37)}
+ else if(!r){c.fillStyle=INK;c.font='bold 14px '+F;c.fillText(seg.move==='breathe'?'🌬️ Breathe with me':'🧍 Stand tall',95,322)}
  if(seg.move==='ypose'&&i<12){
-  const b=MXY_P[i].b,tp=Math.max(0,at-MXY.t0),e=v=>v*v*(3-2*v),uu=Math.min(1,tp/3.6),rad=b==='in'?16+24*e(uu):b==='out'?40-24*e(uu):16+3*Math.sin(at*7),col=b==='in'?'#58b3a3':b==='out'?ACC:'#d9a43a';
-  mxYPanel(c,788,214,158,128);c.fillStyle=col;c.beginPath();c.arc(867,266,rad,0,7);c.globalAlpha=.85;c.fill();c.globalAlpha=1;c.strokeStyle=col;c.lineWidth=3;c.beginPath();c.arc(867,266,42,0,7);c.stroke();
-  c.fillStyle=INK;c.font='bold 15px '+F;c.fillText(b==='in'?'BREATHE IN':b==='out'?'BREATHE OUT':'OUT AND HOLD',867,328);
-  if(r&&i<11){mxYPanel(c,788,352,158,58);c.fillStyle=ACC;c.font='bold 12px '+F;c.fillText('NEXT',867,371);c.fillStyle=INK;c.font='bold 14px '+F;c.fillText(MXY_P[i+1].n,867,392)}}
+  const b=MXY_P[i].b,tp=Math.max(0,at-MXY.t0),e=v=>v*v*(3-2*v),uu=Math.min(1,tp/3.6),rad=b==='in'?16+22*e(uu):b==='out'?38-22*e(uu):16+3*Math.sin(at*7),col=b==='in'?'#58c4a8':b==='out'?'#ff6fa0':'#ffb04a',em=b==='in'?'🌸':b==='out'?'🕯️':'🤫',cue=b==='in'?'SMELL THE FLOWER':b==='out'?'BLOW THE CANDLE':'HOLD IT, SHHH';
+  mxYPanel(c,786,206,168,140,col);const gg=c.createRadialGradient(870,262,2,870,262,rad);gg.addColorStop(0,'#fff');gg.addColorStop(1,col);c.fillStyle=gg;c.beginPath();c.arc(870,262,rad,0,7);c.fill();c.strokeStyle=col;c.lineWidth=3;c.beginPath();c.arc(870,262,42,0,7);c.stroke();
+  c.font='24px '+F;c.fillStyle=INK;c.fillText(em,870,271);c.fillStyle=col;c.font='bold 15px '+F;c.fillText(b==='in'?'BREATHE IN':b==='out'?'BREATHE OUT':'OUT AND HOLD',870,322);c.fillStyle=INK;c.font='bold 11px '+F;c.fillText(cue,870,338);
+  if(r&&i<11){mxYPanel(c,786,356,168,62,'#7a8cff');c.fillStyle='#5a67d8';c.font='bold 12px '+F;c.fillText('NEXT ➜',870,375);c.fillStyle=INK;c.font='bold 14px '+F;c.fillText(MXY_P[i+1].m+' '+MXY_P[i+1].n,870,397)}}
+ /* little stars twinkle at the edges, confetti when a round is finished */
+ for(let q=0;q<7;q++){const sx=(q*149+60)%900+30,sy=70+((q*83)%110),tw=.6+.4*Math.sin(at*3+q*1.7);mxStar(c,sx,sy,5+3*tw,at*.5+q,'rgba(255,214,90,'+(.45+.4*tw)+')')}
+ if(MXY.conf&&MXY.conf.length){const L=MXY.conf;for(let q=L.length-1;q>=0;q--){const p=L[q];p.l-=dt;if(p.l<=0){L.splice(q,1);continue}p.vy+=420*dt;p.x+=p.vx*dt;p.y+=p.vy*dt;p.r+=dt*9;c.save();c.translate(p.x,p.y);c.rotate(p.r);c.fillStyle=p.c;c.fillRect(-5,-3,10,6);c.restore()}}
  c.textAlign='left'}
 /* the voice walks the child through getting ready: mat, water, feet, clothes, a grown-up, resting, then the first pose */
 function mxYPrep(){const n=MXY_PREP.length;let i=0;
@@ -2816,7 +2841,7 @@ function mxYPrep(){const n=MXY_PREP.length;let i=0;
  const step=()=>{if(!mx.active||mx.state!=='welcome')return;if(i>=n){mark(n);setTimeout(()=>{if(mx.active&&mx.state==='welcome')mxCount(3)},900);return}
   const mine=i;mark(i);if(i===0)MXY.matT=1;
   Promise.all([new Promise(r=>{mxSay(MXY_PREP[i][2],r);setTimeout(r,24000)}),new Promise(r=>setTimeout(r,(MXY_PT[i]||3)*1000+300))]).then(()=>{if(mx.active&&mx.state==='welcome'&&i===mine){i++;setTimeout(step,500)}})};
- const rb=$('mxYReady');if(rb)rb.onclick=()=>{try{speechSynthesis.cancel()}catch(e){}MXY.prep=7;MXY.prepT0=mx.at;mxCount(3)};
+ const vb=$('mxYVoiceBtn');if(vb)vb.onclick=()=>{const g=$('voiceChoose');if(g)g.click();setTimeout(()=>mxSay('Hi! I am your yoga friend! Let us stretch together!'),200)};const rb=$('mxYReady');if(rb)rb.onclick=()=>{try{speechSynthesis.cancel()}catch(e){}MXY.prep=7;MXY.prepT0=mx.at;mxCount(3)};
  clearTimeout(mx.introTO);mx.introTO=setTimeout(()=>{if(mx.active&&mx.state==='welcome')mxCount(3)},180000);step()}
 async function mxYStart(){
  let ok=false;try{ok=await mxYInit()}catch(e){ok=false}
@@ -3258,7 +3283,9 @@ async function mxBegin(){
  /* welcome stays at least 5 s (also when the voice is off); safety net if speech never ends */
  Promise.all([new Promise(r=>mxSay(intro,r)),new Promise(r=>setTimeout(r,5000))]).then(()=>{if(mx.active&&mx.state==='welcome')mxCount(3)});
  clearTimeout(mx.introTO);mx.introTO=setTimeout(()=>{if(mx.active&&mx.state==='welcome')mxCount(3)},16000)}
-function mxSay(text,done){try{say(text,false,done,mx&&mx.yoga?{pitch:1.9,rate:1.12}:{pitch:1.1,rate:.97})}catch(e){if(done)done()}}
+/* kids' voice for yoga: a child voice (such as Ana) when the browser has one, otherwise the chosen girl voice pitched up like a cartoon */
+function mxYVoiceOpt(){const all=('speechSynthesis' in window)?speechSynthesis.getVoices().filter(v=>/^en(-|_|$)/i.test(v.lang)):[],re=/\bana\b|child|kid|junior/i;let v=null;if(voicePick===0)v=all.find(x=>re.test(x.name))||null;const g=v||girlVoice(),kv=!!(g&&re.test(g.name));return{voice:g,pitch:kv?1.3:1.9,rate:kv?1.06:1.12}}
+function mxSay(text,done){try{say(text,false,done,mx&&mx.yoga?mxYVoiceOpt():{pitch:1.1,rate:.97})}catch(e){if(done)done()}}
 function mxCount(n){if(!mx.active||mx.state==='play'||mx.state==='done')return;mx.state='count';clearTimeout(mx.introTO);mxOver('<div class="mx-cd"><b>'+n+'</b><span>Get ready!</span></div>');mxChime(n);if(n>1){mx.cdTO=setTimeout(()=>mxCount(n-1),1000)}else mx.cdTO=setTimeout(()=>{if(!mx.active)return;mx.state='play';mx.t=0;mx.idx=-1;mxOver('');$('mxInstr').style.visibility='';$('mxPhase').style.visibility='';$('mxCombo').style.visibility='';mxChime(0)},1000)}
 function mxOver(h){const o=$('mxOver');if(o){o.innerHTML=h;o.classList.toggle('on',!!h);o.classList.toggle('yprep',/mx-yw2/.test(h))}}
 function mxChime(n){try{const ctx=musicCtxGet();if(!ctx)return;const t=ctx.currentTime;if(n===0){note(784,t,.18,'sine',.9);note(1047,t+.12,.3,'sine',.9)}else if(n===99){[523,659,784,1047].forEach((f,i)=>note(f,t+i*.16,.4,'triangle',.9))}else note(660,t,.14,'sine',.7)}catch(e){}}

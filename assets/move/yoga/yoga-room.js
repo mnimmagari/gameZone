@@ -52,6 +52,9 @@
     for (const [w, h, x, y] of [[1.6, .08, 0, 1.34], [1.6, .08, 0, -1.34], [.08, 2.76, .79, 0], [.08, 2.76, -.79, 0], [.05, 2.6, 0, 0], [1.5, .05, 0, 0]]) { const f = new T.Mesh(new T.BoxGeometry(.06, h, w), frameM); f.position.set(-5.97, 1.7 + y, -1.0 + x); f.rotation.y = 0; G.add(f); }
     const sun = new T.Mesh(new T.CircleGeometry(.34, 40), new T.MeshBasicMaterial({ color: 0xfff1c0, fog: false, toneMapped: false })); sun.position.set(-5.95, .8, -1.0); sun.rotation.y = Math.PI / 2; G.add(sun); R.sun = sun;
     const halo = new T.Mesh(new T.CircleGeometry(.95, 40), new T.MeshBasicMaterial({ map: tex(T, 128, 128, (g, w, h) => { const r = g.createRadialGradient(64, 64, 0, 64, 64, 64); r.addColorStop(0, 'rgba(255,230,170,.85)'); r.addColorStop(1, 'rgba(255,200,140,0)'); g.fillStyle = r; g.fillRect(0, 0, w, h); }), transparent: true, depthWrite: false, blending: T.AdditiveBlending, fog: false })); halo.position.set(-5.9, .8, -1.0); halo.rotation.y = Math.PI / 2; G.add(halo); R.halo = halo;
+    /* rainbow on the alcove wall and little butterflies */
+    [0xff8fa3, 0xffb86b, 0xffe27a, 0x9fe0a8, 0x8fd3f4, 0xb9a4f0].forEach((c, i) => { const t = new T.Mesh(new T.TorusGeometry(.95 - i * .07, .036, 10, 48, Math.PI), new T.MeshBasicMaterial({ color: c, transparent: true, opacity: .8, fog: false })); t.position.set(0, .3, -3.42); G.add(t); });
+    R.bf = [0xff8fb0, 0xffd27a, 0xa7d8ff].map((c, i) => { const g = new T.Group(), m = new T.MeshBasicMaterial({ color: c, side: T.DoubleSide, fog: false }), w1 = new T.Mesh(new T.CircleGeometry(.055, 12), m), w2 = new T.Mesh(new T.CircleGeometry(.055, 12), m); w1.position.x = .05; w2.position.x = -.05; g.add(w1, w2); g.userData = { ph: i * 2.1, w1, w2 }; G.add(g); return g; });
     /* light: low warm sun from the window, soft fill, rim */
     G.add(new T.HemisphereLight(0xfff3ea, 0xe9c2ae, .55));
     const key = new T.DirectionalLight(0xffdcb8, 1.5); key.position.set(-5, 2.2, 1.5); key.target.position.set(0, .4, 0); key.castShadow = true; key.shadow.mapSize.set(2048, 2048); Object.assign(key.shadow.camera, { left: -2.5, right: 2.5, top: 2.5, bottom: -1.5, near: .5, far: 14 }); key.shadow.bias = -.0005; key.shadow.radius = 5; G.add(key, key.target); R.key = key;
@@ -76,6 +79,7 @@
     R.setShoes = u => { shoes.visible = u > .02; shoes.scale.setScalar(Math.max(.01, u)); };
     R.setWater = (on, at) => { bottleM.emissiveIntensity = on ? .55 + .35 * Math.sin(at * 4) : 0; };
     R.update = (p, at) => {
+      R.bf.forEach((g, i) => { const u = g.userData, t = at * .35 + u.ph; g.position.set(Math.sin(t) * (1.3 + i * .2), 1.45 + Math.sin(t * 1.9) * .22 + i * .12, -.2 + Math.cos(t * .8) * .9); g.rotation.y = Math.cos(t) * .8; const f = .25 + .75 * Math.abs(Math.sin(at * 12 + u.ph)); u.w1.scale.x = f; u.w2.scale.x = f; });
       p = Math.max(0, Math.min(1, p));
       tmp.copy(c1).lerp(c2, p); sun.position.y = .75 + p * 1.1; halo.position.y = sun.position.y; sun.material.color.setHSL(.12 + p * .02, .9, .8 + p * .1);
       key.color.copy(tmp).lerp(new T.Color(0xffffff), .35); key.intensity = 1.2 + p * .6; key.position.y = 1.4 + p * 2.2;
