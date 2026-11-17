@@ -53,6 +53,33 @@ with cheers ("Super!", "Wow!"), and a soft screen pulse on each beat, in each th
 There is no fail state and no scoring of the child: the app cannot see the child's body (no camera),
 so the combo only counts beats of movement and always goes up. The end screen shows "N beats moved".
 
+## Guided breathing
+Every "breathe" movement shows a breathing orb with a seconds countdown and the child's arms follow
+the same timing: **breathe in 4 s, hold 2 s, let it out 4 s** in the warm-up (6 s out in the slow-down).
+The guide says "Breathe in.", "Hold.", "Now, slowly breathe out." at each stage; the first time, it
+first explains the pattern. The first seconds show "Get ready" so the explanation is finished before
+the first breath.
+
+## Surya Namaskar (6th adventure, 3D yoga)
+See docs/SURYA_NAMASKAR.md. Its own scene and character files are loaded only when it is played.
+
+## Real-time 3D (Forest only for now)
+Forest Level 1 now plays in real-time 3D using Three.js (MIT, `assets/vendor/three-mx.js`, licence in
+`assets/vendor/THREE-LICENSE.txt`, loaded only when you start Forest):
+- A 3D glowing mushroom forest: giant spotted mushrooms, glowing small ones, tree trunks, fireflies,
+  light shafts, a path that scrolls, props (log, glowing vine, orbs, stars) and bloom lighting.
+- An original 3D child and a fox buddy built from shapes (not a downloaded model). The child's joints
+  are driven by the same exercise poses as before, so every movement keeps its exact form.
+- The beat lane, pose panel, combo, voice, music and recording work unchanged on top of it.
+- Resolution adapts to the screen (up to 4K where the device can keep up; lowers on slower machines,
+  then drops the glow). Add `?mx3d=0` to the address to force the 2D version. If WebGL or the library
+  file fails, the 2D version plays automatically. The other four themes are still 2D.
+- AI video backdrop: put `bg.mp4` in `assets/move/forest/` with `"bgVideo": {"src": "bg.mp4"}` in
+  `manifest.json` (see `docs/MOVE_ASSETS.md`); the 3D forest then plays it behind the 3D scene.
+- The page security policy now also allows this site's own script file (`script-src 'self'`).
+- Not yet done: swapping in a downloaded rigged model (for example a Mixamo character), 3D versions of
+  the other four themes, a full real-time 15-minute run, and a real recording test of the WebGL view.
+
 ## Recording crop fix
 When recording with voice (screen share), the recorder finds the stage by flashing magenta corner
 squares and scanning the shared video for magenta. Glowing magenta/pink in the neon scene and HUD

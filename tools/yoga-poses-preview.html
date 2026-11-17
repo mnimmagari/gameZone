@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Surya Namaskar: Stage 3, all 12 poses</title>
+<style>
+body{margin:0;background:#f6e4d8;color:#5a3a30;font:15px/1.4 system-ui,sans-serif}
+h1{margin:12px 16px 2px;font-size:20px}p.s{margin:0 16px 8px;color:#8a6a5c;font-size:13px}
+#wrap{position:relative;width:min(1500px,100%);margin:0 auto}canvas{display:block;width:100%;height:auto;border-radius:14px}
+#labels{display:grid;grid-template-columns:repeat(3,1fr);text-align:center;font-weight:700;margin:4px 0 6px}
+#bar{display:flex;gap:6px;flex-wrap:wrap;margin:6px 16px 8px}button{border:2px solid #d9a58f;background:#fff7f1;color:#5a3a30;padding:6px 11px;border-radius:999px;font-weight:700;cursor:pointer;font-size:13px}button.on{background:#e9a98f;color:#fff}
+#now{margin:0 16px 8px;font-size:18px;font-weight:800}#now small{font-weight:600;color:#8a6a5c;font-size:14px}
+table{border-collapse:collapse;margin:4px 16px 8px;font-size:12px;background:#fff9f4}td,th{border:1px solid #e3c1b0;padding:3px 7px;text-align:center}th{background:#f3d3c2}.ok{color:#2c7a4b;font-weight:700}.bad{color:#b02a2a;font-weight:700}.na{color:#9a8a80}
+h3{margin:12px 16px 0;font-size:15px}.note{margin:0 16px 6px;font-size:12px;color:#8a6a5c}
+</style></head><body>
+<h1>Surya Namaskar child: Stage 3, all 12 poses (human proportions)</h1>
+<p class="s">Front, side and three-quarter views. Feet and hands are solved to exact contact points; the tables are measured from the rig.</p>
+<div id="wrap"><canvas id="c" width="1500" height="640"></canvas><div id="labels"><span>FRONT</span><span>SIDE</span><span>THREE-QUARTER</span></div></div>
+<div id="now"></div>
+<div id="bar"></div>
+<h3>Pose check</h3><div id="t1"></div>
+<h3>Transition check (every frame between consecutive poses)</h3><div id="t2"></div>
+<script src="../assets/vendor/three-mx.js"></script>
+<script src="../assets/move/yoga/yoga-kid.js"></script>
+<script src="../assets/move/yoga/yoga-poses.js"></script>
+<script>
+const T=MXTHREE.THREE,W=1500,H=640,c=document.getElementById('c'),P=MXYogaPoses;
+const r=new T.WebGLRenderer({canvas:c,antialias:true});r.setPixelRatio(1);r.setSize(W,H,false);r.outputColorSpace=T.SRGBColorSpace;r.toneMapping=T.ACESFilmicToneMapping;r.shadowMap.enabled=true;r.shadowMap.type=T.PCFSoftShadowMap;
+const sc=new T.Scene();sc.background=new T.Color(0xf4dccb);sc.fog=new T.Fog(0xf4dccb,7,16);
+sc.add(new T.HemisphereLight(0xfff1e4,0xe9b9a3,1.15));
+const sun=new T.DirectionalLight(0xffe2c0,2.2);sun.position.set(-2.2,3.2,2.6);sun.castShadow=true;sun.shadow.mapSize.set(2048,2048);Object.assign(sun.shadow.camera,{left:-2.2,right:2.2,top:2.2,bottom:-1.2,near:.5,far:12});sun.shadow.bias=-.0005;sc.add(sun);
+const fill=new T.DirectionalLight(0xffd0d8,.8);fill.position.set(3,1.5,2);sc.add(fill);
+const floor=new T.Mesh(new T.PlaneGeometry(30,30),new T.MeshStandardMaterial({color:0xf0cdb9,roughness:1}));floor.rotation.x=-Math.PI/2;floor.receiveShadow=true;sc.add(floor);
+const MAT=.025,mat=new T.Mesh(new T.BoxGeometry(.7,MAT,1.6),new T.MeshStandardMaterial({color:0xe9b8a0,roughness:.85}));mat.position.set(0,MAT/2,-.05);mat.receiveShadow=true;sc.add(mat);
+const K=MXYoga.build(T,{eyes:'open'});K.floorY=MAT;sc.add(K.root);
+const cams=[[0,.85,4.1],[4.1,.85,0],[2.9,1.05,2.9]].map(a=>{const cam=new T.PerspectiveCamera(27,1500/3/H,.1,40);cam.position.set(a[0],a[1],a[2]);cam.lookAt(0,.6,0);return cam});
+const POSES=P.make(K.dim);
+/* what must touch the mat in each pose */
+const FLAT={feet:['flat','flat'],hands:false},FOLD={feet:['flat','flat'],hands:true};
+const EXP={1:FLAT,2:FLAT,3:FOLD,4:{feet:['flat','toes'],hands:true,kneeR:.055},5:{feet:['flat','flat'],hands:true},6:{feet:['toes','toes'],hands:true,knees:true},7:{feet:['top','top'],hands:true,pelvisMax:.16},8:{feet:['flat','flat'],hands:true},9:{feet:['toes','flat'],hands:true,kneeL:.055},10:FOLD,11:FLAT,12:FLAT};
+let mode='pose',idx=0,playT=0,last=performance.now(),t0=last,shown=-1;
+const HOLD=1.5,TRANS=1.3,CYC=HOLD+TRANS;
+function frame(){requestAnimationFrame(frame);const now=performance.now(),dt=(now-last)/1000;last=now;const t=(now-t0)/1000;let S,label;
+ if(mode==='pose'){S=POSES[idx].spec;label=idx}else{playT+=dt;const k=Math.floor(playT/CYC)%POSES.length,ph=playT%CYC,A=POSES[k],B=POSES[(k+1)%POSES.length];S=ph<HOLD?A.spec:P.blend(A.spec,B.spec,(ph-HOLD)/TRANS);label=ph<HOLD+TRANS/2?k:(k+1)%POSES.length}
+ P.solve(T,K,S,0);K.idle(t);setNow(label);
+ r.setScissorTest(true);for(let i=0;i<3;i++){const x=i*(W/3);r.setViewport(x,0,W/3,H);r.setScissor(x,0,W/3,H);r.render(sc,cams[i])}}
+function setNow(i){if(i===shown)return;shown=i;const p=POSES[i];document.getElementById('now').innerHTML=p.id+'. '+p.name+' <small>('+p.sub+') · '+p.breath+'</small>';document.querySelectorAll('#bar button[data-p]').forEach(b=>b.classList.toggle('on',mode==='pose'&&+b.dataset.p===i))}
+const bar=document.getElementById('bar');
+POSES.forEach((p,i)=>{const b=document.createElement('button');b.dataset.p=i;b.textContent=p.id+' '+p.name;b.onclick=()=>{mode='pose';idx=i;shown=-1;document.getElementById('play').classList.remove('on')};bar.appendChild(b)});
+const pb=document.createElement('button');pb.id='play';pb.textContent='Play 1 to 12';pb.onclick=e=>{mode=mode==='play'?'pose':'play';playT=0;shown=-1;e.target.classList.toggle('on',mode==='play')};bar.appendChild(pb);
+/* ---------- validation ---------- */
+const cm=v=>(v*100).toFixed(1),cell=(txt,ok)=>'<td class="'+(ok===undefined?'na':ok?'ok':'bad')+'">'+txt+'</td>';
+const planted=v=>v>=-.015&&v<=.03;
+window.RESULTS={poses:[],transitions:[]};
+let h1='<table><tr><th>Pose</th><th>Left foot</th><th>Right foot</th><th>Left hand</th><th>Right hand</th><th>Knee (cm)</th><th>Whole body lowest (cm)</th><th>Reach error max (cm)</th><th>Result</th></tr>';
+let passAll=true;
+for(const p of POSES){P.solve(T,K,p.spec,0);const m=P.measure(T,K,p.spec),e=EXP[p.id];
+ const fOk=[planted(m.footL),planted(m.footR)],hOk=e.hands?[planted(m.handL),planted(m.handR)]:[true,true];
+ let kneeTxt='',kneeOk=true;if(e.kneeR!==undefined){kneeTxt='R '+cm(m.kneeR.y);kneeOk=m.kneeR.y<=e.kneeR}else if(e.kneeL!==undefined){kneeTxt='L '+cm(m.kneeL.y);kneeOk=m.kneeL.y<=e.kneeL}else if(e.knees){kneeTxt=cm(m.kneeL.y)+' / '+cm(m.kneeR.y);kneeOk=m.kneeL.y<=.07&&m.kneeR.y<=.07}
+ const pelOk=e.pelvisMax?m.pelvisY<=e.pelvisMax:true,bodyOk=m.bodyMin>=-.02;
+ const reach=Math.max(m.ankleErrL,m.ankleErrR,m.wristErrL,m.wristErrR),reachOk=reach<.025;
+ const ok=fOk[0]&&fOk[1]&&hOk[0]&&hOk[1]&&kneeOk&&pelOk&&bodyOk&&reachOk;if(!ok)passAll=false;
+ RESULTS.poses.push({id:p.id,ok,footL:+cm(m.footL),footR:+cm(m.footR),handL:+cm(m.handL),handR:+cm(m.handR),knee:kneeTxt,body:+cm(m.bodyMin),reach:+cm(reach),pelvis:+cm(m.pelvisY)});
+ h1+='<tr><td>'+p.id+'. '+p.name+'</td>'+cell(cm(m.footL),fOk[0])+cell(cm(m.footR),fOk[1])+(e.hands?cell(cm(m.handL),hOk[0])+cell(cm(m.handR),hOk[1]):'<td class="na">free</td><td class="na">free</td>')+(kneeTxt?cell(kneeTxt,kneeOk):'<td class="na">-</td>')+cell(cm(m.bodyMin),bodyOk)+cell(cm(reach),reachOk)+cell(ok?'PASS':'CHECK',ok)+'</tr>';}
+h1+='</table><div class="note">Feet and hands that must touch the mat read 0 to 3 cm (negative = sunk in). Whole body lowest must not go below -2 cm. Reach error is how far a solved foot or hand ended from its target (over 2.5 cm = out of reach). '+(passAll?'<b class="ok">All 12 poses pass.</b>':'<b class="bad">Some poses need attention.</b>')+'</div>';
+document.getElementById('t1').innerHTML=h1;
+let h2='<table><tr><th>Transition</th><th>Frames</th><th>Body lowest (cm)</th><th>Foot lowest (cm)</th><th>Hand lowest (cm)</th><th>Planted foot/hand drift (cm)</th><th>Result</th></tr>';let tAll=true;
+for(let k=0;k<POSES.length-1;k++){const A=POSES[k],B=POSES[k+1];let wb=0,wf=0,wh=0,drift=0,n=0;
+ for(let u=0;u<=1.0001;u+=.02){const S=P.blend(A.spec,B.spec,u);P.solve(T,K,S,0);const m=P.measure(T,K,S);n++;wb=Math.min(wb,m.bodyMin);wf=Math.min(wf,m.footL,m.footR);wh=Math.min(wh,m.handL,m.handR);
+  for(const [kf,e] of [['fL',m.ankleErrL],['fR',m.ankleErrR],['hL',m.wristErrL],['hR',m.wristErrR]]){const a=A.spec[kf],b=B.spec[kf],same=Math.hypot(a.x-b.x,a.y-b.y,a.z-b.z)<.005;if(same)drift=Math.max(drift,e)}}
+ const ok=wb>=-.025&&wf>=-.02&&wh>=-.02&&drift<.03;if(!ok)tAll=false;
+ RESULTS.transitions.push({pair:A.id+'-'+B.id,ok,body:+cm(wb),foot:+cm(wf),hand:+cm(wh),drift:+cm(drift)});
+ h2+='<tr><td>'+A.id+' to '+B.id+'</td><td>'+n+'</td>'+cell(cm(wb),wb>=-.025)+cell(cm(wf),wf>=-.02)+cell(cm(wh),wh>=-.02)+cell(cm(drift),drift<.03)+cell(ok?'PASS':'CHECK',ok)+'</tr>';}
+h2+='</table><div class="note">'+(tAll?'<b class="ok">All 11 transitions pass.</b>':'<b class="bad">Some transitions need attention.</b>')+' A foot that has to travel is lifted over its path, so it does not drag along the mat.</div>';
+document.getElementById('t2').innerHTML=h2;
+frame();
+</script></body></html>
