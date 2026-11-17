@@ -41,20 +41,21 @@
         elbowPoleL: [.6, 0, -1], elbowPoleR: [-.6, 0, -1]
       }),
       mk(4, 'ashwa-sanchalanasana', 'Ashwa Sanchalanasana', 'Equestrian (lunge) pose: right leg back', 'Breathe in', {
-        pelvis: { y: .24, z: -.03, pitch: 0 }, spine: { pitch: 1.0 }, head: { pitch: -.85 },
-        fL: { x: .085, y: A, z: .36, pitch: 0 }, fR: { x: -.085, y: .177, z: -.46, pitch: 1.6 },
-        hL: { x: .2, y: .035, z: .3, dx: 0, dy: 0, dz: 1, px: 0, py: -1, pz: 0, curl: 0 },
-        hR: { x: -.2, y: .035, z: .3, dx: 0, dy: 0, dz: 1, px: 0, py: -1, pz: 0, curl: 0 },
+        pelvis: { y: .25, z: -.03, pitch: 0 }, spine: { pitch: .9 }, head: { pitch: -.7 },
+        fL: { x: .085, y: A, z: .36, pitch: 0 }, fR: { x: -.085, y: .165, z: -.46, pitch: 1.6 },
+        hL: { x: .2, y: .035, z: .28, dx: 0, dy: 0, dz: 1, px: 0, py: -1, pz: 0, curl: 0 },
+        hR: { x: -.2, y: .035, z: .28, dx: 0, dy: 0, dz: 1, px: 0, py: -1, pz: 0, curl: 0 },
         kneePoleL: [0, .5, 1], kneePoleR: [0, -1, 0], elbowPoleL: [.5, 0, -1], elbowPoleR: [-.5, 0, -1]
       })
     ];
     const cl = (p, id, name, sub, breath) => ({ id, key: p.key, name, sub, breath, spec: JSON.parse(JSON.stringify(p.spec)) });
     const hand = (x, z, extra) => Object.assign({ x, y: .035, z, dx: 0, dy: 0, dz: 1, px: 0, py: -1, pz: 0, curl: 0 }, extra || {});
     P.push(
-      mk(5, 'parvatasana', 'Parvatasana', 'Mountain pose (downward dog)', 'Breathe out', {
-        pelvis: { y: .55, z: -.1, pitch: 1.2 }, spine: { pitch: 1.15 }, head: { pitch: .25 },
-        fL: { x: .07, y: .113, z: -.3, pitch: .35 }, fR: { x: -.07, y: .113, z: -.3, pitch: .35 },
-        hL: hand(.12, .4), hR: hand(-.12, .4), elbowPoleL: [.3, 0, -1], elbowPoleR: [-.3, 0, -1]
+      mk(5, 'dandasana', 'Dandasana', 'Plank pose: a long straight line from head to heels', 'Hold your breath', {
+        pelvis: { y: .31, z: .11, pitch: 1.15 }, spine: { pitch: 0 }, head: { pitch: -.35 },
+        fL: { x: .07, y: .175, z: -.39, pitch: 1.45 }, fR: { x: -.07, y: .175, z: -.39, pitch: 1.45 },
+        hL: hand(.13, .4), hR: hand(-.13, .4),
+        kneePoleL: [0, 1, 0], kneePoleR: [0, 1, 0], elbowPoleL: [.3, 0, -1], elbowPoleR: [-.3, 0, -1]
       }),
       mk(6, 'ashtanga-namaskara', 'Ashtanga Namaskara', 'Eight-limbed pose: knees, chest and chin down', 'Breathe out and hold', {
         pelvis: { y: .32, z: -.28, pitch: 1.2 }, spine: { pitch: .7 }, head: { pitch: -1.0 },
@@ -70,9 +71,13 @@
         kneePoleL: [0, -1, 0], kneePoleR: [0, -1, 0], elbowPoleL: [.5, .5, -1], elbowPoleR: [-.5, .5, -1]
       })
     );
-    P.push(cl(P[4], 8, 'Parvatasana', 'Mountain pose (downward dog)', 'Breathe out'));
+    P.push(mk(8, 'parvatasana', 'Parvatasana', 'Mountain pose (downward dog)', 'Breathe out', {
+        pelvis: { y: .55, z: -.1, pitch: 1.2 }, spine: { pitch: 1.15 }, head: { pitch: .25 },
+        fL: { x: .07, y: .113, z: -.3, pitch: .35 }, fR: { x: -.07, y: .113, z: -.3, pitch: .35 },
+        hL: hand(.12, .4), hR: hand(-.12, .4), elbowPoleL: [.3, 0, -1], elbowPoleR: [-.3, 0, -1]
+      }));
     const p9 = cl(P[3], 9, 'Ashwa Sanchalanasana', 'Equestrian pose: left leg back', 'Breathe in');
-    p9.spec.fR = { x: -.085, y: A, z: .36, pitch: 0 }; p9.spec.fL = { x: .085, y: .177, z: -.46, pitch: 1.6 };
+    p9.spec.fR = { x: -.085, y: A, z: .36, pitch: 0 }; p9.spec.fL = { x: .085, y: .165, z: -.46, pitch: 1.6 };
     p9.spec.kneePoleR = [0, .5, 1]; p9.spec.kneePoleL = [0, -1, 0];
     P.push(p9, cl(P[2], 10, 'Hastapadasana', 'Standing forward bend', 'Breathe out'), cl(P[1], 11, 'Hasta Uttanasana', 'Raised arms pose', 'Breathe in'), cl(P[0], 12, 'Pranamasana', 'Prayer pose', 'Breathe out'));
     return P;

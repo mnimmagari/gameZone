@@ -134,6 +134,7 @@
     K.idle = function (t) {
       const b = Math.sin(t * 1.8); K.chest.scale.set(1.08 * (1 + .01 * b), 1 + .014 * b, .8 * (1 + .01 * b));
       pony.forEach((p, i) => { p.rotation.z = Math.sin(t * 1.6 - i * .5) * .07 * (i + 1) * .5; });
+      K.head.rotation.z += Math.sin(t * .55) * .025; K.head.rotation.y += Math.sin(t * .37) * .035;
       const bl = (t % 4.5) < .12 ? .15 : 1; if (eyeOpen[0].visible) for (const e of eyeOpen) e.scale.y = bl;
     };
     return K;

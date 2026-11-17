@@ -20,8 +20,8 @@ Four stages, each approved before the next starts.
 - All pages need the local server (`python -m http.server`) to load their files.
 
 ## The 12 poses (traditional order)
-1 Pranamasana (prayer) · 2 Hasta Uttanasana (raised arms) · 3 Hastapadasana (forward bend) · 4 Ashwa Sanchalanasana (lunge, right leg back, back knee on the mat) · 5 Parvatasana (mountain / downward dog) · 6 Ashtanga Namaskara (eight-limbed) · 7 Bhujangasana (cobra) · 8 Parvatasana · 9 Ashwa Sanchalanasana (lunge, left leg back) · 10 Hastapadasana · 11 Hasta Uttanasana · 12 Pranamasana.
-Breath: out, in, out, in, out, out (hold), in, out, in, out, in, out.
+1 Pranamasana (prayer) · 2 Hasta Uttanasana (raised arms) · 3 Hastapadasana (forward bend) · 4 Ashwa Sanchalanasana (lunge, one leg back) · 5 Dandasana (plank) · 6 Ashtanga Namaskara (eight-limbed) · 7 Bhujangasana (cobra) · 8 Parvatasana (mountain / downward dog) · 9 Ashwa Sanchalanasana (lunge, other leg back) · 10 Hastapadasana · 11 Hasta Uttanasana · 12 Pranamasana.
+Breath: out, in, out, in, hold (plank), out and hold (eight-limbed), in, out, in, out, in, out. The plank version of the sequence is used (Dandasana at 5, Parvatasana at 8).
 
 ## Measured checks (what "pass" means)
 Feet and hands that must touch the mat read 0 to 3 cm from it; nothing sinks more than 2 cm into the mat; every solved foot and hand lands within 2.5 cm of its target; the back knee in the lunges is within 5.5 cm of the mat; in transitions a planted foot or hand drifts less than 3 cm.
@@ -60,3 +60,11 @@ Open `index.html?mxdebug&mxspeed=30` to run at 30x; `MXDEBUG.validate()` lists t
 
 ## Joint limits and transition paths
 The pose solver keeps every joint inside human range, in the poses and in every blended frame between them: wrist about 75 degrees forward, 80 back and 28 sideways; elbow and knee fold no further than about 150 degrees; ankle about 25 degrees up and 75 down. Kneeling feet use the toes-tucked angle; the cobra uses flat feet with straight legs and knees down. Hands that travel far (arms up to the floor, hands to the chest) swing on an arc around the shoulder instead of cutting through the head or body. `tools/yoga-transitions-sheet.html` shows the frames inside the main transitions. The audit (all 12 poses, all transitions, and the get-ready actions, every frame) reports no joint outside these limits.
+
+## Calm exercise screen, three modes, sound (latest)
+- **Screen:** during the exercise only a small chip ("Round 2 of 6 · pose 5 of 12"), the pose name with one short line, and a thin progress line are drawn on the stage. Pause, Stop and the Voice and Music volume sliders sit below the stage, so they are not in recordings. No butterflies, rainbow, dust, confetti, candy panels or side panels.
+- **Camera:** front view for prayer and raised arms, three-quarter for the forward bends, side view for lunge, plank, eight-limbed, cobra and mountain. The camera lowers for floor poses so the whole child stays in frame. Rendering is capped at 1920 px wide for this level.
+- **Modes** (chosen on the menu under the Surya Namaskar card): **Learn** (3 slower rounds, every pose explained), **Follow** (6 rounds, key cues only after round 1), **Practice** (6 rounds, round announcements and breaks only). All modes keep 5 + 7 + 3 minutes.
+- **Voice:** cues are sparse; the lunge foot is also written on screen. Volume sliders for voice and music are independent and remembered. Chimes are one soft tone.
+- **Poses:** pose 5 is now the plank (Dandasana). The lunge is more upright with the back leg straight and the knee lifted a few centimetres.
+- **Not done yet (optional):** replay a single pose and a demonstration speed control; recorded child-voice clips.

@@ -1353,6 +1353,25 @@ body.mx-active #quizPage .quiz-exit-row,body.mx-active #quizPage #quizControls{d
 .mx-yw2 i.on{filter:drop-shadow(0 0 8px #ffb800)}
 .mx-yw2 button{background:linear-gradient(135deg,#ff6fa0,#ffb04a);box-shadow:0 3px 0 rgba(150,50,80,.3)}
 .mx-yw2 button#mxYVoiceBtn{background:linear-gradient(135deg,#7a8cff,#58c4a8)}
+.mx-yoga .mx-phase,.mx-yoga .mx-ring,.mx-yoga .mx-banner{display:none!important}
+.mx-yoga .mx-chip{background:rgba(255,248,242,.9);border:0;color:#6a4a3a;font-size:15px;font-weight:700;padding:5px 14px;box-shadow:none}
+.mx-yoga .mx-instr{background:rgba(255,248,242,.92);color:#5a3a30;border-radius:18px;box-shadow:none;padding:8px 26px 9px;min-width:300px;max-width:640px}
+.mx-yoga .mx-it{color:#5a3a30;font-size:26px;font-weight:700;text-shadow:none}
+.mx-yoga .mx-easy{color:#7a5a4c;font-size:15px;opacity:1;text-shadow:none;margin-top:2px}
+.mx-yoga .mx-bar{height:4px;bottom:8px;opacity:.7}
+.mx-yoga .mx-cd b{font-size:90px}
+.mx-yoga .mx-medal{animation:none}
+.mx-ys{background:#fff8f2!important;border:0;box-shadow:0 8px 24px rgba(90,58,48,.18)!important}
+.mx-ys h2{background:none;-webkit-background-clip:initial;background-clip:initial;color:#5a3a30;font-size:38px!important}
+.mx-ys p{color:#7a5a4c}.mx-sunb{animation:none}
+.mx-ys .mx-chips span{background:#f6e4d8;border:0;color:#6a4a3a}
+.mx-yw2{background:rgba(255,248,242,.92);border:0;box-shadow:0 4px 14px rgba(90,58,48,.18)}
+.mx-yw2 i.on{filter:none}
+.mx-yw2 button,.mx-yw2 button#mxYVoiceBtn{background:#e5805f;box-shadow:none}
+.mx-modes{display:flex;flex-wrap:wrap;gap:10px;align-items:stretch;justify-content:center;margin:12px 0}.mx-modes[hidden]{display:none}
+.mx-modes>span{align-self:center;font-weight:800;color:#6a4a3a}
+.mx-mode{font:inherit;border:2px solid #e8c9b8;background:#fff;color:#5a3a30;border-radius:14px;padding:8px 16px;cursor:pointer;text-align:center}.mx-mode b{display:block;font-size:16px}.mx-mode small{display:block;font-size:12px;color:#8a6a5c}.mx-mode.on{border-color:#e5805f;background:#fff0e8}
+.mx-vols{display:flex;gap:18px;justify-content:center;margin:6px 0;font-size:13px;font-weight:700;color:#5b6479}.mx-vols input{vertical-align:middle;width:110px}
 .mx-over.yprep{background:none;align-items:flex-end}
 .mx-yw2{display:flex;gap:12px;align-items:center;background:rgba(255,246,238,.92);padding:8px 18px;border-radius:999px;margin-bottom:22px;box-shadow:0 5px 0 rgba(160,100,80,.25)}
 .mx-yw2 i{font-style:normal;font-size:26px;opacity:.45;transition:transform .2s}.mx-yw2 i.on{opacity:1;transform:scale(1.35)}.mx-yw2 i.ok{opacity:.9}
@@ -1553,7 +1572,7 @@ function say(text,force=false,onDone=null,hooks=null){
   speechSynthesis.cancel();
   const gv=(hooks&&hooks.voice)||girlVoice(),kid=/ana|child|kid/i.test(gv?gv.name:''),base=(hooks&&hooks.pitch)||(1.2+ageVoice().dp*.2),parts=(String(text).match(/[^.!?]+[.!?]*/g)||[String(text)]).map(p=>p.trim()).filter(Boolean);
   let called=false;const done=()=>{if(!called){called=true;finish()}};
-  parts.forEach((t,k)=>{const u=new SpeechSynthesisUtterance(t);u.volume=1;if(gv){u.voice=gv;u.lang=gv.lang}else u.lang='en-IN';
+  parts.forEach((t,k)=>{const u=new SpeechSynthesisUtterance(t);u.volume=(hooks&&hooks.vol!=null)?hooks.vol:1;if(gv){u.voice=gv;u.lang=gv.lang}else u.lang='en-IN';
    /* cartoon style: squeaky pitch, bouncy rate, extra sparkle on exclamations, curious lift on questions */
    const ex=/!\s*$/.test(t),q=/\?\s*$/.test(t);u.pitch=Math.max(.9,Math.min(base>1.4?2:1.4,base+(ex?.05:0)+(q?.04:0)));u.rate=(hooks&&hooks.rate)?hooks.rate+(ex?.02:0):Math.max(.8,Math.min(1.05,.97+ageVoice().dr*.5+(ex?.03:0)-(t.length>60?.04:0)));if(hooks){if(k===0&&hooks.onStart)u.onstart=hooks.onStart;if(hooks.onWord)u.onboundary=ev=>{if(ev.name==='word'||ev.name===undefined)hooks.onWord()}}
    if(k===parts.length-1){u.onend=done;u.onerror=done}speechSynthesis.speak(u)});
@@ -2511,7 +2530,8 @@ stageScale();
 function vidBanner(){const p=$('quizPanel');if(!p.querySelector('.deco')){[['d1','1f4da'],['d3','270f'],['d2','1f30d']].forEach(([c,u])=>{});}let t=p.querySelector('.lvl-tag');if(!t){t=document.createElement('span');t.className='lvl-tag';p.appendChild(t)}t.textContent='';t.style.display='none';placeLvl()}
 function placeLvl(){const c=$('questionCount'),t=$('quizPanel').querySelector('.lvl-tag');if(c&&t)t.style.left=(c.offsetLeft+c.offsetWidth+8)+'px'}
 function confetti(){const p=$('quizPanel');if(!p)return;const cols=['#f4a6c0','#ffd98a','#9adbc9','#9fb4f0','#f7b98a','#a8e3b9'];for(let i=0;i<46;i++){const c=document.createElement('i');c.className='confetti-bit';c.style.left=rand(100)+'%';c.style.background=pick(cols);c.style.setProperty('--dx',(rand(160)-80)+'px');c.style.setProperty('--rot',(rand(720)-360)+'deg');c.style.animationDuration=(1.4+Math.random()*1.4)+'s';c.style.animationDelay=(Math.random()*.3)+'s';p.appendChild(c);setTimeout(()=>c.remove(),3500)}}
-function duck(on){try{if(musicGain)musicGain.gain.value=on?.012:.05}catch(e){}}
+let mxVolM=1,mxVoiceVol=1;
+function duck(on){try{if(musicGain)musicGain.gain.value=(on?.012:.05)*mxVolM}catch(e){}}
 let musicOn=true,musicCtx=null,musicGain=null,musicTimer=0,musicStep=0;
 /* ---- Background music library ----
    25 gentle, slow tunes generated with Web Audio (no audio files). Each track has a fixed key, scale,
@@ -2690,44 +2710,47 @@ const MXY_P=[
  {n:'Prayer pose',s:'Pranamasana',b:'out',e:'Just stand tall with your hands together.',teach:'Pose one, Prayer pose. Stand tall with your feet together and press your palms together at your heart. Breathe out.',full:'Prayer pose. Palms together at your heart. Breathe out.',short:'Prayer pose. Breathe out.'},
  {n:'Raised arms pose',s:'Hasta Uttanasana',b:'in',e:'Keep your arms in front if your shoulders feel tight.',teach:'Pose two, Raised arms pose. Breathe in, lift your arms high beside your ears, and lean back just a little.',full:'Arms up high. Lean back a little. Breathe in.',short:'Arms up. Breathe in.'},
  {n:'Forward bend',s:'Hastapadasana',b:'out',e:'Bend your knees as much as you like.',teach:'Pose three, Forward bend. Breathe out, fold forward from your hips and bring your hands to the mat. Bend your knees if you need to.',full:'Fold forward. Hands to the mat. Breathe out.',short:'Fold down. Breathe out.'},
- {n:'Horse pose',s:'Ashwa Sanchalanasana',b:'in',e:'Rest your hands on the mat and keep your back knee down.',teach:'Pose four, Horse pose. Breathe in. Step your {f} foot forward between your hands, rest your {b} knee on the mat, and look up. Each round, we swap which foot goes first!',full:'{F} foot forward, {b} knee down. Look up. Breathe in.',short:'{F} foot forward. Breathe in.'},
- {n:'Mountain pose',s:'Parvatasana',b:'out',e:'Keep your knees bent and your hips high.',teach:'Pose five, Mountain pose. Breathe out, step your front foot back, and lift your hips up high, like a mountain.',full:'Hips up high, like a mountain. Breathe out.',short:'Mountain pose. Breathe out.'},
+ {n:'Horse pose',s:'Ashwa Sanchalanasana',b:'in',e:'Rest your back knee on the mat if it feels wobbly.',teach:'Pose four, Horse pose. Breathe in. Step your {f} foot forward between your hands, stretch your {b} leg back, and look up. Each round, we swap which foot goes first!',full:'{F} foot forward, {b} leg back. Look up. Breathe in.',short:'{F} foot forward. Breathe in.'},
+ {n:'Plank pose',s:'Dandasana',b:'hold',e:'Rest your knees on the mat if it feels hard.',teach:'Pose five, Plank pose. Step your front foot back to meet the other, and make one long, straight line from your head to your heels. Hold your breath for a moment.',full:'Step back. One straight line, head to heels. Hold your breath.',short:'Plank. Hold your breath.'},
  {n:'Eight-limbed pose',s:'Ashtanga Namaskara',b:'hold',e:'You can lie down gently on your tummy.',teach:'Pose six, Eight-limbed pose. Breathe out and hold. Lower your knees, your chest and your chin to the mat, with your hips up.',full:'Knees, chest and chin down. Breathe out and hold.',short:'Knees, chest, chin. Hold.'},
  {n:'Cobra pose',s:'Bhujangasana',b:'in',e:'Keep your elbows bent and lift only a little.',teach:'Pose seven, Cobra pose. Breathe in, slide forward, and lift your chest like a friendly snake. Keep your hips low.',full:'Slide forward. Lift your chest like a cobra. Breathe in.',short:'Cobra pose. Breathe in.'},
  {n:'Mountain pose',s:'Parvatasana',b:'out',e:'Keep your knees bent and your hips high.',teach:'Pose eight, Mountain pose again. Breathe out and push your hips back up high.',full:'Hips up high again. Breathe out.',short:'Mountain pose. Breathe out.'},
- {n:'Horse pose',s:'Ashwa Sanchalanasana',b:'in',e:'Rest your hands on the mat and keep your back knee down.',teach:'Pose nine, Horse pose on the other side. Breathe in. Step your {f} foot forward between your hands, and look up.',full:'{F} foot forward, {b} knee down. Look up. Breathe in.',short:'{F} foot forward. Breathe in.'},
+ {n:'Horse pose',s:'Ashwa Sanchalanasana',b:'in',e:'Rest your back knee on the mat if it feels wobbly.',teach:'Pose nine, Horse pose on the other side. Breathe in. Step your {f} foot forward between your hands, and look up.',full:'{F} foot forward, {b} leg back. Look up. Breathe in.',short:'{F} foot forward. Breathe in.'},
  {n:'Forward bend',s:'Hastapadasana',b:'out',e:'Bend your knees as much as you like.',teach:'Pose ten, Forward bend. Breathe out, bring both feet together, and fold forward.',full:'Feet together. Fold forward. Breathe out.',short:'Fold down. Breathe out.'},
  {n:'Raised arms pose',s:'Hasta Uttanasana',b:'in',e:'Keep your arms in front if your shoulders feel tight.',teach:'Pose eleven, Raised arms pose. Breathe in, rise up slowly, and reach high.',full:'Rise up. Arms high. Breathe in.',short:'Arms up. Breathe in.'},
  {n:'Prayer pose',s:'Pranamasana',b:'out',e:'Just stand tall with your hands together.',teach:'Pose twelve, Prayer pose. Breathe out and bring your hands back to your heart. That is one round! Well done.',full:'Hands to your heart. Breathe out.',short:'Prayer pose. Breathe out.'}];
 const MXY_EM=['🙏','🌞','🧸','🐴','⛰️','🐛','🐍','⛰️','🐴','🧸','🌞','🙏'];MXY_P.forEach((p,i)=>{p.m=MXY_EM[i]});
+let mxYMode='follow';
 const mxYLead=r=>r%2?'left':'right';
 function mxYCue(i,r,mode){const p=MXY_P[i],lead=mxYLead(r),oth=lead==='left'?'right':'left',f=i===3?lead:i===8?oth:'',b=f==='left'?'right':'left';return p[mode].replace('{F}',f.charAt(0).toUpperCase()+f.slice(1)).replace('{f}',f).replace('{b}',b)}
-function mxYBuild(){
- const ST=(m,d,t,x)=>[m,d,t,'',x||{}],warm=[],main=[],cool=[];
- /* warm-up: 24 + 36 + 12x14 + 24 + 48 = 300 s */
- warm.push(ST('ystill',24,'Stand tall at the front of your mat',{pose:12,say:'First we learn the twelve sun poses, slowly. Stand tall at the front of your mat. Put your feet together, relax your shoulders, and let your arms hang down. Look straight ahead.',easy:'Your feet can be a little apart.'}));
- warm.push(ST('breathe',36,'Three slow breaths',{bp:[12,1],br:[4,2,4],lead:9,say:'Let us breathe together. Breathe in for four, hold for two, and breathe out for four. Raise your arms as you breathe in.',easy:'Arms are optional. Just breathe slowly.',cues:[{t:30,text:'Lovely breathing!'}]}));
- for(let i=0;i<12;i++)warm.push(ST('ypose',14,MXY_EM[i]+' Pose '+(i+1)+': '+MXY_P[i].n,{pose:i,tr:2.2,round:0,say:mxYCue(i,1,'teach'),easy:MXY_P[i].e}));
- warm.push(ST('ypose',24,'Practise slowly',{seq:[0,1,2,1,0],tr:1.8,say:'Now let us practise slowly, breathing with each move.',easy:'Take your time. Skip anything that does not feel good.',cues:[{t:5,text:'Arms up. Breathe in.'},{t:9.8,text:'Fold down. Breathe out.'},{t:14.6,text:'Arms up. Breathe in.'},{t:19.4,text:'Hands to your heart. Breathe out.'}]}));
- warm.push(ST('breathe',48,'Breathe with the sun',{bp:[0,1],br:[4,2,4],lead:10,say:'Now breathe with your arms. Arms up as you breathe in. Hands to your heart as you breathe out.',easy:'Arms are optional. Just breathe slowly.',cues:[{t:41,text:'Beautiful! Now we begin the six sun salutations.'}]}));
- /* main: 2 rounds + water break + 2 rounds + rest break + 2 rounds = 420 s. The leading foot alternates: L R L R L R */
- const RN=['one','two','three','four','five','six'],ann=r=>r===6?'Last round! Right foot first. Breathe out.':'Round '+RN[r-1]+'. '+(r%2?'Left foot first':'Now the right foot goes first')+'. Breathe out.';
- const round=r=>{const cues=[{t:.1,text:ann(r)}];for(let i=1;i<12;i++)cues.push({t:i*5+.2,text:mxYCue(i,r,r<=2?'full':'short')});
-  main.push(ST('ypose',60,'Round '+r+' of 6 · '+(mxYLead(r)==='left'?'left':'right')+' foot goes first',{round:r,seq:[0,1,2,3,4,5,6,7,8,9,10,11],ps:5,tr:1.6,say:'',easy:'',cues}))};
- round(1);round(2);
- main.push(ST('ystill',30,'Water break',{pose:12,water:1,say:'Round two is done. Great job! Water break. Take a little sip of water, and shake out your hands and feet. Take longer if you need it. You can press pause.',easy:'Rest as long as you like.',cues:[{t:21,text:'Round three is next. Come back and stand tall at the front of your mat.'}]}));
- round(3);round(4);
- main.push(ST('breathe',30,'Rest and breathe',{pose:12,water:1,br:[4,2,6],lead:12,say:'Round four is done. Wonderful! Let us rest. Stand tall, relax your shoulders, and have a sip of water if you are thirsty.',easy:'Rest as long as you like.',cues:[{t:25,text:'Two more rounds. In round five, the left foot goes first.'}]}));
- round(5);round(6);
+function mxYBuild(mode){
+ mode=mode||'follow';
+ const ST=(m,d,t,x)=>[m,d,t,'',x||{}],warm=[],main=[],cool=[],quiet=mode==='practice',learn=mode==='learn',N=learn?3:6,q=quiet;
+ /* warm-up: 24 + 36 + 12x14 + 24 + 48 = 300 s (the same in every mode) */
+ warm.push(ST('ystill',24,'Stand tall at the front of your mat',{pose:12,say:quiet?'Stand tall at the front of your mat. Feet together, arms relaxed.':'First we learn the twelve sun poses, slowly. Stand tall at the front of your mat. Put your feet together, relax your shoulders, and let your arms hang down. Look straight ahead.',easy:'Your feet can be a little apart.'}));
+ warm.push(ST('breathe',36,'Three slow breaths',{bp:[12,1],br:[4,2,4],lead:9,quiet:q,say:quiet?'Three slow breaths. Arms up as you breathe in.':'Let us breathe together. Breathe in for four, hold for two, and breathe out for four. Raise your arms as you breathe in.',easy:'Arms are optional. Just breathe slowly.',cues:quiet?[]:[{t:30,text:'Lovely breathing!'}]}));
+ for(let i=0;i<12;i++)warm.push(ST('ypose',14,'Pose '+(i+1)+': '+MXY_P[i].n,{pose:i,tr:2.2,round:0,say:quiet?mxYCue(i,1,'full'):mxYCue(i,1,'teach'),easy:MXY_P[i].e}));
+ warm.push(ST('ypose',24,'Practise slowly',{seq:[0,1,2,1,0],tr:1.8,say:quiet?'Practise slowly.':'Now let us practise slowly, breathing with each move.',easy:'Take your time. Skip anything that does not feel good.',cues:quiet?[]:[{t:5,text:'Arms up. Breathe in.'},{t:9.8,text:'Fold down. Breathe out.'},{t:14.6,text:'Arms up. Breathe in.'},{t:19.4,text:'Hands to your heart. Breathe out.'}]}));
+ warm.push(ST('breathe',48,'Breathe with the sun',{bp:[0,1],br:[4,2,4],lead:10,quiet:q,say:quiet?'Breathe with your arms.':'Now breathe with your arms. Arms up as you breathe in. Hands to your heart as you breathe out.',easy:'Arms are optional. Just breathe slowly.',cues:quiet?[]:[{t:41,text:'Beautiful! Now we begin the '+(learn?'three':'six')+' sun salutations.'}]}));
+ /* main, 420 s. Follow and Practice: 6 rounds (60 s each) with a water break and a rest break. Learn: 3 slower rounds (120 s each). The leading foot alternates: L R L R L R */
+ const RN=['one','two','three','four','five','six'],ann=r=>quiet?(r===N?'Last round.':'Round '+RN[r-1]+'.')+' '+(r%2?'Left':'Right')+' foot first.':(r===N?'Last round! ':'Round '+RN[r-1]+'. ')+(r%2?'Left foot first':'Now the right foot goes first')+'. Breathe out.';
+ const KEY=[3,4,6,8],ps=learn?10:5;
+ const round=r=>{const cues=[{t:.1,text:ann(r)}];
+  for(let i=1;i<12;i++){let say=null;if(learn)say=mxYCue(i,r,'full')+(i===4?' Rest your knees on the mat if it is hard.':'');else if(!quiet&&(r===1||KEY.indexOf(i)>=0))say=mxYCue(i,r,r===1?'full':'short');if(say)cues.push({t:i*ps+.3,text:say})}
+  main.push(ST('ypose',ps*12,'Round '+r+' of '+N,{round:r,rounds:N,seq:[0,1,2,3,4,5,6,7,8,9,10,11],ps,tr:learn?2.4:1.6,say:'',easy:'',cues}))};
+ const water=(done,nextText)=>main.push(ST('ystill',30,'Water break',{pose:12,water:1,say:'Round '+RN[done-1]+' is done. Great job! Water break. Take a little sip of water, and shake out your hands and feet. Take longer if you need it. You can press pause.',easy:'Rest as long as you like.',cues:[{t:21,text:nextText}]}));
+ const rest=(done,nextText)=>main.push(ST('breathe',30,'Rest and breathe',{pose:12,water:1,br:[4,2,6],lead:12,quiet:q,say:'Round '+RN[done-1]+' is done. Wonderful! Let us rest. Stand tall, relax your shoulders, and have a sip of water if you are thirsty.',easy:'Rest as long as you like.',cues:[{t:25,text:nextText}]}));
+ if(learn){round(1);round(2);water(2,'Round three is next. The left foot goes first again.');round(3);rest(3,'Now we cool down.')}
+ else{round(1);round(2);water(2,'Round three is next. Come back and stand tall at the front of your mat.');round(3);round(4);rest(4,'Two more rounds. In round five, the left foot goes first.');round(5);round(6)}
  /* slow down: 20 + 30 + 20 + 80 + 30 = 180 s */
- cool.push(ST('ypose',20,'Reach up high',{seq:[1],tr:2.5,say:'Round six is done! You did all six rounds. Now we cool down. Reach your arms up high and stretch tall. Breathe in.',easy:'Keep your arms in front if your shoulders feel tight.',cues:[{t:14,text:'Stretch all the way up to the sun.'}]}));
- cool.push(ST('ypose',30,'Hang like a rag doll',{seq:[2],tr:3,say:'Now fold forward slowly and let your arms and head hang heavy. Bend your knees if you like. Breathe out.',easy:'Bend your knees as much as you like.',cues:[{t:15,text:'Breathe slowly. Let your neck relax.'}]}));
+ cool.push(ST('ypose',20,'Reach up high',{seq:[1],tr:2.5,say:'You did all your rounds! Now we cool down. Reach your arms up high and stretch tall. Breathe in.',easy:'Keep your arms in front if your shoulders feel tight.',cues:quiet?[]:[{t:14,text:'Stretch all the way up to the sun.'}]}));
+ cool.push(ST('ypose',30,'Hang like a rag doll',{seq:[2],tr:3,say:'Now fold forward slowly and let your arms and head hang heavy. Bend your knees if you like. Breathe out.',easy:'Bend your knees as much as you like.',cues:quiet?[]:[{t:15,text:'Breathe slowly. Let your neck relax.'}]}));
  cool.push(ST('ypose',20,'Rise up slowly',{seq:[1,0],tr:3,say:'Slowly come back up, reach high, and bring your hands to your heart.',easy:'Come up slowly so you do not feel dizzy.'}));
- cool.push(ST('breathe',80,'Calm breathing',{pose:0,eyes:'closed',eyesUntil:72,br:[4,2,6],lead:12,say:'Close your eyes if you like. Let your breathing be calm and slow. Breathe in for four, hold for two, and breathe out for six.',easy:'Keep your eyes open if you prefer.',cues:[{t:72,text:'Wiggle your fingers and toes, and open your eyes slowly.'}]}));
- cool.push(ST('ystill',30,'Thank you, sun',{pose:0,say:'Hands together at your heart. Thank you, sun! Well done, you did six rounds of Surya Namaskar. Now have a big sip of water and rest.',easy:'You can lie down on your mat for a minute.'}));
+ cool.push(ST('breathe',80,'Calm breathing',{pose:0,eyes:'closed',eyesUntil:72,br:[4,2,6],lead:12,quiet:q,say:'Close your eyes if you like. Let your breathing be calm and slow. Breathe in for four, hold for two, and breathe out for six.',easy:'Keep your eyes open if you prefer.',cues:[{t:72,text:'Wiggle your fingers and toes, and open your eyes slowly.'}]}));
+ cool.push(ST('ystill',30,'Thank you, sun',{pose:0,say:'Hands together at your heart. Thank you, sun! Well done, you finished Surya Namaskar. Now have a big sip of water and rest.',easy:'You can lie down on your mat for a minute.'}));
  return{warm,main,cool}}
 MX_MOVES.ypose={easy:'Move gently and rest whenever you like.',pose:()=>({})};MX_MOVES.ystill=MX_MOVES.ypose;
-MX_LV.sun={1:mxYBuild()};
+MX_LV.sun={1:mxYBuild('follow')};
 const MXY={live:false,state:'idle',loading:null,T:null,key:null,last:null,matU:.02,matT:.02,az:.5,dtE:33,fc:0,t0:0,tr:2,from:null};
 const MXY_PREP=[
  ['🧘','Roll out your yoga mat on a flat, clear floor with lots of space around it.','Let us get ready, one step at a time. First, find a flat, clear spot with lots of space around you, and roll out your yoga mat.'],
@@ -2737,7 +2760,7 @@ const MXY_PREP=[
  ['🧑','Tell a grown-up and ask them to stay nearby.','Tell a grown-up that you are starting, and ask them to stay close by.'],
  ['🛑','Rest any time. There is a water break and a rest break. You can press pause.','Listen to your body. If you feel tired, dizzy or sore, stop and rest. There is a water break and a rest break, and you can press pause any time.'],
  ['🌅','Stand at the front of your mat with your feet together.','Now stand at the front of your mat with your feet together. Here comes the sun!']];
-function mxYSplash(){return'<div class="mx-wel mx-ys"><span class="mx-fl f1">🦋</span><span class="mx-fl f2">⭐</span><span class="mx-fl f3">🌈</span><span class="mx-fl f4">🦋</span><div class="mx-wi mx-sunb">🌞</div><h2>Daily Yoga Practice</h2><p>Surya Namaskar · say hello to the sun!</p><div class="mx-chips"><span>⏱️ 15 minutes</span><span>🧘 12 poses</span><span>⭐ 6 rounds</span></div></div>'}
+function mxYSplash(){const mn={learn:'Learn mode',follow:'Follow mode',practice:'Practice mode'}[mxYMode];return'<div class="mx-wel mx-ys"><div class="mx-wi">☀️</div><h2>Daily Yoga Practice</h2><p>Surya Namaskar · the sun salutation</p><div class="mx-chips"><span>15 minutes</span><span>12 poses</span><span>'+mn+'</span></div></div>'}
 function mxYWelcomeOld(){return'<div class="mx-wel mx-yw"><div class="mx-wi">🌅</div><h2>Surya Namaskar</h2><p>The sun salutation for kids · 6 rounds · 15 minutes</p><ul class="mx-yl">'+MXY_PREP.map((s,i)=>'<li id="mxYL'+i+'"><i>'+s[0]+'</i><span>'+s[1]+'</span></li>').join('')+'</ul><div class="mx-yb"><button type="button" id="mxYReady">I am ready ▶</button></div></div>'}
 function mxYWelcome(){return'<div class="mx-yw2">'+MXY_PREP.map((p,i)=>'<i id="mxYL'+i+'">'+p[0]+'</i>').join('')+'<button type="button" id="mxYVoiceBtn">🎤 Change voice</button><button type="button" id="mxYReady">I am ready ▶</button></div>'}
 function mxYLoad(){if(MXY.loading)return MXY.loading;
@@ -2755,7 +2778,7 @@ async function mxYInit(){if(!MX3_OK)return false;
   const K=MXYoga.build(T,{eyes:'open'});K.floorY=R.floorY;sc.add(K.root);MXY.K=K;
   MXY.specs=MXYogaPoses.make(K.dim).map(p=>p.spec);MXY.specs.push(mxYNeutral(MXY.specs[0],K.dim));{const nw=JSON.parse(JSON.stringify(MXY.specs[12])),D=K.dim;nw.hR={x:-(D.shoulderW+.1),y:D.hipH+D.torso+.28,z:.05,dx:.15,dy:1,dz:0,px:0,py:0,pz:1,curl:0};nw.elbowPoleR=[-1,0,-.4];MXY.specs.push(nw);const hs=JSON.parse(JSON.stringify(MXY.specs[12]));hs.hR={x:-.11,y:D.hipH+D.torso+.1,z:.06,dx:0,dy:1,dz:.3,px:1,py:0,pz:0,curl:.3};hs.elbowPoleR=[-1,0,-.2];MXY.specs.push(hs)}
   MXY.cam=new T.PerspectiveCamera(30,16/9,.1,60);
-  MXY.comp=new X.EffectComposer(r);MXY.comp.addPass(new X.RenderPass(sc,MXY.cam));MXY.bloom=new X.UnrealBloomPass(new T.Vector2(960,540),.35,.6,.92);MXY.comp.addPass(MXY.bloom);MXY.comp.addPass(new X.OutputPass());MXY.bloomOn=true;
+  MXY.comp=new X.EffectComposer(r);MXY.comp.addPass(new X.RenderPass(sc,MXY.cam));MXY.bloom=new X.UnrealBloomPass(new T.Vector2(960,540),.2,.6,.95);MXY.comp.addPass(MXY.bloom);MXY.comp.addPass(new X.OutputPass());MXY.bloomOn=true;
   MXY.state='ready';return true}catch(e){console.warn('Surya Namaskar 3D unavailable:',e);MXY.state='failed';return false}}
 function mxYResize(w,h){if(MXY.state!=='ready'||!MXY.live)return;MXY.r.setPixelRatio(1);MXY.r.setSize(w,h,false);MXY.comp.setSize(w,h);MXY.bloom.setSize(w,h);MXY.cam.aspect=w/h;MXY.cam.updateProjectionMatrix()}
 const mxYSpecFor=(i,rd)=>{const S=MXY.specs;if(i>=12)return S[12];if(rd>0&&rd%2===0){if(i===3)return S[8];if(i===8)return S[3]}return S[i]};
@@ -2801,40 +2824,22 @@ const MXogaBlend=(a,b,u)=>window.MXYogaPoses.blend(a,b,u);
 function mxYPaint(c,k,at,seg,tl){const Y=MXY,T=Y.T,K=Y.K,R=Y.R,P=window.MXYogaPoses,now=performance.now(),dt=Math.min(.1,Math.max(.001,(now-(Y.lastT||now))/1000));Y.lastT=now;Y.hdt=dt;
  const w=mxYWant(seg,tl),x=(seg&&seg.x)||{};
  if(w.key!==Y.key){Y.from=Y.last||w.spec;Y.key=w.key;Y.t0=at;Y.tr=w.tr;
-  if(seg&&x.round&&w.i<12){$('mxText').textContent=MXY_P[w.i].m+' Pose '+(w.i+1)+': '+MXY_P[w.i].n;if(w.i===11){mxYBurst();const bn=$('mxBanner');bn.textContent='⭐ Round '+x.round+' done!';bn.style.setProperty('--pc','#ff6fa0');bn.classList.remove('on');void bn.offsetWidth;bn.classList.add('on')}$('mxEasy').textContent='Easy way: '+MXY_P[w.i].e;$('mxEasy').style.display=''}}
+  if(seg&&x.round&&w.i<12){$('mxText').textContent=MXY_P[w.i].n;$('mxEasy').textContent=mxYCue(w.i,x.round,'full');$('mxEasy').style.display=''}}
  const u=Y.tr>0?Math.min(1,(at-Y.t0)/Y.tr):1,S=u<1?P.blend(Y.from,w.spec,u):w.spec;Y.last=S;
  K.setEyes(x.eyes==='closed'&&tl<(x.eyesUntil||999)?'closed':'open');
  const pl=w.plan||null;P.solve(T,K,S,pl?pl.ry:0);if(pl){K.root.position.x=pl.x;K.root.position.z=pl.z;K.root.updateMatrixWorld(true)}K.idle(at);
  /* room: sun rises over the 15 minutes, mat unrolls while we get ready, bottle glows in breaks */
  {const bt=pl?pl.bot:{x:.62,z:.62,carry:false};let bx=bt.x,by=.15,bz=bt.z;if(bt.carry){const hp=K.armR.hand.getWorldPosition(new T.Vector3());bx=hp.x;by=hp.y+.02;bz=hp.z}R.bottle.position.set(bx,by,bz);R.cap.position.set(bx,by+.117,bz);R.setShoes(pl?pl.shoes:1)}
- const sp=mx.state==='play'?mx.t/900:mx.state==='done'?1:0;R.update(sp,at);if(pl){Y.matU=pl.mat;R.setMat(pl.mat,pl.roll)}else{Y.matU+=(1-Y.matU)*Math.min(1,dt*3);R.setMat(Y.matU,false)}R.setWater(!!x.water&&mx.state==='play',at);
+ const sp=mx.state==='play'?.12+.88*mx.t/900:mx.state==='done'?1:Math.min(.12,mx.at*.02);R.update(sp,at);if(pl){Y.matU=pl.mat;R.setMat(pl.mat,pl.roll)}else{Y.matU+=(1-Y.matU)*Math.min(1,dt*3);R.setMat(Y.matU,false)}R.setWater(!!x.water&&mx.state==='play',at);
  /* camera: gentle drift; side-on for the floor poses so the shape can be seen */
- const prof=w.i>=4&&w.i<=7?1.0:.42;Y.az+=(prof-Y.az)*Math.min(1,dt*1.1);const az=Y.az+Math.sin(at*.13)*.07,cam=Y.cam;cam.position.set(Math.sin(az)*4.6,1.0+Math.sin(at*.2)*.03,Math.cos(az)*4.6);cam.lookAt(0,.74,0);
+ const prof=w.i>=3&&w.i<=9?1.15:(w.i===2||w.i===10)?.7:.35;Y.az+=(prof-Y.az)*Math.min(1,dt*.9);const az=Y.az,cam=Y.cam;Y.ly=(Y.ly||.74)+(((w.i>=3&&w.i<=9)?.5:.74)-(Y.ly||.74))*Math.min(1,dt*.9);cam.position.set(Math.sin(az)*4.6,Y.ly+.26,Math.cos(az)*4.6);cam.lookAt(0,Y.ly,0);
  if(Y.bloomOn)Y.comp.render();else Y.r.render(Y.scene,cam);
  Y.dtE=Y.dtE*.93+dt*1000*.07;if(++Y.fc%50===0&&mx){if(Y.dtE>46&&mx.q>.4){mx.q=Math.max(.4,mx.q-.15);mxSize()}else if(Y.dtE>46&&Y.bloomOn){Y.bloomOn=false}else if(Y.dtE<24&&mx.q<1){mx.q=Math.min(1,mx.q+.1);mxSize()}}
  const cc=c.canvas;c.setTransform(1,0,0,1,0,0);c.clearRect(0,0,cc.width,cc.height);c.setTransform(k,0,0,k,0,0);
- if(mx.active&&mx.state==='play'&&seg)mxYHud2(c,seg,tl,w,at)}
+ if(mx.active&&mx.state==='play'&&seg)mxYChip(seg,w,tl)}
 function mxYRR(c,x,y,w,h,r){c.beginPath();if(c.roundRect)c.roundRect(x,y,w,h,r);else c.rect(x,y,w,h)}
-const MXY_F='"Trebuchet MS","Comic Sans MS",system-ui,sans-serif';
-function mxYPanel(c,x,y,w,h,col){c.save();const g=c.createLinearGradient(0,y,0,y+h);g.addColorStop(0,'rgba(255,255,255,.96)');g.addColorStop(1,'rgba(255,232,244,.94)');c.fillStyle=g;c.strokeStyle=col||'#ff6fa0';c.lineWidth=4;c.shadowColor='rgba(120,40,90,.3)';c.shadowBlur=10;mxYRR(c,x,y,w,h,20);c.fill();c.stroke();c.restore()}
-function mxYBurst(){const a=[],cols=['#ff6fa0','#ffb04a','#ffd54a','#58c4a8','#7a8cff','#c88cff'];for(let i=0;i<46;i++){const an=Math.random()*6.283,sp=120+Math.random()*260;a.push({x:200+Math.random()*560,y:70,vx:Math.cos(an)*sp*.4,vy:Math.abs(Math.sin(an))*sp*.4,c:cols[i%6],l:1.6+Math.random()*.8,r:Math.random()*6})}MXY.conf=a}
-function mxYHud2(c,seg,tl,w,at){
- const x=seg.x||{},r=x.round||0,i=w.i,INK='#7a3566',ACC='#ff4f8e',F=MXY_F,dt=MXY.hdt||.03;c.textAlign='center';
- mxYPanel(c,12,206,166,r?188:170,'#ff6fa0');
- c.fillStyle=ACC;c.font='bold 15px '+F;c.fillText(r?'⭐ ROUND '+r+' of 6':seg.phase===0?'📖 LEARN THE POSES':seg.phase===2?'🌙 COOL DOWN':'💧 BREAK TIME',95,229);
- if(r){c.fillStyle=INK;c.font='bold 12px '+F;c.fillText((mxYLead(r)==='left'?'👈 Left':'Right 👉')+' foot goes first',95,247)}
- for(let q=0;q<12;q++){const cx=95+((q%6)-2.5)*25,cy=(r?272:252)+Math.floor(q/6)*30,cur=q===i,dn=i<12&&q<i,rr=cur?13+Math.sin(at*6)*1.5:10;mxStar(c,cx,cy,rr,0,cur?'#ffb800':dn?'#ffd54a':'rgba(170,130,210,.32)');c.fillStyle=cur?'#fff':INK;c.font='bold 10px '+F;c.fillText(String(q+1),cx,cy+4)}
- if(i<12){const by=r?340:322;c.font='26px '+F;c.fillText(MXY_P[i].m,95,by+2);c.fillStyle=INK;c.font='bold 14px '+F;c.fillText(MXY_P[i].n,95,by+22);c.font='italic 11px '+F;c.fillStyle='#a06a95';c.fillText(MXY_P[i].s,95,by+37)}
- else if(!r){c.fillStyle=INK;c.font='bold 14px '+F;c.fillText(seg.move==='breathe'?'🌬️ Breathe with me':'🧍 Stand tall',95,322)}
- if(seg.move==='ypose'&&i<12){
-  const b=MXY_P[i].b,tp=Math.max(0,at-MXY.t0),e=v=>v*v*(3-2*v),uu=Math.min(1,tp/3.6),rad=b==='in'?16+22*e(uu):b==='out'?38-22*e(uu):16+3*Math.sin(at*7),col=b==='in'?'#58c4a8':b==='out'?'#ff6fa0':'#ffb04a',em=b==='in'?'🌸':b==='out'?'🕯️':'🤫',cue=b==='in'?'SMELL THE FLOWER':b==='out'?'BLOW THE CANDLE':'HOLD IT, SHHH';
-  mxYPanel(c,786,206,168,140,col);const gg=c.createRadialGradient(870,262,2,870,262,rad);gg.addColorStop(0,'#fff');gg.addColorStop(1,col);c.fillStyle=gg;c.beginPath();c.arc(870,262,rad,0,7);c.fill();c.strokeStyle=col;c.lineWidth=3;c.beginPath();c.arc(870,262,42,0,7);c.stroke();
-  c.font='24px '+F;c.fillStyle=INK;c.fillText(em,870,271);c.fillStyle=col;c.font='bold 15px '+F;c.fillText(b==='in'?'BREATHE IN':b==='out'?'BREATHE OUT':'OUT AND HOLD',870,322);c.fillStyle=INK;c.font='bold 11px '+F;c.fillText(cue,870,338);
-  if(r&&i<11){mxYPanel(c,786,356,168,62,'#7a8cff');c.fillStyle='#5a67d8';c.font='bold 12px '+F;c.fillText('NEXT ➜',870,375);c.fillStyle=INK;c.font='bold 14px '+F;c.fillText(MXY_P[i+1].m+' '+MXY_P[i+1].n,870,397)}}
- /* little stars twinkle at the edges, confetti when a round is finished */
- for(let q=0;q<7;q++){const sx=(q*149+60)%900+30,sy=70+((q*83)%110),tw=.6+.4*Math.sin(at*3+q*1.7);mxStar(c,sx,sy,5+3*tw,at*.5+q,'rgba(255,214,90,'+(.45+.4*tw)+')')}
- if(MXY.conf&&MXY.conf.length){const L=MXY.conf;for(let q=L.length-1;q>=0;q--){const p=L[q];p.l-=dt;if(p.l<=0){L.splice(q,1);continue}p.vy+=420*dt;p.x+=p.vx*dt;p.y+=p.vy*dt;p.r+=dt*9;c.save();c.translate(p.x,p.y);c.rotate(p.r);c.fillStyle=p.c;c.fillRect(-5,-3,10,6);c.restore()}}
- c.textAlign='left'}
+/* the exercise screen keeps only the essentials: a small progress chip, the pose name with one short line, and a thin progress bar */
+function mxYChip(seg,w,tl){const x=seg.x||{},ch=$('mxChip');if(!ch)return;let t;if(x.round)t='Round '+x.round+' of '+(x.rounds||6)+' · pose '+(w.i+1)+' of 12';else if(w.i<12)t='Pose '+(w.i+1)+' of 12';else t=MX_PH[seg.phase].name+' · '+mxFmt(seg.dur-tl);if(ch.textContent!==t)ch.textContent=t}
 /* the voice walks the child through getting ready: mat, water, feet, clothes, a grown-up, resting, then the first pose */
 function mxYPrep(){const n=MXY_PREP.length;let i=0;
  const mark=q=>{MXY.prep=q;MXY.prepT0=mx.at;document.querySelectorAll('.mx-yw2 i').forEach((e,k)=>{e.classList.toggle('on',k===q);e.classList.toggle('ok',k<q)})};
@@ -2848,7 +2853,7 @@ async function mxYStart(){
  if(!mx.active)return;
  if(!ok){mxOver('<div class="mx-wel"><div class="mx-wi">🧘</div><h2>This adventure needs 3D</h2><p class="mx-ws">Your browser could not start 3D graphics, so Surya Namaskar cannot play here. Try another adventure, or open GameZone in a newer browser.</p><div class="mx-yb"><button type="button" id="mxYBack">Back to adventures</button></div></div>');const b=$('mxYBack');if(b)b.onclick=()=>{mxTeardown();page('move');mxOpen()};return}
  MXY.live=true;MXY.key=null;MXY.last=null;MXY.lastT=0;MXY.prep=-1;MXY.prepT0=0;MXY.az=.42;MXY.matU=.02;MXY.matT=.02;$('mxPanel').classList.add('mx3','mx-yoga');mxSize();
- musicStop();{const sl=TRACKS.slice().sort((a,b)=>a.bpm-b.bpm).slice(0,6);musicTrack=sl[Math.floor(Math.random()*sl.length)];lastTrack=TRACKS.indexOf(musicTrack)}musicStart();
+ musicStop();{const sl=TRACKS.slice().sort((a,b)=>a.bpm-b.bpm).slice(0,6);musicTrack=sl[Math.floor(Math.random()*sl.length)];lastTrack=TRACKS.indexOf(musicTrack)}musicStart();try{if(musicGain)musicGain.gain.value=.05*mxVolM}catch(e){}
  await Promise.all([new Promise(r=>mxSay('Welcome to your daily yoga practice!',r)),new Promise(r=>setTimeout(r,3500))]);
  if(!mx.active||mx.state!=='welcome')return;mxOver(mxYWelcome());mxYPrep()}
 const MX_CHEER=["You're doing great!","Nice and gentle. Keep going!","Wonderful moving, explorer!","Lovely! Take your time.","You're a star!"];
@@ -3247,9 +3252,9 @@ function mxMarkDone(th,lv){try{const d=mxDone();d[th+':'+lv]=1;localStorage.setI
 /* ---- menu page (theme + level), safety screen ---- */
 let mxPrev={raf:0,last:0,cards:[]};
 function mxOpen(){const p=$('movePage');if(!p)return;mx=mx||{};mx.sel=mx.sel||'forest';mx.level=1;const done=mxDone();
- p.innerHTML='<div class="section-head"><div><h3>🏃 Move & Explore</h3><p>Pick an adventure and move along with the characters! 15 minutes: 5 warm-up · 7 adventure · 3 slow down.</p></div></div><div class="mx-grid">'+Object.keys(MX_TH).map(k=>{const t=MX_TH[k];return'<button type="button" class="mx-card'+(mx.sel===k?' on':'')+'" data-th="'+k+'" style="--mc:'+t.col+'"><canvas width="480" height="270"></canvas><strong>'+t.icon+' '+t.name+'</strong><span>'+t.tag+'</span>'+(done[k+':1']?'<i class="mx-ok">✓ Level 1 done</i>':'')+'</button>'}).join('')+'</div><div class="mx-pick"><div class="mx-lv"><span>Level</span><button type="button" class="on">1</button><button type="button" disabled title="Coming soon">2</button><button type="button" disabled title="Coming soon">3</button></div><button type="button" class="primary mx-start" id="mxStartBtn">▶ Start adventure</button></div>';
+ p.innerHTML='<div class="section-head"><div><h3>🏃 Move & Explore</h3><p>Pick an adventure and move along with the characters! 15 minutes: 5 warm-up · 7 adventure · 3 slow down.</p></div></div><div class="mx-grid">'+Object.keys(MX_TH).map(k=>{const t=MX_TH[k];return'<button type="button" class="mx-card'+(mx.sel===k?' on':'')+'" data-th="'+k+'" style="--mc:'+t.col+'"><canvas width="480" height="270"></canvas><strong>'+t.icon+' '+t.name+'</strong><span>'+t.tag+'</span>'+(done[k+':1']?'<i class="mx-ok">✓ Level 1 done</i>':'')+'</button>'}).join('')+'</div><div class="mx-modes" id="mxModes"'+(mx.sel==='sun'?'':' hidden')+'><span>Yoga mode</span>'+[['learn','Learn','slow, with every pose explained'],['follow','Follow','the full practice'],['practice','Practice','quiet, you lead']].map(m=>'<button type="button" class="mx-mode'+(mxYMode===m[0]?' on':'')+'" data-m="'+m[0]+'"><b>'+m[1]+'</b><small>'+m[2]+'</small></button>').join('')+'</div><div class="mx-pick"><div class="mx-lv"><span>Level</span><button type="button" class="on">1</button><button type="button" disabled title="Coming soon">2</button><button type="button" disabled title="Coming soon">3</button></div><button type="button" class="primary mx-start" id="mxStartBtn">▶ Start adventure</button></div>';
  mxPrev.cards=[...p.querySelectorAll('.mx-card')].map(b=>({th:b.dataset.th,cv:b.querySelector('canvas')}));
- p.onclick=e=>{const b=e.target.closest('.mx-card');if(b){mx.sel=b.dataset.th;p.querySelectorAll('.mx-card').forEach(x=>x.classList.toggle('on',x===b));return}if(e.target.closest('#mxStartBtn'))mxSafety()};
+ p.onclick=e=>{const mb=e.target.closest('.mx-mode');if(mb){mxYMode=mb.dataset.m;p.querySelectorAll('.mx-mode').forEach(x=>x.classList.toggle('on',x===mb));return}const b=e.target.closest('.mx-card');if(b){mx.sel=b.dataset.th;{const md=$('mxModes');if(md)md.hidden=mx.sel!=='sun'}p.querySelectorAll('.mx-card').forEach(x=>x.classList.toggle('on',x===b));return}if(e.target.closest('#mxStartBtn'))mxSafety()};
  cancelAnimationFrame(mxPrev.raf);mxPrev.raf=requestAnimationFrame(mxPreviewLoop)}
 function mxPreviewLoop(ts){const p=$('movePage');if(!p||p.classList.contains('hidden')){mxPrev.raf=0;return}mxPrev.raf=requestAnimationFrame(mxPreviewLoop);if(ts-mxPrev.last<80)return;mxPrev.last=ts;const at=ts/1000;MXP.dt=.08;mxPrev.cards.forEach(cd=>{const th=MX_TH[cd.th],c=cd.cv.getContext('2d'),P=Object.assign({},MX_POSE0,MX_MOVES.sway.pose(at));mxPaint(c,cd.cv.width/MXW,th,at,at*22,P,null,at,0)})}
 function mxSafety(){let o=$('mxSafety');if(o)o.remove();o=document.createElement('div');o.id='mxSafety';o.className='mx-safety';o.setAttribute('role','dialog');o.setAttribute('aria-modal','true');const th=MX_TH[mx.sel];
@@ -3262,12 +3267,13 @@ function mxAsk(){mx.pending=true;mxRecCopy(true);recAsk(0)}
 function mxBuildStage(){let p=$('mxPanel');if(p)return p;p=document.createElement('div');p.id='mxPanel';
  p.innerHTML='<canvas id="mxCv"></canvas><div class="mx-ui"><div class="mx-top"><span class="mx-chip" id="mxChip"></span><span class="mx-phase" id="mxPhase"></span><div class="mx-ring"><svg viewBox="0 0 100 100" aria-hidden="true"><circle class="bg" cx="50" cy="50" r="42"/><circle class="fg" id="mxRingFg" cx="50" cy="50" r="42" stroke-dasharray="264" stroke-dashoffset="0"/></svg><b id="mxClock">5:00</b></div></div><div class="mx-instr" id="mxInstr"><div class="mx-it" id="mxText"></div><div class="mx-easy" id="mxEasy"></div><div class="mx-mp"><i id="mxMp"></i></div></div><div class="mx-breath" id="mxBreath"><div class="orb" id="mxBO"><b id="mxBN"></b></div><span id="mxBL"></span></div><div class="mx-combo" id="mxCombo"><b id="mxComboN">0</b><span>MOVE COMBO</span><em id="mxCheer"></em></div><div class="mx-beat" id="mxBeat"><i></i><i></i><i></i><i></i></div><div class="mx-bar"><i class="w"><b id="mxBw"></b></i><i class="m"><b id="mxBm"></b></i><i class="c"><b id="mxBc"></b></i></div><div class="mx-banner" id="mxBanner"></div><div class="mx-over" id="mxOver"></div></div>';
  $('recStage').appendChild(p);return p}
-function mxControls(on){let b=$('mxControls');if(!b){b=document.createElement('div');b.id='mxControls';b.className='quiz-controls-panel';b.innerHTML='<button class="secondary" id="mxPause" type="button">⏸ Pause</button><button class="secondary" id="mxStop" type="button">⏹ Stop</button><div class="quiz-controls-note">💧 Drink water when you need it · move gently · rest any time</div>';const st=$('recStage');st.parentNode.insertBefore(b,st.nextSibling);$('mxPause').onclick=mxTogglePause;$('mxStop').onclick=()=>mxEnd(false)}b.classList.toggle('hidden',!on)}
-function mxSize(){const st=$('recStage'),cv=$('mxCv');if(!st||!cv)return;const dpr=Math.min(2.5,window.devicePixelRatio||1),w=Math.min(3840,Math.max(640,Math.round(st.clientWidth*dpr*mx.q)));if(cv.width!==w){cv.width=w;cv.height=Math.round(w*MXH/MXW)}mx.k=cv.width/MXW;mx3Resize(cv.width,cv.height);mxYResize(cv.width,cv.height)}
+function mxControls(on){let b=$('mxControls');if(!b){b=document.createElement('div');b.id='mxControls';b.className='quiz-controls-panel';b.innerHTML='<button class="secondary" id="mxPause" type="button">⏸ Pause</button><button class="secondary" id="mxStop" type="button">⏹ Stop</button><div class="quiz-controls-note">💧 Drink water when you need it · move gently · rest any time</div>';const st=$('recStage');st.parentNode.insertBefore(b,st.nextSibling);$('mxPause').onclick=mxTogglePause;$('mxStop').onclick=()=>mxEnd(false)}
+ if(mx.yoga&&!$('mxVv')){let sv={v:100,m:100};try{sv=Object.assign(sv,JSON.parse(localStorage.getItem('mx-yoga-vol')||'{}'))}catch(e){}mxVoiceVol=sv.v/100;mxVolM=sv.m/100;const n=b.querySelector('.quiz-controls-note'),d=document.createElement('div');d.className='mx-vols';d.innerHTML='<label>Voice <input id="mxVv" type="range" min="0" max="100" value="'+sv.v+'"></label><label>Music <input id="mxVm" type="range" min="0" max="100" value="'+sv.m+'"></label>';b.insertBefore(d,n);const sav=()=>{try{localStorage.setItem('mx-yoga-vol',JSON.stringify({v:Math.round(mxVoiceVol*100),m:Math.round(mxVolM*100)}))}catch(e){}};$('mxVv').oninput=e=>{mxVoiceVol=e.target.value/100;sav()};$('mxVm').oninput=e=>{mxVolM=e.target.value/100;try{if(musicGain)musicGain.gain.value=.05*mxVolM}catch(x){}sav()}}b.classList.toggle('hidden',!on)}
+function mxSize(){const st=$('recStage'),cv=$('mxCv');if(!st||!cv)return;const dpr=Math.min(mx.yoga?1.5:2.5,window.devicePixelRatio||1),w=Math.min(mx.yoga?1920:3840,Math.max(640,Math.round(st.clientWidth*dpr*mx.q)));if(cv.width!==w){cv.width=w;cv.height=Math.round(w*MXH/MXW)}mx.k=cv.width/MXW;mx3Resize(cv.width,cv.height);mxYResize(cv.width,cv.height)}
 function mxFmt(s){s=Math.max(0,Math.ceil(s));return Math.floor(s/60)+':'+String(s%60).padStart(2,'0')}
 async function mxBegin(){
  if(!mx)mx={};const sel=mx.sel||'forest';mxPhSet(sel==='sun');mx.pending=false;mxRecCopy(false);
- Object.assign(mx,{active:true,theme:sel,level:1,t:0,at:0,scroll:0,idx:-1,paused:false,state:'welcome',q:1,ema:12,last:0,lastDraw:0,yoga:sel==='sun',segs:mxSegments(sel,1),prevP:Object.assign({},MX_POSE0),curP:Object.assign({},MX_POSE0),blend:1,cheerAt:-1,seen:{},cueIdx:0,combo:0,lastTick:''});
+ Object.assign(mx,{active:true,theme:sel,level:1,t:0,at:0,scroll:0,idx:-1,paused:false,state:'welcome',q:1,ema:12,last:0,lastDraw:0,yoga:sel==='sun',segs:(sel==='sun'&&(MX_LV.sun[1]=mxYBuild(mxYMode)),mxSegments(sel,1)),prevP:Object.assign({},MX_POSE0),curP:Object.assign({},MX_POSE0),blend:1,cheerAt:-1,seen:{},cueIdx:0,combo:0,lastTick:''});
  mxBuildStage();document.body.classList.add('mx-active');$('recStage').classList.add('mx-on');$('quizPage').classList.add('mx-mode');$('endControls').classList.add('hidden');
  page('quiz');$('breadcrumb').textContent='Move & Explore · '+MX_TH[sel].name;stageScale();mxControls(true);$('mxPause').textContent='⏸ Pause';mxSize();$('mxInstr').style.visibility='hidden';$('mxPhase').style.visibility='hidden';$('mxCombo').style.visibility='hidden';{const nc=MX_NEON[sel]||MX_NEON.forest,pn=$('mxPanel');pn.style.setProperty('--n0',nc[0]);pn.style.setProperty('--n1',nc[1])}
  $('mxChip').textContent=MX_TH[sel].icon+' '+MX_TH[sel].name+' · Level 1';
@@ -3284,11 +3290,11 @@ async function mxBegin(){
  Promise.all([new Promise(r=>mxSay(intro,r)),new Promise(r=>setTimeout(r,5000))]).then(()=>{if(mx.active&&mx.state==='welcome')mxCount(3)});
  clearTimeout(mx.introTO);mx.introTO=setTimeout(()=>{if(mx.active&&mx.state==='welcome')mxCount(3)},16000)}
 /* kids' voice for yoga: a child voice (such as Ana) when the browser has one, otherwise the chosen girl voice pitched up like a cartoon */
-function mxYVoiceOpt(){const all=('speechSynthesis' in window)?speechSynthesis.getVoices().filter(v=>/^en(-|_|$)/i.test(v.lang)):[],re=/\bana\b|child|kid|junior/i;let v=null;if(voicePick===0)v=all.find(x=>re.test(x.name))||null;const g=v||girlVoice(),kv=!!(g&&re.test(g.name));return{voice:g,pitch:kv?1.3:1.9,rate:kv?1.06:1.12}}
+function mxYVoiceOpt(){const all=('speechSynthesis' in window)?speechSynthesis.getVoices().filter(v=>/^en(-|_|$)/i.test(v.lang)):[],re=/\bana\b|child|kid|junior/i;let v=null;if(voicePick===0)v=all.find(x=>re.test(x.name))||null;const g=v||girlVoice(),kv=!!(g&&re.test(g.name));return{voice:g,pitch:kv?1.3:1.9,rate:kv?1.06:1.12,vol:mxVoiceVol}}
 function mxSay(text,done){try{say(text,false,done,mx&&mx.yoga?mxYVoiceOpt():{pitch:1.1,rate:.97})}catch(e){if(done)done()}}
 function mxCount(n){if(!mx.active||mx.state==='play'||mx.state==='done')return;mx.state='count';clearTimeout(mx.introTO);mxOver('<div class="mx-cd"><b>'+n+'</b><span>Get ready!</span></div>');mxChime(n);if(n>1){mx.cdTO=setTimeout(()=>mxCount(n-1),1000)}else mx.cdTO=setTimeout(()=>{if(!mx.active)return;mx.state='play';mx.t=0;mx.idx=-1;mxOver('');$('mxInstr').style.visibility='';$('mxPhase').style.visibility='';$('mxCombo').style.visibility='';mxChime(0)},1000)}
 function mxOver(h){const o=$('mxOver');if(o){o.innerHTML=h;o.classList.toggle('on',!!h);o.classList.toggle('yprep',/mx-yw2/.test(h))}}
-function mxChime(n){try{const ctx=musicCtxGet();if(!ctx)return;const t=ctx.currentTime;if(n===0){note(784,t,.18,'sine',.9);note(1047,t+.12,.3,'sine',.9)}else if(n===99){[523,659,784,1047].forEach((f,i)=>note(f,t+i*.16,.4,'triangle',.9))}else note(660,t,.14,'sine',.7)}catch(e){}}
+function mxChime(n){try{const ctx=musicCtxGet();if(!ctx)return;const t=ctx.currentTime;if(mx&&mx.yoga){if(n===0||n===99)note(n===99?587:523,t,.9,'sine',.3);return}if(n===0){note(784,t,.18,'sine',.9);note(1047,t+.12,.3,'sine',.9)}else if(n===99){[523,659,784,1047].forEach((f,i)=>note(f,t+i*.16,.4,'triangle',.9))}else note(660,t,.14,'sine',.7)}catch(e){}}
 function mxTogglePause(){if(!mx||!mx.active||mx.state==='done')return;mx.paused=!mx.paused;$('mxPause').textContent=mx.paused?'▶ Resume':'⏸ Pause';if(mx.paused){try{speechSynthesis.cancel()}catch(e){}mxOver('<div class="mx-pz"><b>⏸</b><span>Take a little rest</span></div>')}else{mxOver('');const s=mx.segs[mx.idx];if(s){const q=s.x&&s.x.say!==undefined?s.x.say:s.text;if(q)mxSay(q)}}}
 /* ---- per-frame loop ---- */
 function mxFrame(ts){if(!mx||!mx.active)return;mx.raf=requestAnimationFrame(mxFrame);if(recCalBusy){mx.last=ts;return}if(ts-mx.lastDraw<28)return;const dt=Math.min(.1,(ts-mx.last)/1000);mx.last=ts;mx.lastDraw=ts;const cv=$('mxCv');if(!cv)return;
@@ -3297,14 +3303,14 @@ function mxFrame(ts){if(!mx||!mx.active)return;mx.raf=requestAnimationFrame(mxFr
  if(mx.state==='play'){let i=mx.segs.findIndex(s=>mx.t>=s.start&&mx.t<s.start+s.dur);if(i<0)i=mx.t>=900?-2:0;if(i===-2){mxEnd(true)}else{if(i!==mx.idx)mxEnterSeg(i);seg=mx.segs[i];tl=mx.t-seg.start;px=1150-((tl%7)/7)*1400;const mv=MX_MOVES[seg.move];P=Object.assign({},MX_POSE0,mv.pose(tl,px));const u=mxClamp(tl/.7,0,1);if(u<1){for(const k in P)P[k]=mx.prevP[k]+(P[k]-mx.prevP[k])*(u*u*(3-2*u))}mx.curP=P;mx.scroll+=dt*MX_SPEED*(mv.walk?58:14);mxHud(seg,tl);{const m2=MX_MOVES[seg.move],tick=m2.hz?Math.floor(tl*m2.hz):Math.floor(tl/2),key=i+':'+tick;if(key!==mx.lastTick){mx.lastTick=key;mx.combo++;mxComboTick()}}while(seg.cues&&mx.cueIdx<seg.cues.length&&tl>=seg.cues[mx.cueIdx].t){const cu=seg.cues[mx.cueIdx++];if(!mx.paused)mxSay(cu.text)}if(!(seg.cues&&seg.cues.length)&&tl>seg.dur*.55&&mx.cheerAt!==i&&i%3===1&&!mx.yoga){mx.cheerAt=i;mxSay(MX_CHEER[i%MX_CHEER.length])}}}
  else{P=Object.assign({},MX_POSE0,MX_MOVES.sway.pose(mx.at));mx.scroll+=dt*10}
  if(mx.state==='done'){P=Object.assign({},MX_POSE0,{aL:165,aR:165,bL:.05,bR:.05,bob:Math.abs(Math.sin(mx.at*3))*10,mouth:1})}
- MXP.dt=dt;const t0=performance.now();mxPaint(cv.getContext('2d'),mx.k||1,th,mx.at,mx.scroll,P,seg,tl,px);if(mx.state==='done')mxConfetti(cv.getContext('2d'),mx.k||1,mx.at);
+ MXP.dt=dt;const t0=performance.now();mxPaint(cv.getContext('2d'),mx.k||1,th,mx.at,mx.scroll,P,seg,tl,px);if(mx.state==='done'&&!mx.yoga)mxConfetti(cv.getContext('2d'),mx.k||1,mx.at);
  const ms=performance.now()-t0;mx.ema=mx.ema*.9+ms*.1;mx.qc=(mx.qc||0)+1;if(!MX3.live&&mx.qc%45===0){if(mx.ema>26&&mx.q>.5){mx.q=Math.max(.5,mx.q-.15);mxSize()}else if(mx.ema<9&&mx.q<1){mx.q=Math.min(1,mx.q+.1);mxSize()}else mxSize()}}
 function mxComboTick(){const n=$('mxComboN');if(!n)return;n.textContent=mx.combo;n.classList.remove('tick');void n.offsetWidth;n.classList.add('tick');if(mx.combo%8===0){const e=$('mxCheer');e.textContent=MX_WORDS[(mx.combo/8)%MX_WORDS.length|0];e.classList.remove('on');void e.offsetWidth;e.classList.add('on')}}
 function mxEnterSeg(i){const seg=mx.segs[i],mv=MX_MOVES[seg.move],x=seg.x||{},own=x.say!==undefined;mx.prevP=Object.assign({},mx.curP);mx.idx=i;const ph=MX_PH[seg.phase];
  $('mxText').textContent=seg.text;{const ez=x.easy!==undefined?(x.easy?'Easy way: '+x.easy:''):'Easy way: '+mv.easy,ee=$('mxEasy');ee.textContent=ez;ee.style.display=ez?'':'none'}const ins=$('mxInstr');ins.classList.remove('pop');void ins.offsetWidth;ins.classList.add('pop');
  $('mxPhase').textContent=ph.icon+' '+ph.name;$('mxPhase').style.setProperty('--pc',ph.col);
  let line=own?x.say:seg.text;const how=own?null:MX_HOW[seg.move];if(how&&!mx.seen[seg.move]){mx.seen[seg.move]=1;line+=' '+how}const tips=own?null:MX_TIPS[seg.move],cues=[];if(tips)cues.push({t:Math.max(13,seg.dur*.42),text:tips});if(!own&&MX_COUNT[seg.move]&&seg.dur>=30){cues.push({t:seg.dur*.64,text:'Count with me! One, two, three, four!'});cues.push({t:seg.dur*.86,text:'Five, six, seven, eight! Keep going!'})}
- mx.br=null;if(seg.move==='breathe'){const pat=x.br||(seg.phase===2?[4,2,6]:[4,2,4]),cy=pat[0]+pat[1]+pat[2],lead=x.lead!==undefined?x.lead:((how&&line.indexOf(how)>=0)?6.5:1.5);mx.br=pat;mx.brLead=lead;for(let k=0;lead+k*cy+cy<=seg.dur+.6;k++){const b0=lead+k*cy;cues.push({t:b0,text:'Breathe in.'},{t:b0+pat[0],text:'Hold.'},{t:b0+pat[0]+pat[1],text:'Now, slowly breathe out.'})}}
+ mx.br=null;if(seg.move==='breathe'){const pat=x.br||(seg.phase===2?[4,2,6]:[4,2,4]),cy=pat[0]+pat[1]+pat[2],lead=x.lead!==undefined?x.lead:((how&&line.indexOf(how)>=0)?6.5:1.5);mx.br=pat;mx.brLead=lead;for(let k=0;!x.quiet&&lead+k*cy+cy<=seg.dur+.6;k++){const b0=lead+k*cy;cues.push({t:b0,text:'Breathe in.'},{t:b0+pat[0],text:'Hold.'},{t:b0+pat[0]+pat[1],text:'Now, slowly breathe out.'})}}
  if(x.cues)for(const q of x.cues)cues.push(q);
  cues.sort((p,q)=>p.t-q.t);seg.cues=cues;mx.cueIdx=0;if(seg.first){line=((ph.line||'')+' '+line).trim();const b=$('mxBanner');b.textContent=ph.icon+' '+ph.name;b.style.setProperty('--pc',ph.col);b.classList.remove('on');void b.offsetWidth;b.classList.add('on');mxChime(99)}else mxChime(0);
  if(line&&!mx.paused)mxSay(line)}
@@ -3317,16 +3323,16 @@ function mxConfetti(c,k,at){c.setTransform(k,0,0,k,0,0);for(let i=0;i<60;i++){co
 function mxEnd(completed){if(!mx||!mx.active||mx.state==='done')return;mx.state='done';mx.paused=false;clearTimeout(mx.introTO);clearTimeout(mx.cdTO);const th=MX_TH[mx.theme];
  $('mxInstr').style.visibility='hidden';$('mxCombo').style.visibility='hidden';
  mxControls(false);musicStop();recOnFinish();
- if(completed){mxMarkDone(mx.theme,1);mxChime(99);mxOver('<div class="mx-fin"><div class="mx-medal">🏅</div><h2>You did it, explorer!</h2><p>'+th.name+' · Level 1 complete</p><p>'+(mx.yoga?'☀️ 6 sun salutations done!':'🎵 '+mx.combo+' beats moved!')+'</p><p class="mx-ws">Great moving! Have a sip of water and a little rest. 💧</p></div>')}
+ if(completed){mxMarkDone(mx.theme,1);mxChime(99);mxOver('<div class="mx-fin"><div class="mx-medal">🏅</div><h2>You did it, explorer!</h2><p>'+th.name+' · Level 1 complete</p><p>'+(mx.yoga?'⭐ Great practice, sun friend!':'🎵 '+mx.combo+' beats moved!')+'</p><p class="mx-ws">Great moving! Have a sip of water and a little rest. 💧</p></div>')}
  else mxOver('<div class="mx-fin"><div class="mx-medal">👏</div><h2>Well done for moving!</h2><p>You can try the rest another time.</p><p class="mx-ws">Have a sip of water and a little rest. 💧</p></div>');
- const line=completed?(mx.yoga?"Fantastic! You finished Surya Namaskar, all six rounds! Thank you, sun! Now have a big sip of water and a little rest.":"Fantastic! You did it, explorer! You finished the "+th.name+". Great moving! Now have a sip of water and a little rest."):"Well done for moving today! Have a sip of water and a little rest.";
+ const line=completed?(mx.yoga?"Fantastic! You finished Surya Namaskar, all your rounds! Thank you, sun! Now have a big sip of water and a little rest.":"Fantastic! You did it, explorer! You finished the "+th.name+". Great moving! Now have a sip of water and a little rest."):"Well done for moving today! Have a sip of water and a little rest.";
  const wait=ms=>new Promise(r=>setTimeout(r,ms));
  Promise.all([new Promise(r=>mxSay(line,r)),wait(9000)]).then(()=>{recAfterSpeech()});
  const ec=$('endControls'),ra=ec.querySelector('.result-actions');ra.querySelectorAll('.mx-add').forEach(x=>x.remove());
  const a=document.createElement('button');a.type='button';a.className='primary mx-add';a.textContent='🏃 Another adventure';a.onclick=()=>{mxTeardown();page('move');mxOpen()};
  const b=document.createElement('button');b.type='button';b.className='secondary mx-add';b.textContent='🔁 Play this again';b.onclick=()=>{const s=mx.theme;mxTeardown();mx={sel:s};mxSafety()};
  ra.appendChild(a);ra.appendChild(b);ec.classList.remove('hidden')}
-function mxTeardown(){if(!mx)return;cancelAnimationFrame(mx.raf);clearTimeout(mx.introTO);clearTimeout(mx.cdTO);const was=mx.active;mx.active=false;MX3.live=false;MXY.live=false;mxPhSet(false);mx.pending=false;mxRecCopy(false);
+function mxTeardown(){if(!mx)return;cancelAnimationFrame(mx.raf);clearTimeout(mx.introTO);clearTimeout(mx.cdTO);const was=mx.active;mx.active=false;MX3.live=false;MXY.live=false;mxPhSet(false);mxVolM=1;try{if(musicGain)musicGain.gain.value=.05}catch(e){}mx.pending=false;mxRecCopy(false);
  try{speechSynthesis.cancel()}catch(e){}if(was){musicStop();if(recState==='recording')recStop();else if(recState==='armed'||recState==='starting')recCleanup()}
  const st=$('recStage');if(st)st.classList.remove('mx-on');const pn=$('mxPanel');if(pn)pn.remove();document.body.classList.remove('mx-active');const qp=$('quizPage');if(qp)qp.classList.remove('mx-mode');
  const ec=$('endControls');if(ec){ec.querySelectorAll('.mx-add').forEach(x=>x.remove());ec.classList.add('hidden')}const cb=$('mxControls');if(cb)cb.remove();stageScale()}
