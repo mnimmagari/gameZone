@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>Surya Namaskar: transitions</title>
+<style>
+body{margin:0;background:#f6e4d8;color:#5a3a30;font:15px/1.35 system-ui,sans-serif}
+h1{margin:10px 14px 2px;font-size:19px}p.s{margin:0 14px 6px;font-size:12px;color:#8a6a5c}
+#wrap{position:relative;width:min(1600px,100%)}canvas{display:block;width:100%;height:auto}
+#grid{position:absolute;inset:0;display:grid;pointer-events:none}
+#grid div{display:flex;align-items:flex-start;padding:4px 8px;border:1px solid rgba(160,110,90,.25);box-sizing:border-box;font-size:12px;font-weight:700}
+#grid div span{background:rgba(255,247,241,.85);padding:1px 8px;border-radius:8px}
+</style></head><body>
+<h1>Surya Namaskar: frames inside the transitions</h1>
+<p class="s">Each row is one transition, shown at 0, 25, 50, 75 and 100 percent. Check that no hand, elbow, knee or ankle bends the wrong way. Needs the local server.</p>
+<div id="wrap"><canvas id="c" width="1600" height="1920"></canvas><div id="grid"></div></div>
+<script src="../assets/vendor/three-mx.js"></script>
+<script src="../assets/move/yoga/yoga-kid.js"></script>
+<script src="../assets/move/yoga/yoga-poses.js"></script>
+<script>
+const T=MXTHREE.THREE,c=document.getElementById('c'),P=MXYogaPoses,W=1600,H=1920,COLS=5,CELL=320,ROWS=6;
+const r=new T.WebGLRenderer({canvas:c,antialias:true});r.setPixelRatio(1);r.setSize(W,H,false);r.outputColorSpace=T.SRGBColorSpace;r.toneMapping=T.ACESFilmicToneMapping;
+const sc=new T.Scene();sc.background=new T.Color(0xf4dccb);
+sc.add(new T.HemisphereLight(0xfff1e4,0xe9b9a3,1.15));
+const sun=new T.DirectionalLight(0xffe2c0,2.0);sun.position.set(-2.2,3.2,2.6);sc.add(sun);
+const floor=new T.Mesh(new T.PlaneGeometry(30,30),new T.MeshStandardMaterial({color:0xf0cdb9,roughness:1}));floor.rotation.x=-Math.PI/2;sc.add(floor);
+const MAT=.025,mat=new T.Mesh(new T.BoxGeometry(.7,MAT,1.6),new T.MeshStandardMaterial({color:0xe9b8a0,roughness:.85}));mat.position.set(0,MAT/2,-.05);sc.add(mat);
+const K=MXYoga.build(T,{eyes:'open'});K.floorY=MAT;sc.add(K.root);
+const cam=new T.PerspectiveCamera(30,1,.1,40);cam.position.set(2.6,1.05,2.6);cam.lookAt(0,.55,0);
+const S=P.make(K.dim).map(p=>p.spec),D=K.dim;
+const neutral=(()=>{const s=JSON.parse(JSON.stringify(S[0])),y=D.hipH+D.torso-.42;s.hL={x:D.shoulderW+.02,y,z:.03,dx:0,dy:-1,dz:0,px:-1,py:0,pz:0,curl:.2};s.hR=Object.assign({},s.hL,{x:-(D.shoulderW+.02),px:1});s.elbowPoleL=[.4,0,-1];s.elbowPoleR=[-.4,0,-1];return s})();
+const wave=(()=>{const s=JSON.parse(JSON.stringify(neutral));s.hR={x:-(D.shoulderW+.1),y:D.hipH+D.torso+.28,z:.05,dx:.15,dy:1,dz:0,px:0,py:0,pz:1,curl:0};s.elbowPoleR=[-1,0,-.4];return s})();
+const hair=(()=>{const s=JSON.parse(JSON.stringify(neutral));s.hR={x:-.11,y:D.hipH+D.torso+.1,z:.06,dx:0,dy:1,dz:.3,px:1,py:0,pz:0,curl:.3};s.elbowPoleR=[-1,0,-.2];return s})();
+const ROWSDEF=[['2 to 3 (arms up, fold)',S[1],S[2]],['3 to 4 (step into the lunge)',S[2],S[3]],['4 to 5 (lunge to mountain)',S[3],S[4]],['6 to 7 (eight limbs to cobra)',S[5],S[6]],['7 to 8 (cobra to mountain)',S[6],S[7]],['stand to prayer, and hand to hair',neutral,S[0]]];
+const grid=document.getElementById('grid');grid.style.gridTemplateColumns='repeat('+COLS+',1fr)';grid.style.gridTemplateRows='repeat('+ROWS+',1fr)';
+r.setScissorTest(true);
+ROWSDEF.forEach((row,ri)=>{for(let ci=0;ci<COLS;ci++){const u=ci/(COLS-1);let s=P.blend(row[1],row[2],u);if(ri===5&&ci>=1&&ci<=3)s=P.blend(neutral,hair,[0,.5,1,.5,0][ci]);
+ P.solve(T,K,s,0);K.idle(1.2);const x=ci*CELL,y=(ROWS-1-ri)*CELL;r.setViewport(x,y,CELL,CELL);r.setScissor(x,y,CELL,CELL);r.render(sc,cam);
+ const d=document.createElement('div');d.innerHTML=ci===0?'<span>'+row[0]+'</span>':'<span>'+Math.round(u*100)+'%</span>';grid.appendChild(d)}});
+document.title='done';
+</script></body></html>

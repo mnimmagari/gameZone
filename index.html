@@ -3305,7 +3305,7 @@ function mxTeardown(){if(!mx)return;cancelAnimationFrame(mx.raf);clearTimeout(mx
  const ec=$('endControls');if(ec){ec.querySelectorAll('.mx-add').forEach(x=>x.remove());ec.classList.add('hidden')}const cb=$('mxControls');if(cb)cb.remove();stageScale()}
 /* called by page(): leaving the adventure page area stops everything cleanly */
 function mxOnPage(p){if(!mx)return;if(mx.active&&p!=='quiz'){mxTeardown()}else if(!mx.active&&mx.pending&&p!=='move'){mx.pending=false;mxRecCopy(false)}if(p!=='move'){cancelAnimationFrame(mxPrev.raf);mxPrev.raf=0;const o=$('mxSafety');if(o)o.remove()}}
-if(MX_DEBUG)window.MXDEBUG={y:()=>MXY,segs:()=>mx&&mx.segs,jump:s=>{if(mx)mx.t=s},state:()=>mx&&({at:mx.at,state:mx.state,t:mx.t,idx:mx.idx,active:mx.active,q:mx.q,k:mx.k}),validate:()=>Object.keys(MX_LV).map(t=>{const s=mxSegments(t,1),sum=p=>s.filter(x=>x.phase===p).reduce((a,x)=>a+x.dur,0);return[t,sum(0),sum(1),sum(2)]})};
+if(MX_DEBUG)window.MXDEBUG={y:()=>MXY,plan:(q,t)=>mxYPlan(q,t),segs:()=>mx&&mx.segs,jump:s=>{if(mx)mx.t=s},state:()=>mx&&({at:mx.at,state:mx.state,t:mx.t,idx:mx.idx,active:mx.active,q:mx.q,k:mx.k}),validate:()=>Object.keys(MX_LV).map(t=>{const s=mxSegments(t,1),sum=p=>s.filter(x=>x.phase===p).reduce((a,x)=>a+x.dur,0);return[t,sum(0),sum(1),sum(2)]})};
 
 })();
 </script>

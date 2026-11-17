@@ -57,3 +57,6 @@ Uses the existing recorder unchanged (it records the stage only, no menus). The 
 
 ### Debug
 Open `index.html?mxdebug&mxspeed=30` to run at 30x; `MXDEBUG.validate()` lists the phase lengths of every theme (sun is 300/420/180).
+
+## Joint limits and transition paths
+The pose solver keeps every joint inside human range, in the poses and in every blended frame between them: wrist about 75 degrees forward, 80 back and 28 sideways; elbow and knee fold no further than about 150 degrees; ankle about 25 degrees up and 75 down. Kneeling feet use the toes-tucked angle; the cobra uses flat feet with straight legs and knees down. Hands that travel far (arms up to the floor, hands to the chest) swing on an arc around the shoulder instead of cutting through the head or body. `tools/yoga-transitions-sheet.html` shows the frames inside the main transitions. The audit (all 12 poses, all transitions, and the get-ready actions, every frame) reports no joint outside these limits.
