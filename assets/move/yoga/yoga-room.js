@@ -69,6 +69,9 @@
     const bottleM = M(0x9fd8e8, .25, { transparent: true, opacity: .85, emissive: 0x4fb4d0, emissiveIntensity: 0 });
     const bottle = sh(new T.Mesh(new T.CylinderGeometry(.034, .034, .2, 20), bottleM), true, false); bottle.position.set(.62, .05 + .1, .62); G.add(bottle);
     const cap = sh(new T.Mesh(new T.CylinderGeometry(.02, .024, .035, 16), M(0xe5805f, .6)), false, false); cap.position.set(.62, .05 + .2 + .017, .62); G.add(cap);
+    R.bottle = bottle; R.cap = cap;
+    const shoes = new T.Group(); for (const x of [-.05, .05]) { const sm = sh(new T.Mesh(new T.CapsuleGeometry(.035, .1, 6, 10), M(0xe5805f, .7)), true, false); sm.rotation.x = Math.PI / 2; sm.position.set(x, .03, 0); shoes.add(sm); } shoes.position.set(-.8, .05, .55); shoes.visible = false; G.add(shoes);
+    R.setShoes = u => { shoes.visible = u > .02; shoes.scale.setScalar(Math.max(.01, u)); };
     R.setWater = (on, at) => { bottleM.emissiveIntensity = on ? .55 + .35 * Math.sin(at * 4) : 0; };
     R.update = (p, at) => {
       p = Math.max(0, Math.min(1, p));

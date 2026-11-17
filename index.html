@@ -1329,9 +1329,16 @@ body.mx-active #quizPage .quiz-exit-row,body.mx-active #quizPage #quizControls{d
 .mx-breath{position:absolute;left:640px;top:214px;width:130px;text-align:center;display:none;color:#fff}.mx-breath .orb{width:104px;height:104px;margin:0 auto;border-radius:50%;background:radial-gradient(circle at 35% 30%,#fff,var(--bc,#5dffe6) 45%,rgba(255,255,255,.08) 72%);box-shadow:0 0 28px var(--bc,#5dffe6),inset 0 0 18px rgba(255,255,255,.5);display:flex;align-items:center;justify-content:center;transition:transform .25s linear}.mx-breath b{font-size:48px;font-weight:900;color:#12306b;text-shadow:0 2px 0 rgba(255,255,255,.6)}.mx-breath span{display:block;margin-top:6px;font-size:22px;font-weight:900;letter-spacing:1px;text-shadow:0 0 10px var(--bc,#5dffe6),0 2px 0 rgba(0,0,0,.45)}
 #mxGl{position:absolute;left:0;top:0;width:960px;height:540px;display:none}#mxPanel.mx3 #mxGl{display:block}
 .mx-beat{display:none!important}
-.mx-yoga .mx-instr{top:auto;bottom:30px;width:600px;padding:8px 20px 10px;border-radius:26px;background:rgba(255,246,238,.93);color:#6a3b2e;box-shadow:0 6px 0 rgba(160,100,80,.28),0 0 0 3px #fff}
-.mx-yoga .mx-it{font-size:30px;text-shadow:none}
-.mx-yoga .mx-easy{font-size:17px;color:#8b5a4a}
+.mx-yoga .mx-instr{top:auto;bottom:24px;width:auto;max-width:620px;min-width:260px;padding:6px 22px 7px;border-radius:22px;background:rgba(255,246,238,.93);color:#6a3b2e;box-shadow:0 6px 0 rgba(160,100,80,.28),0 0 0 3px #fff}
+.mx-yoga .mx-it{font-size:22px;line-height:1.15;text-shadow:none}
+.mx-yoga .mx-mp{display:none}
+.mx-yoga .mx-banner{font-size:30px;padding:8px 28px;top:92px;border-radius:26px}
+.mx-yoga .mx-easy{font-size:13px;margin-top:1px;color:#8b5a4a}
+.mx-over.yprep{background:none;align-items:flex-end}
+.mx-yw2{display:flex;gap:12px;align-items:center;background:rgba(255,246,238,.92);padding:8px 18px;border-radius:999px;margin-bottom:22px;box-shadow:0 5px 0 rgba(160,100,80,.25)}
+.mx-yw2 i{font-style:normal;font-size:26px;opacity:.45;transition:transform .2s}.mx-yw2 i.on{opacity:1;transform:scale(1.35)}.mx-yw2 i.ok{opacity:.9}
+.mx-yw2 button{pointer-events:auto;font:inherit;font-weight:900;font-size:15px;padding:6px 16px;border-radius:999px;border:0;background:#e5805f;color:#fff;cursor:pointer}
+.mx-ys{width:520px;text-align:center;padding:26px 40px!important}.mx-ys .mx-wi{font-size:86px}.mx-ys h2{font-size:44px!important;margin:4px 0!important}.mx-ys .mx-chips{display:flex;gap:8px;justify-content:center;margin:10px 0 14px}.mx-ys .mx-chips span{background:#ffe9dc;color:#8b4a36;font-weight:900;font-size:15px;padding:5px 14px;border-radius:999px}.mx-yb button[disabled]{opacity:.6;cursor:default}
 .mx-yoga .mx-mp{background:rgba(160,100,80,.2)}.mx-yoga .mx-mp i{background:#e5805f}
 .mx-yoga .mx-combo{display:none}
 .mx-yoga .mx-breath{left:auto;right:26px;top:206px}
@@ -1529,7 +1536,7 @@ function say(text,force=false,onDone=null,hooks=null){
   let called=false;const done=()=>{if(!called){called=true;finish()}};
   parts.forEach((t,k)=>{const u=new SpeechSynthesisUtterance(t);u.volume=1;if(gv){u.voice=gv;u.lang=gv.lang}else u.lang='en-IN';
    /* cartoon style: squeaky pitch, bouncy rate, extra sparkle on exclamations, curious lift on questions */
-   const ex=/!\s*$/.test(t),q=/\?\s*$/.test(t);u.pitch=Math.max(.9,Math.min(1.4,base+(ex?.05:0)+(q?.04:0)));u.rate=(hooks&&hooks.rate)?hooks.rate+(ex?.02:0):Math.max(.8,Math.min(1.05,.97+ageVoice().dr*.5+(ex?.03:0)-(t.length>60?.04:0)));if(hooks){if(k===0&&hooks.onStart)u.onstart=hooks.onStart;if(hooks.onWord)u.onboundary=ev=>{if(ev.name==='word'||ev.name===undefined)hooks.onWord()}}
+   const ex=/!\s*$/.test(t),q=/\?\s*$/.test(t);u.pitch=Math.max(.9,Math.min(base>1.4?2:1.4,base+(ex?.05:0)+(q?.04:0)));u.rate=(hooks&&hooks.rate)?hooks.rate+(ex?.02:0):Math.max(.8,Math.min(1.05,.97+ageVoice().dr*.5+(ex?.03:0)-(t.length>60?.04:0)));if(hooks){if(k===0&&hooks.onStart)u.onstart=hooks.onStart;if(hooks.onWord)u.onboundary=ev=>{if(ev.name==='word'||ev.name===undefined)hooks.onWord()}}
    if(k===parts.length-1){u.onend=done;u.onerror=done}speechSynthesis.speak(u)});
   if(!parts.length)done();
  }catch(err){finish()}
@@ -2703,14 +2710,16 @@ MX_MOVES.ypose={easy:'Move gently and rest whenever you like.',pose:()=>({})};MX
 MX_LV.sun={1:mxYBuild()};
 const MXY={live:false,state:'idle',loading:null,T:null,key:null,last:null,matU:.02,matT:.02,az:.5,dtE:33,fc:0,t0:0,tr:2,from:null};
 const MXY_PREP=[
- ['🧘','Roll out your yoga mat on a flat, clear floor with lots of space around it.','Welcome to Surya Namaskar, the sun salutation! Let us get ready, one step at a time. First, find a flat, clear spot with lots of space around you, and roll out your yoga mat.'],
+ ['🧘','Roll out your yoga mat on a flat, clear floor with lots of space around it.','Let us get ready, one step at a time. First, find a flat, clear spot with lots of space around you, and roll out your yoga mat.'],
  ['💧','Put your water bottle next to the mat.','Next, put your water bottle next to the mat, so you can take a sip when you need to.'],
  ['🦶','Bare feet are best. Take off your shoes and socks.','Take off your shoes and socks. Bare feet grip the mat and keep you steady.'],
  ['👕','Wear comfy clothes. Tie back long hair.','Wear comfy clothes that stretch, and tie back long hair.'],
  ['🧑','Tell a grown-up and ask them to stay nearby.','Tell a grown-up that you are starting, and ask them to stay close by.'],
  ['🛑','Rest any time. There is a water break and a rest break. You can press pause.','Listen to your body. If you feel tired, dizzy or sore, stop and rest. There is a water break and a rest break, and you can press pause any time.'],
  ['🌅','Stand at the front of your mat with your feet together.','Now stand at the front of your mat with your feet together. Here comes the sun!']];
-function mxYWelcome(){return'<div class="mx-wel mx-yw"><div class="mx-wi">🌅</div><h2>Surya Namaskar</h2><p>The sun salutation for kids · 6 rounds · 15 minutes</p><ul class="mx-yl">'+MXY_PREP.map((s,i)=>'<li id="mxYL'+i+'"><i>'+s[0]+'</i><span>'+s[1]+'</span></li>').join('')+'</ul><div class="mx-yb"><button type="button" id="mxYReady">I am ready ▶</button></div></div>'}
+function mxYSplash(){return'<div class="mx-wel mx-ys"><div class="mx-wi">🌅</div><h2>Daily Yoga Practice</h2><p>Surya Namaskar · the sun salutation for kids</p><div class="mx-chips"><span>15 minutes</span><span>12 poses</span><span>6 rounds</span></div></div>'}
+function mxYWelcomeOld(){return'<div class="mx-wel mx-yw"><div class="mx-wi">🌅</div><h2>Surya Namaskar</h2><p>The sun salutation for kids · 6 rounds · 15 minutes</p><ul class="mx-yl">'+MXY_PREP.map((s,i)=>'<li id="mxYL'+i+'"><i>'+s[0]+'</i><span>'+s[1]+'</span></li>').join('')+'</ul><div class="mx-yb"><button type="button" id="mxYReady">I am ready ▶</button></div></div>'}
+function mxYWelcome(){return'<div class="mx-yw2">'+MXY_PREP.map((p,i)=>'<i id="mxYL'+i+'">'+p[0]+'</i>').join('')+'<button type="button" id="mxYReady">I am ready ▶</button></div>'}
 function mxYLoad(){if(MXY.loading)return MXY.loading;
  const add=src=>new Promise(res=>{const s=document.createElement('script');s.src=src;s.onload=()=>res(true);s.onerror=()=>res(false);document.head.appendChild(s)});
  MXY.loading=(async()=>{if(!(await mx3Load()))return false;for(const[g,f]of[['MXYoga','yoga-kid'],['MXYogaPoses','yoga-poses'],['MXYogaRoom','yoga-room']]){if(!window[g])await add('assets/move/yoga/'+f+'.js');if(!window[g])return false}return true})();return MXY.loading}
@@ -2724,7 +2733,7 @@ async function mxYInit(){if(!MX3_OK)return false;
   const sc=new T.Scene();sc.background=new T.Color(0xf4dccb);sc.fog=new T.Fog(0xf4dccb,10,24);MXY.scene=sc;
   const R=MXYogaRoom.build(T);sc.add(R.group);MXY.R=R;
   const K=MXYoga.build(T,{eyes:'open'});K.floorY=R.floorY;sc.add(K.root);MXY.K=K;
-  MXY.specs=MXYogaPoses.make(K.dim).map(p=>p.spec);MXY.specs.push(mxYNeutral(MXY.specs[0],K.dim));
+  MXY.specs=MXYogaPoses.make(K.dim).map(p=>p.spec);MXY.specs.push(mxYNeutral(MXY.specs[0],K.dim));{const nw=JSON.parse(JSON.stringify(MXY.specs[12])),D=K.dim;nw.hR={x:-(D.shoulderW+.1),y:D.hipH+D.torso+.28,z:.05,dx:.15,dy:1,dz:0,px:0,py:0,pz:1,curl:0};nw.elbowPoleR=[-1,0,-.4];MXY.specs.push(nw)}
   MXY.cam=new T.PerspectiveCamera(30,16/9,.1,60);
   MXY.comp=new X.EffectComposer(r);MXY.comp.addPass(new X.RenderPass(sc,MXY.cam));MXY.bloom=new X.UnrealBloomPass(new T.Vector2(960,540),.35,.6,.92);MXY.comp.addPass(MXY.bloom);MXY.comp.addPass(new X.OutputPass());MXY.bloomOn=true;
   MXY.state='ready';return true}catch(e){console.warn('Surya Namaskar 3D unavailable:',e);MXY.state='failed';return false}}
@@ -2733,6 +2742,7 @@ const mxYSpecFor=(i,rd)=>{const S=MXY.specs;if(i>=12)return S[12];if(rd>0&&rd%2=
 /* what the child should be doing now: a pose, a breath-driven blend, or a rest stance */
 function mxYWant(seg,tl){
  if(mx.state==='done')return{key:'d',spec:MXY.specs[1],i:1,tr:2};
+ if(mx.state==='welcome'&&MXY.prep>=0){const m=[2,2,2,12,13,12,0][MXY.prep];if(m===13){const s=JSON.parse(JSON.stringify(MXY.specs[13]));s.hR.x+=Math.sin(mx.at*7)*.07;return{key:'w',spec:s,i:12,tr:1.2}}const mm=m===undefined?0:m;return{key:'p'+mm,spec:MXY.specs[mm],i:12,tr:1.4}}
  if(!seg||mx.state!=='play')return{key:'n',spec:MXY.specs[12],i:12,tr:1.5};
  const x=seg.x||{},rd=x.round||0;
  if(x.bp)return{key:'bp',spec:MXogaBlend(MXY.specs[x.bp[0]],MXY.specs[x.bp[1]],mxBreathU(tl)),i:12,tr:1.5};
@@ -2747,6 +2757,7 @@ function mxYPaint(c,k,at,seg,tl){const Y=MXY,T=Y.T,K=Y.K,R=Y.R,P=window.MXYogaPo
  K.setEyes(x.eyes==='closed'&&tl<(x.eyesUntil||999)?'closed':'open');
  P.solve(T,K,S,0);K.idle(at);
  /* room: sun rises over the 15 minutes, mat unrolls while we get ready, bottle glows in breaks */
+ {const pr=mx.state==='welcome'?MXY.prep:99,u1=pr===1?Math.min(1,(at-MXY.prepT0)/2.6):pr>1?1:0,bx=.12+.5*u1,by=.55-.4*u1,bz=.3+.32*u1;R.bottle.visible=pr>=1;R.bottle.position.set(bx,by,bz);R.cap.visible=pr>=1;R.cap.position.set(bx,by+.117,bz);R.setShoes(pr===2?Math.min(1,(at-MXY.prepT0)/1.5):pr>2?1:0)}
  const sp=mx.state==='play'?mx.t/900:mx.state==='done'?1:0;R.update(sp,at);Y.matU+=(Y.matT-Y.matU)*Math.min(1,dt*1.6);R.setMat(Y.matU);R.setWater(!!x.water&&mx.state==='play',at);
  /* camera: gentle drift; side-on for the floor poses so the shape can be seen */
  const prof=w.i>=4&&w.i<=7?1.0:.42;Y.az+=(prof-Y.az)*Math.min(1,dt*1.1);const az=Y.az+Math.sin(at*.13)*.07,cam=Y.cam;cam.position.set(Math.sin(az)*4.6,1.0+Math.sin(at*.2)*.03,Math.cos(az)*4.6);cam.lookAt(0,.74,0);
@@ -2772,19 +2783,20 @@ function mxYHud2(c,seg,tl,w,at){
  c.textAlign='left'}
 /* the voice walks the child through getting ready: mat, water, feet, clothes, a grown-up, resting, then the first pose */
 function mxYPrep(){const n=MXY_PREP.length;let i=0;
- const mark=q=>document.querySelectorAll('.mx-yl li').forEach((e,k)=>{e.classList.toggle('on',k===q);e.classList.toggle('ok',k<q)});
+ const mark=q=>{MXY.prep=q;MXY.prepT0=mx.at;document.querySelectorAll('.mx-yw2 i').forEach((e,k)=>{e.classList.toggle('on',k===q);e.classList.toggle('ok',k<q)})};
  const step=()=>{if(!mx.active||mx.state!=='welcome')return;if(i>=n){mark(n);setTimeout(()=>{if(mx.active&&mx.state==='welcome')mxCount(3)},900);return}
   const mine=i;mark(i);if(i===0)MXY.matT=1;
-  Promise.all([new Promise(r=>{mxSay(MXY_PREP[i][2],r);setTimeout(r,24000)}),new Promise(r=>setTimeout(r,4200))]).then(()=>{if(mx.active&&mx.state==='welcome'&&i===mine){i++;setTimeout(step,500)}})};
+  Promise.all([new Promise(r=>{mxSay(MXY_PREP[i][2],r);setTimeout(r,24000)}),new Promise(r=>setTimeout(r,3000))]).then(()=>{if(mx.active&&mx.state==='welcome'&&i===mine){i++;setTimeout(step,500)}})};
  const rb=$('mxYReady');if(rb)rb.onclick=()=>{try{speechSynthesis.cancel()}catch(e){}MXY.matT=1;mxCount(3)};
  clearTimeout(mx.introTO);mx.introTO=setTimeout(()=>{if(mx.active&&mx.state==='welcome')mxCount(3)},180000);step()}
 async function mxYStart(){
  let ok=false;try{ok=await mxYInit()}catch(e){ok=false}
  if(!mx.active)return;
  if(!ok){mxOver('<div class="mx-wel"><div class="mx-wi">🧘</div><h2>This adventure needs 3D</h2><p class="mx-ws">Your browser could not start 3D graphics, so Surya Namaskar cannot play here. Try another adventure, or open GameZone in a newer browser.</p><div class="mx-yb"><button type="button" id="mxYBack">Back to adventures</button></div></div>');const b=$('mxYBack');if(b)b.onclick=()=>{mxTeardown();page('move');mxOpen()};return}
- MXY.live=true;MXY.key=null;MXY.last=null;MXY.lastT=0;MXY.az=.42;MXY.matU=.02;MXY.matT=.02;$('mxPanel').classList.add('mx3','mx-yoga');mxSize();
+ MXY.live=true;MXY.key=null;MXY.last=null;MXY.lastT=0;MXY.prep=-1;MXY.prepT0=0;MXY.az=.42;MXY.matU=.02;MXY.matT=.02;$('mxPanel').classList.add('mx3','mx-yoga');mxSize();
  musicStop();{const sl=TRACKS.slice().sort((a,b)=>a.bpm-b.bpm).slice(0,6);musicTrack=sl[Math.floor(Math.random()*sl.length)];lastTrack=TRACKS.indexOf(musicTrack)}musicStart();
- mxYPrep()}
+ await Promise.all([new Promise(r=>mxSay('Welcome to your daily yoga practice!',r)),new Promise(r=>setTimeout(r,3500))]);
+ if(!mx.active||mx.state!=='welcome')return;mxOver(mxYWelcome());mxYPrep()}
 const MX_CHEER=["You're doing great!","Nice and gentle. Keep going!","Wonderful moving, explorer!","Lovely! Take your time.","You're a star!"];
 /* ---- drawing helpers ---- */
 function mxGrad(c,y0,y1,stops){const g=c.createLinearGradient(0,y0,0,y1);stops.forEach((s,i)=>g.addColorStop(i/(stops.length-1),s));return g}
@@ -3205,7 +3217,7 @@ async function mxBegin(){
  mxBuildStage();document.body.classList.add('mx-active');$('recStage').classList.add('mx-on');$('quizPage').classList.add('mx-mode');$('endControls').classList.add('hidden');
  page('quiz');$('breadcrumb').textContent='Move & Explore · '+MX_TH[sel].name;stageScale();mxControls(true);$('mxPause').textContent='⏸ Pause';mxSize();$('mxInstr').style.visibility='hidden';$('mxPhase').style.visibility='hidden';$('mxCombo').style.visibility='hidden';{const nc=MX_NEON[sel]||MX_NEON.forest,pn=$('mxPanel');pn.style.setProperty('--n0',nc[0]);pn.style.setProperty('--n1',nc[1])}
  $('mxChip').textContent=MX_TH[sel].icon+' '+MX_TH[sel].name+' · Level 1';
- mxOver(sel==='sun'?mxYWelcome():'<div class="mx-wel"><div class="mx-wi">'+MX_TH[sel].icon+'</div><h2>'+MX_TH[sel].name+'</h2><p>Level 1 · 15 minutes</p><p class="mx-ws">Stand up with lots of space around you. Ask a grown-up to stay close.</p></div>');
+ mxOver(sel==='sun'?mxYSplash():'<div class="mx-wel"><div class="mx-wi">'+MX_TH[sel].icon+'</div><h2>'+MX_TH[sel].name+'</h2><p>Level 1 · 15 minutes</p><p class="mx-ws">Stand up with lots of space around you. Ask a grown-up to stay close.</p></div>');
  cancelAnimationFrame(mx.raf);mx.last=performance.now();mx.raf=requestAnimationFrame(mxFrame);
  try{await Promise.resolve(recOnStart())}catch(e){}
  if(sel!=='sun')try{await Promise.race([mxLoadAssets(sel),new Promise(r=>setTimeout(r,5000))])}catch(e){}
@@ -3217,9 +3229,9 @@ async function mxBegin(){
  /* welcome stays at least 5 s (also when the voice is off); safety net if speech never ends */
  Promise.all([new Promise(r=>mxSay(intro,r)),new Promise(r=>setTimeout(r,5000))]).then(()=>{if(mx.active&&mx.state==='welcome')mxCount(3)});
  clearTimeout(mx.introTO);mx.introTO=setTimeout(()=>{if(mx.active&&mx.state==='welcome')mxCount(3)},16000)}
-function mxSay(text,done){try{say(text,false,done,mx&&mx.yoga?{pitch:1.26,rate:.93}:{pitch:1.1,rate:.97})}catch(e){if(done)done()}}
+function mxSay(text,done){try{say(text,false,done,mx&&mx.yoga?{pitch:1.9,rate:1.12}:{pitch:1.1,rate:.97})}catch(e){if(done)done()}}
 function mxCount(n){if(!mx.active||mx.state==='play'||mx.state==='done')return;mx.state='count';clearTimeout(mx.introTO);mxOver('<div class="mx-cd"><b>'+n+'</b><span>Get ready!</span></div>');mxChime(n);if(n>1){mx.cdTO=setTimeout(()=>mxCount(n-1),1000)}else mx.cdTO=setTimeout(()=>{if(!mx.active)return;mx.state='play';mx.t=0;mx.idx=-1;mxOver('');$('mxInstr').style.visibility='';$('mxPhase').style.visibility='';$('mxCombo').style.visibility='';mxChime(0)},1000)}
-function mxOver(h){const o=$('mxOver');if(o){o.innerHTML=h;o.classList.toggle('on',!!h)}}
+function mxOver(h){const o=$('mxOver');if(o){o.innerHTML=h;o.classList.toggle('on',!!h);o.classList.toggle('yprep',/mx-yw2/.test(h))}}
 function mxChime(n){try{const ctx=musicCtxGet();if(!ctx)return;const t=ctx.currentTime;if(n===0){note(784,t,.18,'sine',.9);note(1047,t+.12,.3,'sine',.9)}else if(n===99){[523,659,784,1047].forEach((f,i)=>note(f,t+i*.16,.4,'triangle',.9))}else note(660,t,.14,'sine',.7)}catch(e){}}
 function mxTogglePause(){if(!mx||!mx.active||mx.state==='done')return;mx.paused=!mx.paused;$('mxPause').textContent=mx.paused?'▶ Resume':'⏸ Pause';if(mx.paused){try{speechSynthesis.cancel()}catch(e){}mxOver('<div class="mx-pz"><b>⏸</b><span>Take a little rest</span></div>')}else{mxOver('');const s=mx.segs[mx.idx];if(s){const q=s.x&&s.x.say!==undefined?s.x.say:s.text;if(q)mxSay(q)}}}
 /* ---- per-frame loop ---- */

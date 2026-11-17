@@ -64,10 +64,10 @@
       }),
       mk(7, 'bhujangasana', 'Bhujangasana', 'Cobra pose', 'Breathe in', {
         liftIn: .07,
-        pelvis: { y: .1, z: -.1, pitch: 1.5 }, spine: { pitch: -.6 }, head: { pitch: -.45 },
-        fL: { x: .06, y: .05, z: -.6, pitch: 3.0 }, fR: { x: -.06, y: .05, z: -.6, pitch: 3.0 },
-        hL: hand(.13, .12), hR: hand(-.13, .12),
-        kneePoleL: [0, 1, 0], kneePoleR: [0, 1, 0], elbowPoleL: [.5, .5, -1], elbowPoleR: [-.5, .5, -1]
+        pelvis: { y: .13, z: -.12, pitch: 1.45 }, spine: { pitch: -1.0 }, head: { pitch: -.2 },
+        fL: { x: .06, y: .06, z: -.66, pitch: 3.0 }, fR: { x: -.06, y: .06, z: -.66, pitch: 3.0 },
+        hL: hand(.13, .14), hR: hand(-.13, .14),
+        kneePoleL: [0, -1, 0], kneePoleR: [0, -1, 0], elbowPoleL: [.5, .5, -1], elbowPoleR: [-.5, .5, -1]
       })
     );
     P.push(cl(P[4], 8, 'Parvatasana', 'Mountain pose (downward dog)', 'Breathe out'));
