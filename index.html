@@ -2733,16 +2733,45 @@ async function mxYInit(){if(!MX3_OK)return false;
   const sc=new T.Scene();sc.background=new T.Color(0xf4dccb);sc.fog=new T.Fog(0xf4dccb,10,24);MXY.scene=sc;
   const R=MXYogaRoom.build(T);sc.add(R.group);MXY.R=R;
   const K=MXYoga.build(T,{eyes:'open'});K.floorY=R.floorY;sc.add(K.root);MXY.K=K;
-  MXY.specs=MXYogaPoses.make(K.dim).map(p=>p.spec);MXY.specs.push(mxYNeutral(MXY.specs[0],K.dim));{const nw=JSON.parse(JSON.stringify(MXY.specs[12])),D=K.dim;nw.hR={x:-(D.shoulderW+.1),y:D.hipH+D.torso+.28,z:.05,dx:.15,dy:1,dz:0,px:0,py:0,pz:1,curl:0};nw.elbowPoleR=[-1,0,-.4];MXY.specs.push(nw)}
+  MXY.specs=MXYogaPoses.make(K.dim).map(p=>p.spec);MXY.specs.push(mxYNeutral(MXY.specs[0],K.dim));{const nw=JSON.parse(JSON.stringify(MXY.specs[12])),D=K.dim;nw.hR={x:-(D.shoulderW+.1),y:D.hipH+D.torso+.28,z:.05,dx:.15,dy:1,dz:0,px:0,py:0,pz:1,curl:0};nw.elbowPoleR=[-1,0,-.4];MXY.specs.push(nw);const hs=JSON.parse(JSON.stringify(MXY.specs[12]));hs.hR={x:-.11,y:D.hipH+D.torso+.1,z:.06,dx:0,dy:1,dz:.3,px:1,py:0,pz:0,curl:.3};hs.elbowPoleR=[-1,0,-.2];MXY.specs.push(hs)}
   MXY.cam=new T.PerspectiveCamera(30,16/9,.1,60);
   MXY.comp=new X.EffectComposer(r);MXY.comp.addPass(new X.RenderPass(sc,MXY.cam));MXY.bloom=new X.UnrealBloomPass(new T.Vector2(960,540),.35,.6,.92);MXY.comp.addPass(MXY.bloom);MXY.comp.addPass(new X.OutputPass());MXY.bloomOn=true;
   MXY.state='ready';return true}catch(e){console.warn('Surya Namaskar 3D unavailable:',e);MXY.state='failed';return false}}
 function mxYResize(w,h){if(MXY.state!=='ready'||!MXY.live)return;MXY.r.setPixelRatio(1);MXY.r.setSize(w,h,false);MXY.comp.setSize(w,h);MXY.bloom.setSize(w,h);MXY.cam.aspect=w/h;MXY.cam.updateProjectionMatrix()}
 const mxYSpecFor=(i,rd)=>{const S=MXY.specs;if(i>=12)return S[12];if(rd>0&&rd%2===0){if(i===3)return S[8];if(i===8)return S[3]}return S[i]};
 /* what the child should be doing now: a pose, a breath-driven blend, or a rest stance */
+/* ---- get-ready actions: the child rolls out the mat, fetches the water bottle and sets it down, puts her shoes aside, fixes her hair, waves to the grown-up ---- */
+const MXY_PT=[6.4,7.6,5.8,3.8,3.8,2.6,2.8];
+function mxYWalk(base,ph,amp){const s=JSON.parse(JSON.stringify(base)),sw=Math.sin(ph),a=Math.max(0,Math.cos(ph))*.05,b=Math.max(0,-Math.cos(ph))*.05;s.fL.z+=sw*amp;s.fL.y+=a;s.fR.z-=sw*amp;s.fR.y+=b;return s}
+function mxYPlan(q,t){const S=MXY.specs,B=(a,b,u)=>window.MXYogaPoses.blend(a,b,u),e=mxEase,cl=mxClamp,N=S[12],F=S[2],lp=(a,b,u)=>a+(b-a)*u,sg=(a,b)=>cl((t-a)/(b-a),0,1),PI=Math.PI;
+ const o={x:0,z:0,ry:0,spec:N,mat:1,roll:false,bot:{x:.62,z:.62,carry:false},shoes:q>2?1:0};
+ if(q<1)o.bot={x:-.62,z:.9,carry:false};
+ const mv=(a,b)=>t>=a&&t<b,ph=t*PI*2*1.3;
+ if(q<0){o.z=-.95;o.mat=.001;o.roll=true;return o}
+ if(q===0){o.mat=0;const bu=e(sg(0,.9))*(1-e(sg(4.6,5.4))),pu=sg(.9,4.6);o.mat=pu;o.roll=t<4.6;
+  if(t<4.6){o.z=-.95+1.7*pu}else if(t<5.4){o.z=.75;o.mat=1}else{o.mat=1;o.z=lp(.75,0,e(sg(5.4,6.4)))}
+  const moving=(t>.9&&t<4.6)||t>=5.4;o.spec=mxYWalk(B(N,F,bu),(t<4.6?pu*PI*2*3:t*PI*2*1.3),moving?.07:0);return o}
+ if(q===1){const P1={x:-.72,z:.75},P2={x:.52,z:.47};
+  const bu=e(sg(1.8,2.5))*(1-e(sg(2.6,3.1)))+e(sg(4.5,5.1))*(1-e(sg(5.4,5.9)));
+  let x=0,z=0,ry=0;
+  if(t<1.6){const u=e(sg(0,1.6));x=lp(0,P1.x,u);z=lp(0,P1.z,u);ry=lp(0,-.77,e(sg(0,.3)))}
+  else if(t<3.1){x=P1.x;z=P1.z;ry=lp(-.77,PI/2,e(sg(1.6,2.1)))}
+  else if(t<4.5){const u=e(sg(3.1,4.5));x=lp(P1.x,P2.x,u);z=lp(P1.z,P2.z,u);ry=PI/2}
+  else if(t<6.3){x=P2.x;z=P2.z;ry=lp(PI/2,0,e(sg(5.9,6.3)))}
+  else{const u=e(sg(6.3,7.5));x=lp(P2.x,0,u);z=lp(P2.z,0,u);ry=0}
+  o.x=x;o.z=z;o.ry=ry;const moving=mv(.1,1.6)||mv(3.1,4.5)||mv(6.3,7.5);o.spec=mxYWalk(B(N,F,bu),ph,moving?.09:0);o.bot={x:-.62,z:.9,carry:t>=2.5&&t<5.2};if(t>=5.2)o.bot={x:.62,z:.62,carry:false};return o}
+ if(q===2){const P1={x:-.55,z:.15};let x,z,ry=0;
+  if(t<1.5){const u=e(sg(0,1.5));x=lp(0,P1.x,u);z=lp(0,P1.z,u);ry=lp(0,-1,e(sg(0,.3)))*(1-e(sg(1.1,1.5)))}
+  else if(t<3.8){x=P1.x;z=P1.z}else{const u=e(sg(3.8,5.6));x=lp(P1.x,0,u);z=lp(P1.z,0,u)}
+  o.x=x;o.z=z;o.ry=ry;const bu=e(sg(1.8,2.5))*(1-e(sg(3,3.6))),moving=mv(.1,1.5)||mv(3.8,5.6);o.spec=mxYWalk(B(N,F,bu),ph,moving?.09:0);o.shoes=sg(2.2,2.9);return o}
+ if(q===3){const u=e(sg(0,.6))*(1-e(sg(3.1,3.7)));const s=B(N,S[14],u);s.hR.x+=Math.sin(t*9)*.012*u;o.spec=s;return o}
+ if(q===4){const u=e(sg(0,.5))*(1-e(sg(3.3,3.8)));const s=B(N,S[13],u);s.hR.x+=Math.sin(t*7)*.07*u;o.spec=s;return o}
+ if(q===5){o.spec=N;return o}
+ if(q===6){o.spec=B(N,S[0],e(sg(0,1.2)));return o}
+ o.spec=S[0];return o}
 function mxYWant(seg,tl){
  if(mx.state==='done')return{key:'d',spec:MXY.specs[1],i:1,tr:2};
- if(mx.state==='welcome'&&MXY.prep>=0){const m=[2,2,2,12,13,12,0][MXY.prep];if(m===13){const s=JSON.parse(JSON.stringify(MXY.specs[13]));s.hR.x+=Math.sin(mx.at*7)*.07;return{key:'w',spec:s,i:12,tr:1.2}}const mm=m===undefined?0:m;return{key:'p'+mm,spec:MXY.specs[mm],i:12,tr:1.4}}
+ if((mx.state==='welcome'||mx.state==='count')&&MXY.prep>=-1){const pl=mxYPlan(MXY.prep,mx.at-MXY.prepT0);return{key:'prep',spec:pl.spec,i:12,tr:.01,plan:pl}}
  if(!seg||mx.state!=='play')return{key:'n',spec:MXY.specs[12],i:12,tr:1.5};
  const x=seg.x||{},rd=x.round||0;
  if(x.bp)return{key:'bp',spec:MXogaBlend(MXY.specs[x.bp[0]],MXY.specs[x.bp[1]],mxBreathU(tl)),i:12,tr:1.5};
@@ -2755,10 +2784,10 @@ function mxYPaint(c,k,at,seg,tl){const Y=MXY,T=Y.T,K=Y.K,R=Y.R,P=window.MXYogaPo
   if(seg&&x.round&&w.i<12){$('mxText').textContent='Pose '+(w.i+1)+': '+MXY_P[w.i].n;$('mxEasy').textContent='Easy way: '+MXY_P[w.i].e;$('mxEasy').style.display=''}}
  const u=Y.tr>0?Math.min(1,(at-Y.t0)/Y.tr):1,S=u<1?P.blend(Y.from,w.spec,u):w.spec;Y.last=S;
  K.setEyes(x.eyes==='closed'&&tl<(x.eyesUntil||999)?'closed':'open');
- P.solve(T,K,S,0);K.idle(at);
+ const pl=w.plan||null;P.solve(T,K,S,pl?pl.ry:0);if(pl){K.root.position.x=pl.x;K.root.position.z=pl.z;K.root.updateMatrixWorld(true)}K.idle(at);
  /* room: sun rises over the 15 minutes, mat unrolls while we get ready, bottle glows in breaks */
- {const pr=mx.state==='welcome'?MXY.prep:99,u1=pr===1?Math.min(1,(at-MXY.prepT0)/2.6):pr>1?1:0,bx=.12+.5*u1,by=.55-.4*u1,bz=.3+.32*u1;R.bottle.visible=pr>=1;R.bottle.position.set(bx,by,bz);R.cap.visible=pr>=1;R.cap.position.set(bx,by+.117,bz);R.setShoes(pr===2?Math.min(1,(at-MXY.prepT0)/1.5):pr>2?1:0)}
- const sp=mx.state==='play'?mx.t/900:mx.state==='done'?1:0;R.update(sp,at);Y.matU+=(Y.matT-Y.matU)*Math.min(1,dt*1.6);R.setMat(Y.matU);R.setWater(!!x.water&&mx.state==='play',at);
+ {const bt=pl?pl.bot:{x:.62,z:.62,carry:false};let bx=bt.x,by=.15,bz=bt.z;if(bt.carry){const hp=K.armR.hand.getWorldPosition(new T.Vector3());bx=hp.x;by=hp.y+.02;bz=hp.z}R.bottle.position.set(bx,by,bz);R.cap.position.set(bx,by+.117,bz);R.setShoes(pl?pl.shoes:1)}
+ const sp=mx.state==='play'?mx.t/900:mx.state==='done'?1:0;R.update(sp,at);if(pl){Y.matU=pl.mat;R.setMat(pl.mat,pl.roll)}else{Y.matU+=(1-Y.matU)*Math.min(1,dt*3);R.setMat(Y.matU,false)}R.setWater(!!x.water&&mx.state==='play',at);
  /* camera: gentle drift; side-on for the floor poses so the shape can be seen */
  const prof=w.i>=4&&w.i<=7?1.0:.42;Y.az+=(prof-Y.az)*Math.min(1,dt*1.1);const az=Y.az+Math.sin(at*.13)*.07,cam=Y.cam;cam.position.set(Math.sin(az)*4.6,1.0+Math.sin(at*.2)*.03,Math.cos(az)*4.6);cam.lookAt(0,.74,0);
  if(Y.bloomOn)Y.comp.render();else Y.r.render(Y.scene,cam);
@@ -2786,8 +2815,8 @@ function mxYPrep(){const n=MXY_PREP.length;let i=0;
  const mark=q=>{MXY.prep=q;MXY.prepT0=mx.at;document.querySelectorAll('.mx-yw2 i').forEach((e,k)=>{e.classList.toggle('on',k===q);e.classList.toggle('ok',k<q)})};
  const step=()=>{if(!mx.active||mx.state!=='welcome')return;if(i>=n){mark(n);setTimeout(()=>{if(mx.active&&mx.state==='welcome')mxCount(3)},900);return}
   const mine=i;mark(i);if(i===0)MXY.matT=1;
-  Promise.all([new Promise(r=>{mxSay(MXY_PREP[i][2],r);setTimeout(r,24000)}),new Promise(r=>setTimeout(r,3000))]).then(()=>{if(mx.active&&mx.state==='welcome'&&i===mine){i++;setTimeout(step,500)}})};
- const rb=$('mxYReady');if(rb)rb.onclick=()=>{try{speechSynthesis.cancel()}catch(e){}MXY.matT=1;mxCount(3)};
+  Promise.all([new Promise(r=>{mxSay(MXY_PREP[i][2],r);setTimeout(r,24000)}),new Promise(r=>setTimeout(r,(MXY_PT[i]||3)*1000+300))]).then(()=>{if(mx.active&&mx.state==='welcome'&&i===mine){i++;setTimeout(step,500)}})};
+ const rb=$('mxYReady');if(rb)rb.onclick=()=>{try{speechSynthesis.cancel()}catch(e){}MXY.prep=7;MXY.prepT0=mx.at;mxCount(3)};
  clearTimeout(mx.introTO);mx.introTO=setTimeout(()=>{if(mx.active&&mx.state==='welcome')mxCount(3)},180000);step()}
 async function mxYStart(){
  let ok=false;try{ok=await mxYInit()}catch(e){ok=false}
@@ -3276,7 +3305,7 @@ function mxTeardown(){if(!mx)return;cancelAnimationFrame(mx.raf);clearTimeout(mx
  const ec=$('endControls');if(ec){ec.querySelectorAll('.mx-add').forEach(x=>x.remove());ec.classList.add('hidden')}const cb=$('mxControls');if(cb)cb.remove();stageScale()}
 /* called by page(): leaving the adventure page area stops everything cleanly */
 function mxOnPage(p){if(!mx)return;if(mx.active&&p!=='quiz'){mxTeardown()}else if(!mx.active&&mx.pending&&p!=='move'){mx.pending=false;mxRecCopy(false)}if(p!=='move'){cancelAnimationFrame(mxPrev.raf);mxPrev.raf=0;const o=$('mxSafety');if(o)o.remove()}}
-if(MX_DEBUG)window.MXDEBUG={y:()=>MXY,segs:()=>mx&&mx.segs,jump:s=>{if(mx)mx.t=s},state:()=>mx&&({state:mx.state,t:mx.t,idx:mx.idx,active:mx.active,q:mx.q,k:mx.k}),validate:()=>Object.keys(MX_LV).map(t=>{const s=mxSegments(t,1),sum=p=>s.filter(x=>x.phase===p).reduce((a,x)=>a+x.dur,0);return[t,sum(0),sum(1),sum(2)]})};
+if(MX_DEBUG)window.MXDEBUG={y:()=>MXY,segs:()=>mx&&mx.segs,jump:s=>{if(mx)mx.t=s},state:()=>mx&&({at:mx.at,state:mx.state,t:mx.t,idx:mx.idx,active:mx.active,q:mx.q,k:mx.k}),validate:()=>Object.keys(MX_LV).map(t=>{const s=mxSegments(t,1),sum=p=>s.filter(x=>x.phase===p).reduce((a,x)=>a+x.dur,0);return[t,sum(0),sum(1),sum(2)]})};
 
 })();
 </script>

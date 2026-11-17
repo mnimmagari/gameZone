@@ -64,13 +64,15 @@
     const dm = new T.PointsMaterial({ size: .05, map: tex(T, 32, 32, (g, w, h) => { const r = g.createRadialGradient(16, 16, 0, 16, 16, 16); r.addColorStop(0, 'rgba(255,240,210,.9)'); r.addColorStop(1, 'rgba(255,230,190,0)'); g.fillStyle = r; g.fillRect(0, 0, w, h); }), transparent: true, depthWrite: false, blending: T.AdditiveBlending, color: 0xffe9c8 }); G.add(new T.Points(dg, dm));
     const c1 = new T.Color(0xff8f78), c2 = new T.Color(0xffe3a8), tmp = new T.Color();
     /* the mat unrolls from the back of the platform towards the viewer (u 0..1) */
-    R.setMat = u => { u = Math.max(.001, Math.min(1, u)); mat.scale.z = u; mat.position.z = -(1 - u) * .85; };
+    const rollG = new T.Group(), rollM = sh(new T.Mesh(new T.CylinderGeometry(.05, .05, .72, 24), M(0xe9a98f, .85)), true, false); rollM.rotation.z = Math.PI / 2; rollG.add(rollM); G.add(rollG);
+    /* u = how much of the mat is unrolled (0..1); the rolled-up part sits at the front edge and shrinks */
+    R.setMat = (u, showRoll) => { u = Math.max(.001, Math.min(1, u)); mat.scale.z = u; mat.position.z = -(1 - u) * .85; const rs = (.012 + .038 * (1 - u)) / .05; rollG.visible = !!showRoll && u < .985; rollM.scale.set(rs, 1, rs); rollG.position.set(0, R.floorY - .024 + .05 * rs, -.85 + 1.7 * u); rollG.rotation.x = u * 24; };
     /* water bottle beside the mat; it glows softly during the water and rest breaks */
     const bottleM = M(0x9fd8e8, .25, { transparent: true, opacity: .85, emissive: 0x4fb4d0, emissiveIntensity: 0 });
-    const bottle = sh(new T.Mesh(new T.CylinderGeometry(.034, .034, .2, 20), bottleM), true, false); bottle.position.set(.62, .05 + .1, .62); G.add(bottle);
+    const bottle = sh(new T.Mesh(new T.CylinderGeometry(.034, .034, .2, 20), bottleM), true, false); bottle.position.set(-.62, .05 + .1, .9); G.add(bottle);
     const cap = sh(new T.Mesh(new T.CylinderGeometry(.02, .024, .035, 16), M(0xe5805f, .6)), false, false); cap.position.set(.62, .05 + .2 + .017, .62); G.add(cap);
     R.bottle = bottle; R.cap = cap;
-    const shoes = new T.Group(); for (const x of [-.05, .05]) { const sm = sh(new T.Mesh(new T.CapsuleGeometry(.035, .1, 6, 10), M(0xe5805f, .7)), true, false); sm.rotation.x = Math.PI / 2; sm.position.set(x, .03, 0); shoes.add(sm); } shoes.position.set(-.8, .05, .55); shoes.visible = false; G.add(shoes);
+    const shoes = new T.Group(); for (const x of [-.05, .05]) { const sm = sh(new T.Mesh(new T.CapsuleGeometry(.035, .1, 6, 10), M(0xe5805f, .7)), true, false); sm.rotation.x = Math.PI / 2; sm.position.set(x, .03, 0); shoes.add(sm); } shoes.position.set(-.55, .05, .27); shoes.visible = false; G.add(shoes);
     R.setShoes = u => { shoes.visible = u > .02; shoes.scale.setScalar(Math.max(.01, u)); };
     R.setWater = (on, at) => { bottleM.emissiveIntensity = on ? .55 + .35 * Math.sin(at * 4) : 0; };
     R.update = (p, at) => {
