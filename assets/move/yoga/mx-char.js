@@ -53,12 +53,13 @@
   function spec(K, P, ctx) {
     const mv = ctx && ctx.mv, tl = (ctx && ctx.tl) || 0, D = K.dim, H = D.hipH, A = D.ankle, s = JSON.parse(JSON.stringify(K.base)), sq = P.squat || 0, fo = P.fold || 0, bob = Math.max(0, P.bob || 0);
     const heel = (mv === 'tiptoe' || mv === 'reach' || mv === 'breathe') ? bob : 0;
-    s.pelvis = { x: 0, y: H * (1 - .47 * sq) - fo * .02 + bob * .0035, z: -sq * .1 - fo * .08, pitch: sq * .5 + fo * 1.0, roll: 0 };
+    s.pelvis = { x: clamp((P.shift || 0) * .0016, -.09, .09), y: H * (1 - .47 * sq) - fo * .02 + bob * .0035, z: -sq * .1 - fo * .08, pitch: sq * .5 + fo * 1.0, roll: 0 };
     s.spine = { pitch: sq * .15 + fo * .6, twist: (P.twist || 0) * .55, roll: -(P.lean || 0) * R * .8 };
     s.head = { pitch: fo * .45 - sq * .15 };
     for (const sd of [-1, 1]) {       /* sd -1 = the left of the picture (the engine's "L" numbers) = the rig's -x side ("R" keys) */
       const key = sd > 0 ? 'L' : 'R', lift = clamp(sd < 0 ? P.lL : P.lR, 0, 1.2), lh = P.lh || 34;
-      s['f' + key] = { x: sd * (.058 + Math.max(0, (P.sp || 20) - 20) * .0045 + sq * .06), y: A + lift * lh * .0055 + heel * .0035, z: lift * lh * .0042, pitch: lift * .35 + Math.min(.7, heel * .05) };
+      const stepW = (mv === 'stepSide' || mv === 'crab') ? Math.sign(P.shift || 0) * lift * .1 : 0;
+      s['f' + key] = { x: sd * (.058 + Math.max(0, (P.sp || 20) - 20) * .0045 + sq * .06) + stepW, y: A + lift * lh * .0055 + heel * .0035, z: lift * lh * .0042, pitch: lift * .35 + Math.min(.7, heel * .05) };
       s['kneePole' + key] = [sd * .1, 0, 1];
       const th = (sd < 0 ? P.aL : P.aR) * R, bd = sd < 0 ? P.bL : P.bR, dirs = armDirs(sd, th, bd, mv, tl), U = D.upper, F = D.fore * .95;
       const e = [dirs[0][0] * U, dirs[0][1] * U, dirs[0][2] * U], w = [e[0] + dirs[1][0] * F, e[1] + dirs[1][1] * F, e[2] + dirs[1][2] * F];
