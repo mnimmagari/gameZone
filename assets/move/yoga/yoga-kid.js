@@ -18,13 +18,13 @@
     const D = { thigh: .27, shin: .27, ankle: .062, upper: .22, fore: .2, shoulderW: .135, hipW: .06, torso: .32, neck: .06, headR: .105 };
     D.hipH = D.thigh + D.shin + D.ankle; D.handLen = .1;
     const K = { dim: D };
-    const knitMap = knitTex(T, '#fbf6ec', 4);
+    const knitMap = knitTex(T, opt.top || '#fbf6ec', 4), knitMapB = knitTex(T, opt.bottom || opt.top || '#fbf6ec', 4);
     const knit = new T.MeshStandardMaterial({ color: 0xffffff, map: knitMap, bumpMap: knitMap, bumpScale: .9, roughness: .95 });
-    const knit2 = new T.MeshStandardMaterial({ color: 0xfffaf0, map: knitMap, bumpMap: knitMap, bumpScale: .9, roughness: .95 });
-    const skin = new T.MeshStandardMaterial({ color: 0xf2bda3, roughness: .55 });
-    const sock = new T.MeshStandardMaterial({ color: 0xfffaf0, roughness: .9 });
-    const hairM = new T.MeshStandardMaterial({ color: 0xc19672, roughness: .6 });
-    const hairD = new T.MeshStandardMaterial({ color: 0xa27a58, roughness: .6 });
+    const knit2 = new T.MeshStandardMaterial({ color: opt.bottom ? 0xffffff : 0xfffaf0, map: knitMapB, bumpMap: knitMapB, bumpScale: .9, roughness: .95 });
+    const skin = new T.MeshStandardMaterial({ color: opt.skin || 0xf2bda3, roughness: .55 });
+    const sock = new T.MeshStandardMaterial({ color: opt.sock || 0xfffaf0, roughness: .9 });
+    const hairM = new T.MeshStandardMaterial({ color: opt.hair || 0xc19672, roughness: .6 });
+    const hairD = new T.MeshStandardMaterial({ color: opt.hairD || opt.hair || 0xa27a58, roughness: .6 });
     const dark = new T.MeshStandardMaterial({ color: 0x3a2622, roughness: .5 });
     const sh = m => { m.castShadow = true; return m; };
     const ball = (r, m, sx, sy, sz) => { const g = sh(new T.Mesh(new T.SphereGeometry(r, 20, 14), m)); g.scale.set(sx || 1, sy || 1, sz || 1); return g; };
@@ -132,7 +132,7 @@
       const tm2 = sh(new T.Mesh(new T.CapsuleGeometry(.036, .03, 8, 12), sock)); tm2.rotation.x = Math.PI / 2; tm2.position.set(0, -.001, .022); toes.add(tm2);
       /* coral trainers that go on over the socks (hidden unless the game asks for them) */
       const shoe = new T.Group(); shoe.visible = false;
-      const sb = sh(new T.Mesh(new T.CapsuleGeometry(.05, .11, 8, 14), new T.MeshStandardMaterial({ color: 0xe5805f, roughness: .6 }))); sb.rotation.x = Math.PI / 2; sb.position.set(0, -.012, .07);
+      const sb = sh(new T.Mesh(new T.CapsuleGeometry(.05, .11, 8, 14), new T.MeshStandardMaterial({ color: opt.shoe || 0xe5805f, roughness: .6 }))); sb.rotation.x = Math.PI / 2; sb.position.set(0, -.012, .07);
       const so = sh(new T.Mesh(new T.BoxGeometry(.1, .014, .22), new T.MeshStandardMaterial({ color: 0xfff6ee, roughness: .7 }))); so.position.set(0, -.064, .07); shoe.add(sb, so);   /* only attached to the foot while worn, so measurements ignore it */
       return { thigh, shin, foot, toes, shoe };
     };
@@ -140,10 +140,10 @@
     K.setShoes = on => { for (const L of [K.legL, K.legR]) { if (on && L.shoe.parent !== L.foot) L.foot.add(L.shoe); else if (!on && L.shoe.parent) L.shoe.parent.remove(L.shoe); L.shoe.visible = on; } };
     const sockC0 = sock.color.clone(); K.setBare = on => sock.color.copy(on ? skin.color : sockC0);
     K.idle = function (t) {
-      const b = Math.sin(t * 1.8); K.chest.scale.set(1.08 * (1 + .01 * b), 1 + .014 * b, .8 * (1 + .01 * b));
+      const b = Math.sin(t * 1.8); K.chest.scale.set(1.08 * (K.bulk || 1) * (1 + .01 * b), 1 + .014 * b, .8 * (K.bulk || 1) * (1 + .01 * b));
       pony.forEach((p, i) => { p.rotation.set(p.userData.rx, 0, Math.sin(t * 1.6 - i * .5) * .07 * (i + 1) * .5); });
       /* when the head tips forward or down, swing the ponytail to the side so hair never hangs over the face */
-      { const q = K.head.getWorldQuaternion(new T.Quaternion()), up = new T.Vector3(0, 1, 0).applyQuaternion(q), fwd = new T.Vector3(0, 0, 1).applyQuaternion(q), tilt = Math.max(0, Math.min(1, (.75 - up.y) / .6)) + Math.max(0, Math.min(1, (fwd.y * -1 - .3) / .5)) * 0; K.ponyRoot.rotation.y += (tilt * 1.35 - K.ponyRoot.rotation.y) * .25;
+      { const q = K.head.getWorldQuaternion(new T.Quaternion()), up = new T.Vector3(0, 1, 0).applyQuaternion(q), fwd = new T.Vector3(0, 0, 1).applyQuaternion(q), tilt = Math.max(0, Math.min(1, (.35 - up.y) / .5)) + Math.max(0, Math.min(1, (fwd.y * -1 - .3) / .5)) * 0; K.ponyRoot.rotation.y += (tilt * 1.35 - K.ponyRoot.rotation.y) * .25;
         /* gravity: when the head is tipped, every ponytail segment turns a little towards the floor so the hair hangs down instead of sticking out */
         if (tilt > .02) {
           const down = new T.Vector3(0, -1, 0), qp = new T.Quaternion(), qw = new T.Quaternion(), qd = new T.Quaternion(), cur = new T.Vector3(), id = new T.Quaternion();
@@ -164,6 +164,54 @@
       K.head.rotation.z = Math.sin(t * .55) * .025; K.head.rotation.y = Math.sin(t * .37) * .035;
       const bl = (t % 4.5) < .12 ? .15 : 1; if (eyeOpen[0].visible) for (const e of eyeOpen) e.scale.y = bl;
     };
+    /* ---------- themed outfits for the Move & Explore adventures (opt.kind, opt.acc, opt.shoes ...) ---------- */
+    if (opt.kind === 'boy') { pr.visible = false; tie.visible = false; }
+    if (opt.noBand || opt.kind === 'boy') band.visible = false;
+    if (opt.shoes) K.setShoes(true);
+    K.bulk = opt.bulk || 1;
+    const AC = opt.acc || [], mm = (c, rr, extra) => new T.MeshStandardMaterial(Object.assign({ color: c, roughness: rr == null ? .7 : rr }, extra || {}));
+    const hatM = mm(opt.hat || 0x2f8f6a, .8), trimM = mm(opt.trim || 0xffffff, .8), packM = mm(opt.pack || 0x8a6a44, .8), scarfM = mm(opt.scarf || 0xd64550, .9);
+    if (AC.indexOf('ranger') >= 0) {      /* soft cap with a short brim and a leaf badge */
+      const dome = sh(new T.Mesh(new T.SphereGeometry(.212, 32, 20, 0, Math.PI * 2, 0, 1.4), hatM)); dome.position.set(0, .03, -.005); hd.add(dome);
+      const brim = sh(new T.Mesh(new T.CircleGeometry(.25, 32, Math.PI, Math.PI), hatM)); brim.material.side = T.DoubleSide; brim.rotation.x = -Math.PI / 2 + .16; brim.position.set(0, .07, .045); hd.add(brim);
+      const leaf = sh(new T.Mesh(new T.SphereGeometry(.032, 12, 8), trimM)); leaf.scale.set(1, 1.5, .35); leaf.position.set(0, .11, .2); leaf.rotation.z = .5; hd.add(leaf);
+    }
+    if (AC.indexOf('safari') >= 0) {      /* wide-brim explorer hat with a band */
+      const crown = sh(new T.Mesh(new T.SphereGeometry(.2, 30, 16, 0, Math.PI * 2, 0, Math.PI * .5), hatM)); crown.scale.set(1, 1.1, 1); crown.position.set(0, .075, 0); hd.add(crown);
+      const brim = sh(new T.Mesh(new T.CircleGeometry(.36, 40), hatM)); brim.material.side = T.DoubleSide; brim.rotation.x = -Math.PI / 2 + .08; brim.position.set(0, .08, 0); hd.add(brim);
+      const hb = ring(.2, .018, trimM); hb.rotation.x = Math.PI / 2; hb.position.set(0, .1, 0); hd.add(hb);
+    }
+    if (AC.indexOf('goggles') >= 0) {     /* swim goggles pushed up on the forehead, with a strap */
+      for (const sx of [-1, 1]) { const g = ring(.05, .013, trimM); g.position.set(sx * .075, .105, .17); g.rotation.x = -.35; hd.add(g); const lens = sh(new T.Mesh(new T.CircleGeometry(.047, 18), mm(0x8fe3f5, .1, { transparent: true, opacity: .55 }))); lens.position.set(sx * .075, .105, .172); lens.rotation.x = -.35; hd.add(lens); }
+      const br = sh(new T.Mesh(new T.CapsuleGeometry(.012, .035, 4, 8), trimM)); br.rotation.z = Math.PI / 2; br.position.set(0, .108, .178); hd.add(br);
+      const st = ring(.196, .01, trimM); st.rotation.x = Math.PI / 2 - .25; st.position.set(0, .1, 0); hd.add(st);
+    }
+    if (AC.indexOf('beanie') >= 0) {      /* knit bobble hat */
+      const dome = sh(new T.Mesh(new T.SphereGeometry(.214, 32, 20, 0, Math.PI * 2, 0, 1.4), hatM)); dome.position.set(0, .03, -.004); hd.add(dome);
+      const fold = ring(.205, .03, trimM); fold.rotation.x = Math.PI / 2 - .1; fold.position.set(0, .07, 0); hd.add(fold);
+      const pom = ball(.055, trimM); pom.position.set(0, .255, 0); hd.add(pom);
+    }
+    if (AC.indexOf('helmet') >= 0) {      /* clear bubble helmet, so the face stays visible */
+      const bub = new T.Mesh(new T.SphereGeometry(.27, 36, 24), mm(0xcfeeff, .05, { transparent: true, opacity: .2, depthWrite: false })); bub.position.set(0, .01, 0); hd.add(bub); K.bubble = bub;
+      const rim = ring(.2, .04, trimM); rim.rotation.x = Math.PI / 2; rim.position.set(0, -.2, 0); hd.add(rim);
+      for (const sx of [-1, 1]) { const nub = ball(.03, mm(0xff8a3d)); nub.position.set(sx * .27, .0, 0); hd.add(nub); }
+    }
+    if (AC.indexOf('scarf') >= 0) {       /* scarf around the neck with a tail */
+      const sc = ring(.06, .032, scarfM); sc.rotation.x = Math.PI / 2; sc.position.set(0, .362, .005); spine.add(sc);
+      const tail = sh(new T.Mesh(new T.CapsuleGeometry(.026, .17, 4, 10), scarfM)); tail.position.set(.055, .29, .085); tail.rotation.z = .12; spine.add(tail);
+      const tail2 = sh(new T.Mesh(new T.CapsuleGeometry(.026, .12, 4, 10), mm(opt.trim || 0xffffff, .9))); tail2.position.set(.055, .3, .082); tail2.scale.set(1, .3, 1.05); spine.add(tail2);
+    }
+    if (AC.indexOf('pack') >= 0) {        /* small backpack with straps */
+      const bp = sh(new T.Mesh(new T.CapsuleGeometry(.075, .1, 6, 14), packM)); bp.scale.set(1.1, 1, .6); bp.position.set(0, .18, -.115); spine.add(bp);
+      for (const sx of [-1, 1]) { const st = sh(new T.Mesh(new T.CapsuleGeometry(.012, .2, 4, 8), packM)); st.position.set(sx * .075, .2, .06); st.rotation.x = .08; spine.add(st); }
+    }
+    if (AC.indexOf('mitten') >= 0 || AC.indexOf('glove') >= 0) {   /* mittens or gloves over the hands */
+      for (const A of [K.armL, K.armR]) { const mt = ball(.054, hatM, 1, 1.35, .8); mt.position.set(0, -.058, 0); A.hand.add(mt); }
+    }
+    if (AC.indexOf('patch') >= 0) {       /* chest badge, like a flight suit */
+      const pt = sh(new T.Mesh(new T.CircleGeometry(.036, 18), mm(0x3d6fe0, .6))); pt.position.set(.06, .24, .104); pt.scale.set(1, 1, 1); spine.add(pt);
+      const pt2 = sh(new T.Mesh(new T.CircleGeometry(.02, 14), mm(0xff5c5c, .6))); pt2.position.set(-.06, .24, .104); spine.add(pt2);
+    }
     return K;
   }
   window.MXYoga = { build };

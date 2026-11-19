@@ -1393,6 +1393,13 @@ body.mx-active #quizPage .quiz-exit-row,body.mx-active #quizPage #quizControls{d
 .mx-book{display:flex;gap:5px;justify-content:center;flex-wrap:wrap;margin:4px 0 6px}.mx-book i{font-style:normal;font-size:20px;width:30px;height:30px;border-radius:50%;background:#f6e4d8;display:flex;align-items:center;justify-content:center;filter:grayscale(1);opacity:.35}.mx-book i.on{filter:none;opacity:1;background:#fff3c8}
 .mx-feel{display:flex;gap:8px;align-items:center;justify-content:center;margin-top:6px;pointer-events:auto}.mx-feel span{font-weight:800;color:#6a4a3a;font-size:15px}.mx-feel.mx-yb button{background:#f6e4d8;box-shadow:none;padding:0}.mx-feel button{font-size:24px;border:0;background:#f6e4d8;border-radius:50%;width:42px;height:42px;cursor:pointer}
 @media (prefers-reduced-motion:reduce){.mx-mas,.mx-mas .rays,.mx-mas .eyes,.mx-stars i{animation:none}}
+.mx-chip:empty{display:none}
+#mxPanel:not(.mx-yoga) .mx-instr{top:64px;width:auto;min-width:320px;max-width:620px;padding:6px 24px 8px;border-radius:22px;box-shadow:0 5px 0 rgba(0,0,0,.16),0 0 0 3px rgba(255,255,255,.85)}
+#mxPanel:not(.mx-yoga) .mx-it{font-size:28px;line-height:1.15}
+#mxPanel:not(.mx-yoga) .mx-easy{font-size:15px;margin-top:2px}
+#mxPanel:not(.mx-yoga) .mx-mp{display:none}
+#mxPanel:not(.mx-yoga) .mx-banner{font-size:34px;padding:8px 28px;top:300px;border-radius:26px}
+.mx-over.mxw{align-items:flex-start;padding-top:30px;box-sizing:border-box}.mxw .mx-wel{padding:12px 40px;box-shadow:0 6px 0 rgba(0,0,0,.18)}.mxw .mx-wi{font-size:52px;line-height:1.1}.mxw .mx-wel h2{font-size:36px;margin:0}.mxw .mx-wel p{font-size:19px;margin:2px 0}.mxw .mx-gr{font-size:18px!important}.mxw .mx-wel .mx-ws{font-size:16px!important}
 .mx-over.yprep{background:none;align-items:flex-end}
 .mx-yw2{display:flex;gap:12px;align-items:center;background:rgba(255,246,238,.92);padding:8px 18px;border-radius:999px;margin-bottom:22px;box-shadow:0 5px 0 rgba(160,100,80,.25)}
 .mx-yw2 i{font-style:normal;font-size:26px;opacity:.45;transition:transform .2s}.mx-yw2 i.on{opacity:1;transform:scale(1.35)}.mx-yw2 i.ok{opacity:.9}
@@ -2708,6 +2715,9 @@ Object.assign(MX_MOVES,{
 });
 MX_MOVES.sideBend={easy:'Lean just a little to each side.',pose:t=>{const s=mxS(t,.28);return{lean:s*16,shift:s*8,aL:55+Math.max(0,s)*108,bL:-2.2+Math.max(0,s)*3,aR:55+Math.max(0,-s)*108,bR:-2.2+Math.max(0,-s)*3,tilt:s*5}}};
 MX_MOVES.march.hz=2.0;MX_MOVES.bounce.hz=2.0;
+/* calm get-ready movements: a friendly wave hello while the welcome is read, then a relaxed stance with a little knee bounce for the countdown */
+MX_MOVES.hello={easy:'',pose:t=>{const k=mxClamp(t/.5,0,1)*mxClamp((4.6-t)/.6,0,1),sw=Math.sin(t*7);return{aL:12,bL:.2,aR:12+k*93,bR:.2+k*(1+sw*.35),bob:1.6*Math.sin(t*1.5),tilt:k*3,mouth:1}}};
+MX_MOVES.readyGo={easy:'',pose:t=>{const s=Math.sin(t*5);return{squat:.05+.05*s,aL:24+s*6,aR:24-s*6,bL:.5,bR:.5,mouth:1}}};
 /* what the guide says the first time a movement appears: how to do it properly */
 const MX_HOW={breathe:'We breathe in for four, hold for two, and breathe out slowly.',shoulderRoll:'Lift your shoulders up, roll them back, and down. Nice and slow.',armCircle:'Stretch your arms out wide and draw big circles in the air.',march:'Lift one knee, then the other, and swing your arms.',stepTouch:'Step to the right, bring your feet together and clap. Then step to the left.',reach:'Stretch your arms up high and rise on your tiptoes.',sideBend:'Put one hand on your hip, stretch the other arm over your head and lean.',twist:'Keep your feet still. Turn your body to the right, then to the left.',kneeLift:'Lift your knees up as high as feels good, and pump your arms.',stepJack:'Step one foot out wide with your arms up. Then step back in and bring your arms down. No jumping needed.',stepOver:'Lift your knee high to step over it.',duck:'Bend your knees and lower your head to duck under.',squat:'Push your hips back and bend your knees, like sitting on a little stool.',bounce:'Bend and straighten your knees softly, keeping both feet on the floor.',fold:'Bend forward from your hips, let your arms hang and relax your neck.',walkSlow:'Take slow, soft steps.'};
 /* short coaching lines spoken part-way through a movement, and counting for the rhythmic ones */
@@ -3080,18 +3090,18 @@ MX_TH.sun={name:'Surya Namaskar',icon:'🧘',tag:'Sun salutation for kids · 12 
   for(const [x,y] of[[355,436],[605,436]]){const fl=Math.sin(at*7+x)*2,gg=c.createRadialGradient(x,y-6,0,x,y-6,34);gg.addColorStop(0,'rgba(255,214,140,.9)');gg.addColorStop(1,'rgba(255,214,140,0)');c.fillStyle=gg;c.beginPath();c.arc(x,y-6,34,0,7);c.fill();c.fillStyle='#fff1dd';c.fillRect(x-6,y,12,16);c.fillStyle='#ffd27a';c.beginPath();c.ellipse(x,y-5,4,8+fl*.3,0,0,7);c.fill()}}};
 const MX_WORDS=['Nice!','Great!','Super!','Wow!','Awesome!','Fantastic!'];
 const MXSIL=document.createElement('canvas');MXSIL.width=220;MXSIL.height=300;
-function mxSil(c,dx,dy,w,P,th,at,col){const oc=MXSIL.getContext('2d');oc.setTransform(1,0,0,1,0,0);oc.clearRect(0,0,220,300);oc.save();mxKid(oc,110,280,.88,Object.assign({},P,{shift:0,pulse:0,sv:0,hv:0}),th.skin,at);oc.restore();oc.globalCompositeOperation='source-in';oc.fillStyle='#140a33';oc.fillRect(0,0,220,300);oc.globalCompositeOperation='source-over';c.save();c.shadowColor=col;c.shadowBlur=16;c.drawImage(MXSIL,dx,dy,w,w*300/220);c.shadowBlur=6;c.drawImage(MXSIL,dx,dy,w,w*300/220);c.restore()}
+function mxSil(c,dx,dy,w,P,th,at,col,mv,tl){const oc=MXSIL.getContext('2d');oc.setTransform(1,0,0,1,0,0);oc.clearRect(0,0,220,300);oc.save();if(!(MXC.live&&mx&&mx.active&&window.MXChar&&MXChar.silhouette(oc,mx.theme,Object.assign({},P,{shift:0}),at,{mv,tl})))mxKid(oc,110,280,.88,Object.assign({},P,{shift:0,pulse:0,sv:0,hv:0}),th.skin,at);oc.restore();oc.globalCompositeOperation='source-in';oc.fillStyle='#140a33';oc.fillRect(0,0,220,300);oc.globalCompositeOperation='source-over';c.save();c.shadowColor=col;c.shadowBlur=16;c.drawImage(MXSIL,dx,dy,w,w*300/220);c.shadowBlur=6;c.drawImage(MXSIL,dx,dy,w,w*300/220);c.restore()}
 function mxPanel(c,x,y,w,h,col){c.save();c.fillStyle='rgba(8,6,30,.58)';c.strokeStyle=col;c.lineWidth=3;c.shadowColor=col;c.shadowBlur=12;c.beginPath();if(c.roundRect)c.roundRect(x,y,w,h,14);else c.rect(x,y,w,h);c.fill();c.stroke();c.restore()}
 function mxHud2(c,k,th,P,seg,tl,at,pulse){
  const nc=MX_NEON[mx.theme]||MX_NEON.forest,T=mx.t;c.setTransform(k,0,0,k,0,0);
  c.fillStyle=nc[0]+'';c.globalAlpha=.07*pulse;c.fillRect(0,0,MXW,MXH);c.globalAlpha=1;
  /* your pose: the move as a glowing silhouette */
- mxPanel(c,14,204,128,170,nc[0]);mxSil(c,28,226,100,P,th,at,nc[0]);
+ mxPanel(c,14,204,128,170,nc[0]);mxSil(c,28,226,100,P,th,at,nc[0],seg.move,tl);
  c.font='bold 12px system-ui,sans-serif';c.textAlign='center';c.fillStyle=nc[0];c.fillText('YOUR POSE',78,219);
  c.fillStyle='#fff';c.font='bold 13px system-ui,sans-serif';c.fillText(MX_NAMES[seg.move]||'',78,368);
  /* next pose */
  const nx=mx.segs[mx.idx+1];mxPanel(c,14,382,128,88,nc[1]);
- if(nx){const NP=Object.assign({},MX_POSE0,MX_MOVES[nx.move].pose(at,1150));mxSil(c,20,388,56,NP,th,at,nc[1]);c.textAlign='left';c.fillStyle=nc[1];c.font='bold 11px system-ui,sans-serif';c.fillText('NEXT',82,404);c.fillStyle='#fff';c.font='bold 12px system-ui,sans-serif';const nm=(MX_NAMES[nx.move]||'').split(' ');let ln='',y=420;for(const w of nm){if((ln+' '+w).trim().length>11){c.fillText(ln.trim(),82,y);y+=14;ln=w}else ln+=' '+w}c.fillText(ln.trim(),82,y)}
+ if(nx){const NP=Object.assign({},MX_POSE0,MX_MOVES[nx.move].pose(at,1150));mxSil(c,20,388,56,NP,th,at,nc[1],nx.move,0);c.textAlign='left';c.fillStyle=nc[1];c.font='bold 11px system-ui,sans-serif';c.fillText('NEXT',82,404);c.fillStyle='#fff';c.font='bold 12px system-ui,sans-serif';const nm=(MX_NAMES[nx.move]||'').split(' ');let ln='',y=420;for(const w of nm){if((ln+' '+w).trim().length>11){c.fillText(ln.trim(),82,y);y+=14;ln=w}else ln+=' '+w}c.fillText(ln.trim(),82,y)}
  else{c.textAlign='center';c.fillStyle='#fff';c.font='bold 13px system-ui,sans-serif';c.fillText('Last move!',78,430)}
  /* beat lane: notes slide toward the hit ring under the child */
  const hx=440,y0=484,h=30,sp=140,cy=y0+h/2;
@@ -3132,6 +3142,11 @@ function mxDrawChar(c,A,seg,tl,gy,P){const m=A.moves[seg.move];if(!m)return fals
    If WebGL or the file is unavailable, the 2D version plays. Add ?mx3d=0 to the address to force 2D. */
 const MX3={live:false,state:'idle',loading:null,T:null,r:null,comp:null,bloomOn:true,scene:null,cam:null,kid:null,fox:null,items:[],wz:0,dtE:33,last:0,fc:0};
 const MX3_OK=!/[?&]mx3d=0/.test(location.search);
+/* human-proportion 3D characters in themed outfits for all adventures (assets/move/yoga/mx-char.js); the 2D child is the fallback */
+const MXC={live:false,p:null};
+function mxAddScript(src){return new Promise(res=>{const el=document.createElement('script');el.src=src;el.onload=()=>res(true);el.onerror=()=>res(false);document.head.appendChild(el)})}
+function mxcLoad(){if(MXC.p)return MXC.p;MXC.p=(async()=>{if(!MX3_OK||!(await mx3Load()))return false;for(const[g,fl]of[['MXYoga','yoga-kid'],['MXYogaPoses','yoga-poses'],['MXChar','mx-char']]){if(!window[g])await mxAddScript('assets/move/yoga/'+fl+'.js');if(!window[g])return false}return true})();return MXC.p}
+function mxcDrawKid(c,th,P,at,gy,mv,tl){if(!(MXC.live&&mx&&mx.active&&window.MXChar&&MXChar.ready()))return false;const x=440+P.shift*.95;c.fillStyle='rgba(0,0,0,.25)';c.beginPath();c.ellipse(x,gy+2,56,10,0,0,7);c.fill();return MXChar.draw(c,mx.theme,P,at,x,gy,.95,{mv,tl})}
 function mx3Load(){if(MX3.loading)return MX3.loading;MX3.loading=new Promise(res=>{if(window.MXTHREE){res(true);return}const s=document.createElement('script');s.src='assets/vendor/three-mx.js';s.onload=()=>res(!!window.MXTHREE);s.onerror=()=>res(false);document.head.appendChild(s)});return MX3.loading}
 function mx3Tex(w,h,draw,rep){const c=document.createElement('canvas');c.width=w;c.height=h;draw(c.getContext('2d'),w,h);const t=new MX3.T.CanvasTexture(c);t.colorSpace=MX3.T.SRGBColorSpace;t.anisotropy=4;if(rep){t.wrapS=t.wrapT=MX3.T.RepeatWrapping}return t}
 const mx3R=(a,b)=>a+Math.random()*(b-a);
@@ -3222,19 +3237,12 @@ async function mx3Init(){if(!MX3_OK)return false;if(MX3.state==='ready'){const p
  try{if(!(await mx3Load()))throw new Error('3D library not loaded');const X=window.MXTHREE,T=X.THREE;MX3.T=T;const pn=$('mxPanel'),gl=document.createElement('canvas');gl.id='mxGl';pn.insertBefore(gl,$('mxCv'));MX3.canvas=gl;
   const r=new T.WebGLRenderer({canvas:gl,antialias:true,powerPreference:'high-performance'});if(!r.getContext())throw new Error('no WebGL');
   r.outputColorSpace=T.SRGBColorSpace;r.toneMapping=T.ACESFilmicToneMapping;r.toneMappingExposure=.85;r.shadowMap.enabled=true;r.shadowMap.type=T.PCFSoftShadowMap;MX3.r=r;
-  mx3BuildWorld();const kid=mx3BuildKid();MX3.kid=kid;MX3.scene.add(kid.root);const fox=mx3BuildFox();MX3.fox=fox;fox.g.position.set(2.1,0,.2);fox.g.rotation.y=-.6;MX3.scene.add(fox.g);
+  if(!(await mxcLoad()))throw new Error('character files not loaded');mx3BuildWorld();{const ch=MXChar.create(T,'forest'),g=new T.Group();g.add(ch.K.root);g.scale.setScalar(.98);MX3.kid={root:g,K:ch.K};MX3.scene.add(g)}const fox=mx3BuildFox();MX3.fox=fox;fox.g.position.set(2.1,0,.2);fox.g.rotation.y=-.6;MX3.scene.add(fox.g);
   MX3.cam=new T.PerspectiveCamera(38,16/9,.1,140);
   MX3.comp=new X.EffectComposer(r);MX3.comp.addPass(new X.RenderPass(MX3.scene,MX3.cam));MX3.bloom=new X.UnrealBloomPass(new T.Vector2(960,540),.5,.45,.82);MX3.comp.addPass(MX3.bloom);MX3.comp.addPass(new X.OutputPass());
   MX3.state='ready';return true}catch(e){console.warn('Move & Explore 3D unavailable, using 2D:',e);MX3.state='failed';return false}}
 function mx3Resize(w,h){if(MX3.state!=='ready')return;MX3.r.setPixelRatio(1);MX3.r.setSize(w,h,false);MX3.comp.setSize(w,h);MX3.bloom.setSize(w,h);MX3.cam.aspect=w/h;MX3.cam.updateProjectionMatrix()}
-function mx3Pose(P,at){const K=MX3.kid,R=Math.PI/180,a=.25,b=.25,ft=.06;let hip=0;
- for(const side of[-1,1]){const lift=side<0?P.lL:P.lR,Lh=lift*P.lh/34,al=Math.min(1.45,Lh*.95)+P.squat*1.3,be=Math.min(2.0,Lh*1.15)+P.squat*1.9,lg=side<0?K.legL:K.legR;
-  lg.thigh.rotation.set(-al,0,side*Math.max(0,(P.sp-20)/70));lg.shin.rotation.x=be;lg.foot.rotation.x=(al-be)*(1-Math.min(1,Lh)*.5);hip=Math.max(hip,a*Math.cos(al)+b*Math.cos(al-be)+ft)}
- K.pelvis.position.y=hip+P.bob*.007;K.root.position.x=-.1+P.shift*.0095;const pu=P.pulse||0;K.root.scale.set(1+.04*pu,1-.04*pu,1+.04*pu);
- K.spine.rotation.set(P.fold*.8,P.twist*.55,-P.lean*R);K.chest.scale.y=1+.016*Math.sin(at*2.4);
- for(const side of[-1,1]){const A=side<0?K.armL:K.armR,th=(side<0?P.aL:P.aR)*R,bd=side<0?P.bL:P.bR;A.sh.position.y=.3+(side<0?P.shL:P.shR)*.005;A.up.rotation.set(-P.fold*.35,0,side*th);A.fore.rotation.z=side*bd*.8}
- K.head.rotation.set(P.fold*.5,0,-(P.tilt+Math.sin(at*2.7)*2.2)*R);K.hair.position.set(-(P.sv||0)*.004,-(P.hv||0)*.006,0);
- K.mouth.scale.y=.4+(P.mouth+.25*pu)*.9;const bl=(at%4.2)<.12?.15:1;for(const e of K.eyes){e.scale.y=bl;e.children[2].position.x=Math.sin(at*.9)*.006}}
+function mx3Pose(P,at,mv,tl){const K=MX3.kid.K;MXChar.pose(MX3.T,K,P,at,.35,{mv,tl});MX3.kid.root.position.x=-.1+P.shift*.0095}
 function mx3Spawn(x,y,z,vx,vy,vz,life){const p=MX3.pt,i=p.n++%p.N;p.pos[i*3]=x;p.pos[i*3+1]=y;p.pos[i*3+2]=z;p.vel[i*3]=vx;p.vel[i*3+1]=vy;p.vel[i*3+2]=vz;p.life[i]=life}
 function mx3Render(P,seg,tl,at,sc,px,pulse,dt){const T=MX3.T,wz=sc*.022;MX3.wz=wz;const fx=seg&&seg.fx;
  /* world flows toward the camera */
@@ -3244,7 +3252,7 @@ function mx3Render(P,seg,tl,at,sc,px,pulse,dt){const T=MX3.T,wz=sc*.022;MX3.wz=w
  /* fireflies */
  const ff=MX3.ff,pa=MX3.ffG.attributes.position.array;for(let i=0;i<ff.N;i++){const b=ff.base[i],t=at*.5+b[3];pa[i*3]=b[0]+Math.sin(t)*.7;pa[i*3+1]=b[1]+Math.sin(t*1.3)*.4;pa[i*3+2]=(((b[2]+wz*.4)%34)+34)%34-30+Math.cos(t*.8)*.5}MX3.ffG.attributes.position.needsUpdate=true;MX3.ffM.size=.42+.12*pulse;
  /* child, fox */
- mx3Pose(P,at);const fo=MX3.fox;fo.g.position.y=Math.abs(Math.sin(at*3))*.05+pulse*.13;fo.tail.rotation.y=Math.sin(at*7)*.6;fo.head.rotation.z=Math.sin(at*2.4)*.12;fo.g.rotation.y=-.6+Math.sin(at*1.7)*.1;
+ mx3Pose(P,at,seg&&seg.move,tl);const fo=MX3.fox;fo.g.position.y=Math.abs(Math.sin(at*3))*.05+pulse*.13;fo.tail.rotation.y=Math.sin(at*7)*.6;fo.head.rotation.z=Math.sin(at*2.4)*.12;fo.g.rotation.y=-.6+Math.sin(at*1.7)*.1;
  /* props */
  const ox=(px-440)*.0095;MX3.log.visible=fx==='obstacle';if(MX3.log.visible)MX3.log.position.set(ox-.1,.17,.5);
  MX3.vine.visible=fx==='overhead';if(MX3.vine.visible)MX3.vine.position.set(ox-.1,1.72,.25);
@@ -3280,7 +3288,7 @@ function mxPaint(c,k,th,at,sc,P,seg,tl,px){ if(MXY.live&&mx&&mx.active&&mx.yoga)
  if(fx==='collect'||(seg&&seg.fx==='stars')){const stars=fx==='stars';for(let i=0;i<(stars?7:6);i++){const u=(((tl||at)/(stars?10:9))+i/(stars?7:6))%1;if(stars){const sx=330+((i*61)%360),sy=250-Math.abs(Math.sin(at*1.4+i))*28-((i*37)%70),tw=1+.18*Math.sin(at*5+i);{const gg=c.createRadialGradient(sx,sy,0,sx,sy,34*tw);gg.addColorStop(0,'rgba(255,230,110,.55)');gg.addColorStop(1,'rgba(255,230,110,0)');c.fillStyle=gg;c.beginPath();c.arc(sx,sy,34*tw,0,7);c.fill()}mxStar(c,sx,sy,17*tw,at*.6+i,'#ffe45c');c.fillStyle='rgba(255,255,255,.7)';mxStar(c,sx,sy,7*tw,at+i,'#fff')}else{const ix=1050-u*1200,iy=300+mxHr(i+3)*120+Math.sin(at*2+i)*14;th.item(c,ix,iy,1.5,at);if(mxA(ix-440)<70){c.fillStyle='rgba(255,255,255,'+(.5-mxA(ix-440)/140)+')';for(let q=0;q<6;q++){c.beginPath();c.arc(ix+Math.cos(q+at*6)*26,iy+Math.sin(q+at*6)*26,3.6,0,7);c.fill()}}}}}
  if(fx==='obstacle')th.obst(c,px,gy);
  {const nc=(mx&&mx.active&&MX_NEON[mx.theme])||MX_NEON.forest,h0=nc[0],hg=c.createRadialGradient(440,gy-110,10,440,gy-110,200);hg.addColorStop(0,'rgba('+parseInt(h0.slice(1,3),16)+','+parseInt(h0.slice(3,5),16)+','+parseInt(h0.slice(5,7),16)+','+(.2+.12*pulse)+')');hg.addColorStop(1,'rgba(0,0,0,0)');c.fillStyle=hg;c.fillRect(200,gy-330,480,360)}if(!(A&&A.man.buddy===false))th.buddy(c,700+P.shift*.3,gy,at,P);
- if(!(A&&seg&&mxDrawChar(c,A,seg,tl,gy,P)))mxKid(c,440,gy,.95,P,th.skin,at);mxFx(c,P,seg,tl,pulse,gy,bp);if(A)for(const L of A.fg)mxDrawLayer(c,L,at,sc);
+ if(!(A&&seg&&mxDrawChar(c,A,seg,tl,gy,P))&&!mxcDrawKid(c,th,P,at,gy,seg&&seg.move,tl))mxKid(c,440,gy,.95,P,th.skin,at);mxFx(c,P,seg,tl,pulse,gy,bp);if(A)for(const L of A.fg)mxDrawLayer(c,L,at,sc);
  if(fx==='overhead')th.over(c,px,gy-262);
  c.setTransform(k,0,0,k,0,0);if(mx&&mx.active&&mx.state==='play'&&seg)mxHud2(c,k,th,P,seg,tl,at,pulse);c.setTransform(k,0,0,k,0,0);const g=c.createRadialGradient(MXW/2,MXH/2,MXH*.5,MXW/2,MXH/2,MXW*.75);g.addColorStop(0,'rgba(0,0,0,0)');g.addColorStop(1,'rgba(0,20,60,.22)');c.fillStyle=g;c.fillRect(0,0,MXW,MXH)}
 /* ---- timeline: warm-up 5 min + adventure 7 min + slow down 3 min = exactly 15 min ---- */
@@ -3314,12 +3322,13 @@ async function mxBegin(){
  if(!mx)mx={};const sel=mx.sel||'forest';mxPhSet(sel==='sun');mx.pending=false;mxRecCopy(false);
  Object.assign(mx,{active:true,theme:sel,level:1,t:0,at:0,scroll:0,idx:-1,paused:false,state:'welcome',q:1,ema:12,last:0,lastDraw:0,yoga:sel==='sun',segs:(sel==='sun'&&(MX_LV.sun[1]=mxYBuild(mxYMode)),mxSegments(sel,1)),prevP:Object.assign({},MX_POSE0),curP:Object.assign({},MX_POSE0),blend:1,cheerAt:-1,seen:{},cueIdx:0,combo:0,lastTick:''});
  mxBuildStage();document.body.classList.add('mx-active');$('recStage').classList.add('mx-on');$('quizPage').classList.add('mx-mode');$('endControls').classList.add('hidden');
- page('quiz');$('breadcrumb').textContent='Move & Explore · '+MX_TH[sel].name;stageScale();mxControls(true);$('mxPause').textContent='⏸ Pause';mxSize();$('mxInstr').style.visibility='hidden';$('mxPhase').style.visibility='hidden';$('mxCombo').style.visibility='hidden';{const nc=MX_NEON[sel]||MX_NEON.forest,pn=$('mxPanel');pn.style.setProperty('--n0',nc[0]);pn.style.setProperty('--n1',nc[1])}
- $('mxChip').textContent=MX_TH[sel].icon+' '+MX_TH[sel].name+' · Level 1';
- mxOver(sel==='sun'?mxYSplash():'<div class="mx-wel"><div class="mx-wi">'+MX_TH[sel].icon+'</div><p class="mx-gr">'+mxGreet()+', explorer!</p><h2>'+MX_TH[sel].name+'</h2><p>Level 1 · 15 minutes</p>'+mxStreakChip()+'<p class="mx-ws">Stand up with lots of space around you. Ask a grown-up to stay close.</p></div>');
+ page('quiz');$('breadcrumb').textContent='Move & Explore';stageScale();mxControls(true);$('mxPause').textContent='⏸ Pause';mxSize();$('mxInstr').style.visibility='hidden';$('mxPhase').style.visibility='hidden';$('mxCombo').style.visibility='hidden';{const nc=MX_NEON[sel]||MX_NEON.forest,pn=$('mxPanel');pn.style.setProperty('--n0',nc[0]);pn.style.setProperty('--n1',nc[1])}
+ $('mxChip').textContent='';
+ mxOver(sel==='sun'?mxYSplash():'<div class="mx-wel"><div class="mx-wi">'+MX_TH[sel].icon+'</div><p class="mx-gr">'+mxGreet()+', explorer!</p><h2>Ready to move?</h2><p>Let us have some fun together!</p>'+mxStreakChip()+'<p class="mx-ws">Stand up with lots of space around you. Ask a grown-up to stay close.</p></div>');
  cancelAnimationFrame(mx.raf);mx.last=performance.now();mx.raf=requestAnimationFrame(mxFrame);
  try{await Promise.resolve(recOnStart())}catch(e){}
  if(sel!=='sun')try{await Promise.race([mxLoadAssets(sel),new Promise(r=>setTimeout(r,5000))])}catch(e){}
+ if(sel!=='forest'&&sel!=='sun'){try{MXC.live=!!(await Promise.race([mxcLoad(),new Promise(r=>setTimeout(()=>r(false),9000))]))}catch(e){MXC.live=false}}
  if(sel==='forest'){try{MX3.live=await mx3Init();if(MX3.live){$('mxPanel').classList.add('mx3');mxSize();const A3=MXA.forest;if(A3&&A3.bgv)mx3Backdrop(A3.bgv)}}catch(e){MX3.live=false}}
  if(!mx.active)return;
  if(sel==='sun'){await mxYStart();return}
@@ -3332,7 +3341,7 @@ async function mxBegin(){
 function mxYVoiceOpt(){const all=('speechSynthesis' in window)?speechSynthesis.getVoices().filter(v=>/^en(-|_|$)/i.test(v.lang)):[],re=/\bana\b|child|kid|junior/i;let v=null;if(voicePick===0)v=all.find(x=>re.test(x.name))||null;const g=v||girlVoice(),kv=!!(g&&re.test(g.name));return{voice:g,pitch:kv?1.3:1.9,rate:kv?1.06:1.12,vol:mxVoiceVol}}
 function mxSay(text,done){try{const o=mxYVoiceOpt();if(mx&&mx.yoga){mx.talkEnd=performance.now()+Math.min(25000,String(text).length*75);o.onStart=()=>{mx.talkWord=performance.now()+500};o.onWord=()=>{mx.talkWord=performance.now()+260}}say(text,false,()=>{if(mx){mx.talkEnd=0;mx.talkWord=0}if(done)done()},o)}catch(e){if(done)done()}}
 function mxCount(n){if(!mx.active||mx.state==='play'||mx.state==='done')return;mx.state='count';clearTimeout(mx.introTO);mxOver('<div class="mx-cd"><b>'+n+'</b><span>Get ready!</span></div>');mxChime(n);if(n>1){mx.cdTO=setTimeout(()=>mxCount(n-1),1000)}else mx.cdTO=setTimeout(()=>{if(!mx.active)return;mx.state='play';mx.t=0;mx.idx=-1;mxOver('');$('mxInstr').style.visibility='';$('mxPhase').style.visibility='';$('mxCombo').style.visibility='';mxChime(0)},1000)}
-function mxOver(h){const o=$('mxOver');if(o){o.innerHTML=h;o.classList.toggle('on',!!h);o.classList.toggle('yprep',/mx-yw2/.test(h))}}
+function mxOver(h){const o=$('mxOver');if(o){o.innerHTML=h;o.classList.toggle('on',!!h);o.classList.toggle('yprep',/mx-yw2/.test(h));o.classList.toggle('mxw',/mx-wel/.test(h)&&!/mx-ys/.test(h)&&!/mx-wel"><div class="mx-wi">🧘/.test(h))}}
 function mxChime(n){try{const ctx=musicCtxGet();if(!ctx)return;const t=ctx.currentTime;if(mx&&mx.yoga){if(n===0||n===99)note(n===99?587:523,t,.9,'sine',.3);return}if(n===0){note(784,t,.18,'sine',.9);note(1047,t+.12,.3,'sine',.9)}else if(n===99){[523,659,784,1047].forEach((f,i)=>note(f,t+i*.16,.4,'triangle',.9))}else note(660,t,.14,'sine',.7)}catch(e){}}
 function mxTogglePause(){if(!mx||!mx.active||mx.state==='done')return;mx.paused=!mx.paused;$('mxPause').textContent=mx.paused?'▶ Resume':'⏸ Pause';if(mx.paused){mx.talkEnd=0;try{speechSynthesis.cancel()}catch(e){}mxOver('<div class="mx-pz"><b>⏸</b><span>Take a little rest</span></div>')}else{mxOver('');const s=mx.segs[mx.idx];if(s){const q=s.x&&s.x.say!==undefined?s.x.say:s.text;if(q)mxSay(q)}}}
 /* ---- per-frame loop ---- */
@@ -3340,7 +3349,7 @@ function mxFrame(ts){if(!mx||!mx.active)return;mx.raf=requestAnimationFrame(mxFr
  if(!mx.paused){mx.at+=dt;if(mx.state==='play')mx.t+=dt*MX_SPEED}
  const th=MX_TH[mx.theme];let seg=null,tl=0,P=Object.assign({},MX_POSE0),px=-999;
  if(mx.state==='play'){let i=mx.segs.findIndex(s=>mx.t>=s.start&&mx.t<s.start+s.dur);if(i<0)i=mx.t>=900?-2:0;if(i===-2){mxEnd(true)}else{if(i!==mx.idx)mxEnterSeg(i);seg=mx.segs[i];tl=mx.t-seg.start;px=1150-((tl%7)/7)*1400;const mv=MX_MOVES[seg.move];P=Object.assign({},MX_POSE0,mv.pose(tl,px));const u=mxClamp(tl/.7,0,1);if(u<1){for(const k in P)P[k]=mx.prevP[k]+(P[k]-mx.prevP[k])*(u*u*(3-2*u))}mx.curP=P;mx.scroll+=dt*MX_SPEED*(mv.walk?58:14);mxHud(seg,tl);{const m2=MX_MOVES[seg.move],tick=m2.hz?Math.floor(tl*m2.hz):Math.floor(tl/2),key=i+':'+tick;if(key!==mx.lastTick){mx.lastTick=key;mx.combo++;mxComboTick()}}while(seg.cues&&mx.cueIdx<seg.cues.length&&tl>=seg.cues[mx.cueIdx].t){const cu=seg.cues[mx.cueIdx++];if(!mx.paused)mxSay(cu.text)}if(!(seg.cues&&seg.cues.length)&&tl>seg.dur*.55&&mx.cheerAt!==i&&i%3===1&&!mx.yoga){mx.cheerAt=i;mxSay(MX_CHEER[i%MX_CHEER.length])}}}
- else{P=Object.assign({},MX_POSE0,MX_MOVES.sway.pose(mx.at));mx.scroll+=dt*10}
+ else{P=Object.assign({},MX_POSE0,(mx.state==='count'?MX_MOVES.readyGo:MX_MOVES.hello).pose(mx.at));mx.scroll+=dt*10}
  if(mx.state==='done'){P=Object.assign({},MX_POSE0,{aL:165,aR:165,bL:.05,bR:.05,bob:Math.abs(Math.sin(mx.at*3))*10,mouth:1})}
  MXP.dt=dt;const t0=performance.now();mxPaint(cv.getContext('2d'),mx.k||1,th,mx.at,mx.scroll,P,seg,tl,px);if(mx.state==='done'&&!mx.yoga)mxConfetti(cv.getContext('2d'),mx.k||1,mx.at);
  const ms=performance.now()-t0;mx.ema=mx.ema*.9+ms*.1;mx.qc=(mx.qc||0)+1;if(!MX3.live&&mx.qc%45===0){if(mx.ema>26&&mx.q>.5){mx.q=Math.max(.5,mx.q-.15);mxSize()}else if(mx.ema<9&&mx.q<1){mx.q=Math.min(1,mx.q+.1);mxSize()}else mxSize()}}
@@ -3369,7 +3378,7 @@ function mxGreet(){const h=new Date().getHours();return h<12?'Good morning':h<17
 function mxStreakChip(){const n=mxStreak(mxProg());return'<div class="mx-chips"><span>'+(n?'🔥 '+n+'-day streak':'🌱 Start your streak today')+'</span></div>'}
 function mxMascot(m){return'<svg class="mx-mas" viewBox="0 0 120 120" aria-hidden="true"><g class="rays">'+Array.from({length:12},(_,i)=>'<rect x="57" y="4" width="6" height="18" rx="3" transform="rotate('+i*30+' 60 60)" fill="#ffb347"/>').join('')+'</g><circle cx="60" cy="60" r="34" fill="#ffd24d"/><circle cx="60" cy="60" r="34" fill="none" stroke="#ffbf3f" stroke-width="3"/><g class="eyes"><ellipse cx="48" cy="56" rx="4" ry="5.5" fill="#5a3a30"/><ellipse cx="72" cy="56" rx="4" ry="5.5" fill="#5a3a30"/></g><circle cx="41" cy="68" r="6" fill="#ff9a8a" opacity=".6"/><circle cx="79" cy="68" r="6" fill="#ff9a8a" opacity=".6"/><path d="'+(m==='cheer'?'M46 69 Q60 88 74 69 Z':'M48 70 Q60 80 72 70')+'" fill="'+(m==='cheer'?'#c4505a':'none')+'" stroke="#5a3a30" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>'}
 function mxFinCard(pr){const yoga=!!(mx&&mx.yoga);return'<div class="mx-fin mx-fc">'+(yoga?mxMascot('cheer'):'<div class="mx-medal">🏅</div>')+'<h2>'+(yoga?'You finished your practice!':'You did it, explorer!')+'</h2><div class="mx-stars"><i>⭐</i><i>⭐</i><i>⭐</i></div><div class="mx-stats"><span>⏱️ 15 minutes</span><span>🔥 '+pr.streak+'-day streak</span><span>🏅 '+pr.total+' adventure'+(pr.total===1?'':'s')+'</span></div><div class="mx-stk"><b>'+pr.sticker[1]+'</b><span>'+(pr.isNew?'New sticker: ':'Sticker: ')+pr.sticker[2]+'</span></div><div class="mx-book">'+MX_STICKERS.map(q=>'<i class="'+(pr.owned.indexOf(q[0])>=0?'on':'')+'" title="'+q[2]+'">'+q[1]+'</i>').join('')+'</div><p class="mx-ws">Have a sip of water and a little rest. 💧</p><div class="mx-feel mx-yb" id="mxFeel"><span>How do you feel?</span><button type="button" data-f="😊">😊</button><button type="button" data-f="😌">😌</button><button type="button" data-f="😴">😴</button></div></div>'}
-function mxEnd(completed){if(!mx||!mx.active||mx.state==='done')return;mx.state='done';mx.paused=false;clearTimeout(mx.introTO);clearTimeout(mx.cdTO);const th=MX_TH[mx.theme];{const ch=$('mxChip');if(ch)ch.textContent=th.icon+' '+th.name}
+function mxEnd(completed){if(!mx||!mx.active||mx.state==='done')return;mx.state='done';mx.paused=false;clearTimeout(mx.introTO);clearTimeout(mx.cdTO);const th=MX_TH[mx.theme];{const ch=$('mxChip');if(ch)ch.textContent=''}
  $('mxInstr').style.visibility='hidden';$('mxCombo').style.visibility='hidden';
  mxControls(false);musicStop();recOnFinish();
  if(completed){mxMarkDone(mx.theme,1);mxChime(99);const pr=mxProgBump(mx.theme);mxOver(mxFinCard(pr));const fe=$('mxFeel');if(fe)fe.onclick=e=>{const bt=e.target.closest('button');if(!bt)return;try{const L=JSON.parse(localStorage.getItem('mx-mood')||'[]');L.push({d:mxDay(),f:bt.dataset.f,t:mx.theme});localStorage.setItem('mx-mood',JSON.stringify(L.slice(-200)))}catch(x){}fe.innerHTML='<span>Thanks for sharing '+bt.dataset.f+'</span>'}}
@@ -3381,13 +3390,13 @@ function mxEnd(completed){if(!mx||!mx.active||mx.state==='done')return;mx.state=
  const a=document.createElement('button');a.type='button';a.className='primary mx-add';a.textContent='🏃 Another adventure';a.onclick=()=>{mxTeardown();page('move');mxOpen()};
  const b=document.createElement('button');b.type='button';b.className='secondary mx-add';b.textContent='🔁 Play this again';b.onclick=()=>{const s=mx.theme;mxTeardown();mx={sel:s};mxSafety()};
  ra.appendChild(a);ra.appendChild(b);ec.classList.remove('hidden')}
-function mxTeardown(){if(!mx)return;cancelAnimationFrame(mx.raf);clearTimeout(mx.introTO);clearTimeout(mx.cdTO);const was=mx.active;mx.active=false;MX3.live=false;MXY.live=false;mxPhSet(false);mxVolM=1;try{if(musicGain)musicGain.gain.value=.05}catch(e){}mx.pending=false;mxRecCopy(false);
+function mxTeardown(){if(!mx)return;cancelAnimationFrame(mx.raf);clearTimeout(mx.introTO);clearTimeout(mx.cdTO);const was=mx.active;mx.active=false;MX3.live=false;MXC.live=false;MXY.live=false;mxPhSet(false);mxVolM=1;try{if(musicGain)musicGain.gain.value=.05}catch(e){}mx.pending=false;mxRecCopy(false);
  try{speechSynthesis.cancel()}catch(e){}if(was){musicStop();if(recState==='recording')recStop();else if(recState==='armed'||recState==='starting')recCleanup()}
  const st=$('recStage');if(st)st.classList.remove('mx-on');const pn=$('mxPanel');if(pn)pn.remove();document.body.classList.remove('mx-active');const qp=$('quizPage');if(qp)qp.classList.remove('mx-mode');
  const ec=$('endControls');if(ec){ec.querySelectorAll('.mx-add').forEach(x=>x.remove());ec.classList.add('hidden')}const cb=$('mxControls');if(cb)cb.remove();stageScale()}
 /* called by page(): leaving the adventure page area stops everything cleanly */
 function mxOnPage(p){if(!mx)return;if(mx.active&&p!=='quiz'){mxTeardown()}else if(!mx.active&&mx.pending&&p!=='move'){mx.pending=false;mxRecCopy(false)}if(p!=='move'){cancelAnimationFrame(mxPrev.raf);mxPrev.raf=0;const o=$('mxSafety');if(o)o.remove()}}
-if(MX_DEBUG)window.MXDEBUG={rec:{add:recLibAdd,open:recLibOpen,meta:recMetaNow},y:()=>MXY,plan:(q,t)=>mxYPlan(q,t),segs:()=>mx&&mx.segs,jump:s=>{if(mx)mx.t=s},state:()=>mx&&({at:mx.at,state:mx.state,t:mx.t,idx:mx.idx,active:mx.active,q:mx.q,k:mx.k}),validate:()=>Object.keys(MX_LV).map(t=>{const s=mxSegments(t,1),sum=p=>s.filter(x=>x.phase===p).reduce((a,x)=>a+x.dur,0);return[t,sum(0),sum(1),sum(2)]})};
+if(MX_DEBUG)window.MXDEBUG={moves:()=>MX_MOVES,p0:()=>MX_POSE0,rec:{add:recLibAdd,open:recLibOpen,meta:recMetaNow},y:()=>MXY,plan:(q,t)=>mxYPlan(q,t),segs:()=>mx&&mx.segs,jump:s=>{if(mx)mx.t=s},state:()=>mx&&({at:mx.at,state:mx.state,t:mx.t,idx:mx.idx,active:mx.active,q:mx.q,k:mx.k}),validate:()=>Object.keys(MX_LV).map(t=>{const s=mxSegments(t,1),sum=p=>s.filter(x=>x.phase===p).reduce((a,x)=>a+x.dur,0);return[t,sum(0),sum(1),sum(2)]})};
 
 })();
 </script>
