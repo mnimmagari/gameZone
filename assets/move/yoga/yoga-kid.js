@@ -67,29 +67,20 @@
     K.pony = pony; K.ponyRoot = pr;
     const eyeOpen = [], eyeClosed = [];
     for (const sx of [-1, 1]) {
-      const eg = new T.Group(); eg.position.set(sx * .075, .0, .178); eg.scale.set(1.2, 1.2, .6);
-      const ew = ball(.038, new T.MeshStandardMaterial({ color: 0xffffff, roughness: .3 }), 1, 1.2, .5), ir = ball(.025, new T.MeshStandardMaterial({ color: 0x6b4426, roughness: .25 }), 1.1, 1.25, .5), pu = ball(.013, new T.MeshStandardMaterial({ color: 0x120c0a, roughness: .3 }), 1, 1.2, .5), hl = new T.Mesh(new T.SphereGeometry(.007, 8, 6), new T.MeshBasicMaterial({ color: 0xffffff }));
-      ir.position.z = .014; pu.position.z = .02; hl.position.set(.009, .013, .028); const hl2 = new T.Mesh(new T.SphereGeometry(.0045, 8, 6), new T.MeshBasicMaterial({ color: 0xffffff })); hl2.position.set(-.009, -.011, .027); eg.add(ew, ir, pu, hl, hl2); hd.add(eg); eyeOpen.push(eg);
+      const eg = new T.Group(); eg.position.set(sx * .075, .0, .178);
+      const ew = ball(.038, new T.MeshStandardMaterial({ color: 0xffffff, roughness: .3 }), 1, 1.2, .5), ir = ball(.025, new T.MeshStandardMaterial({ color: 0x5a3a28, roughness: .3 }), 1, 1.2, .5), pu = ball(.013, new T.MeshStandardMaterial({ color: 0x120c0a, roughness: .3 }), 1, 1.2, .5), hl = new T.Mesh(new T.SphereGeometry(.007, 8, 6), new T.MeshBasicMaterial({ color: 0xffffff }));
+      ir.position.z = .014; pu.position.z = .02; hl.position.set(.009, .012, .027); eg.add(ew, ir, pu, hl); hd.add(eg); eyeOpen.push(eg);
       const ec = new T.Mesh(new T.TorusGeometry(.03, .005, 6, 14, Math.PI), dark); ec.position.set(sx * .075, -.004, .185); ec.rotation.z = Math.PI; ec.scale.set(1, .8, 1); ec.visible = false; hd.add(ec); eyeClosed.push(ec);
-      const br = new T.Mesh(new T.TorusGeometry(.04, .0055, 6, 14, Math.PI * .55), hairD); br.rotation.z = Math.PI * .22 + (sx > 0 ? 0 : Math.PI * .23); br.position.set(sx * .078, .035, .182); br.scale.set(1, .6, 1); hd.add(br);
-      const lid = new T.Mesh(new T.TorusGeometry(.04, .0055, 6, 16, Math.PI), dark); lid.position.set(sx * .075, .014, .19); lid.scale.set(1, .6, 1); hd.add(lid);
-      const lash = new T.Mesh(new T.CapsuleGeometry(.0042, .02, 3, 6), dark); lash.position.set(sx * .112, .03, .182); lash.rotation.z = -sx * 1.0; hd.add(lash);
-      const ch = new T.Mesh(new T.CircleGeometry(.037, 18), new T.MeshBasicMaterial({ color: 0xff8f9a, transparent: true, opacity: .55 })); ch.position.set(sx * .118, -.05, .16); ch.rotation.y = sx * .6; hd.add(ch);
+      const br = new T.Mesh(new T.CapsuleGeometry(.006, .04, 3, 6), hairD); br.rotation.z = Math.PI / 2 + sx * .06; br.position.set(sx * .075, .055, .186); hd.add(br);
+      const ch = new T.Mesh(new T.CircleGeometry(.03, 18), new T.MeshBasicMaterial({ color: 0xf08a8a, transparent: true, opacity: .4 })); ch.position.set(sx * .118, -.05, .16); ch.rotation.y = sx * .6; hd.add(ch);
     }
     K.eyeOpen = eyeOpen; K.eyeClosed = eyeClosed;
     const nose = ball(.012, new T.MeshStandardMaterial({ color: 0xe5a58a, roughness: .6 })); nose.position.set(0, -.03, .194); hd.add(nose);
     const mouth = new T.Mesh(new T.TorusGeometry(.026, .006, 6, 16, Math.PI), new T.MeshStandardMaterial({ color: 0xc4605e, roughness: .5 })); mouth.rotation.z = Math.PI; mouth.position.set(0, -.072, .184); hd.add(mouth); K.mouth = mouth;
-    /* freckles across the nose, and an open happy smile (a closed smile for breathing and holds) */
-    const frM = new T.MeshBasicMaterial({ color: 0xc98d6f, transparent: true, opacity: .6 });
-    for (const [fx, fy] of [[.03, -.012], [-.03, -.012], [.055, -.03], [-.055, -.03], [.02, -.042], [-.02, -.042]]) { const fr = new T.Mesh(new T.CircleGeometry(.0045, 8), frM); fr.position.set(fx, fy, .98 * Math.sqrt(Math.max(0, .0361 - fx * fx - (fy / 1.08) * (fy / 1.08))) + .004); hd.add(fr); }
-    const mouthOpen = new T.Group(); mouthOpen.position.set(0, -.066, .18); hd.add(mouthOpen);
-    const mIn = new T.Mesh(new T.CircleGeometry(.034, 22, Math.PI, Math.PI), new T.MeshBasicMaterial({ color: 0x8c2f36, side: T.DoubleSide })); mIn.scale.set(1.15, 1, 1); mouthOpen.add(mIn);
-    const tg = new T.Mesh(new T.CircleGeometry(.019, 16, Math.PI, Math.PI), new T.MeshBasicMaterial({ color: 0xf08a9a, side: T.DoubleSide })); tg.position.set(0, -.016, .001); mouthOpen.add(tg);
-    const teeth = new T.Mesh(new T.PlaneGeometry(.04, .008), new T.MeshBasicMaterial({ color: 0xffffff })); teeth.position.set(0, -.004, .001); mouthOpen.add(teeth);
-    const dimple = new T.Mesh(new T.CircleGeometry(.0045, 8), new T.MeshBasicMaterial({ color: 0xc4605e })); const dimple2 = dimple.clone(); dimple.position.set(-.045, -.002, .0); dimple2.position.set(.045, -.002, .0); mouthOpen.add(dimple, dimple2);
-    K.setMouth = open => { mouthOpen.visible = open; mouth.visible = !open; }; K.setMouth(true); K.talk = a => { mouthOpen.scale.set(1 + .1 * a, .35 + .75 * a, 1); }; K.talk(.6);
     K.setEyes = mode => { for (const e of eyeOpen) e.visible = mode !== 'closed'; for (const e of eyeClosed) e.visible = mode === 'closed'; };
     K.setEyes(opt.eyes || 'open');
+    /* the original face is kept; the mouth only changes size a little while she talks */
+    K.setMouth = () => {}; K.talk = a => { mouth.scale.set(1 + .12 * a, .75 + .6 * a, 1); };
 
     /* ---------- hands with fingers (hang from the wrist; fingers point down -y; the palm faces +z) ---------- */
     const makeHand = side => {                                   /* side +1 = left hand (+x), -1 = right */
