@@ -9,19 +9,19 @@
     const R = { group: new T.Group() }, G = R.group, M = (c, r, e) => new T.MeshStandardMaterial(Object.assign({ color: c, roughness: r == null ? .9 : r }, e || {}));
     const sh = (m, cast, rec) => { m.castShadow = !!cast; m.receiveShadow = rec !== false; return m; };
     /* floor and platform */
-    const floor = sh(new T.Mesh(new T.PlaneGeometry(30, 30), M(0xf0cdb9, 1)), false, true); floor.rotation.x = -Math.PI / 2; G.add(floor);
-    const plat = sh(new T.Mesh(new T.BoxGeometry(1.6, .05, 2.2), M(0xe7c3a6, .8)), true, true); plat.position.y = .025; G.add(plat);
-    const matTex = tex(T, 64, 256, (g, w, h) => { g.fillStyle = '#e9a98f'; g.fillRect(0, 0, w, h); g.strokeStyle = 'rgba(255,255,255,.12)'; g.lineWidth = 2; for (let y = 0; y < h; y += 8) { g.beginPath(); g.moveTo(0, y); g.lineTo(w, y); g.stroke(); } }, true);
+    const floor = sh(new T.Mesh(new T.PlaneGeometry(30, 30), M(0xead5b8, 1)), false, true); floor.rotation.x = -Math.PI / 2; G.add(floor);
+    const plat = sh(new T.Mesh(new T.BoxGeometry(1.6, .05, 2.2), M(0xdcbb94, .8)), true, true); plat.position.y = .025; G.add(plat);
+    const matTex = tex(T, 64, 256, (g, w, h) => { g.fillStyle = '#6dbdb0'; g.fillRect(0, 0, w, h); g.strokeStyle = 'rgba(255,255,255,.12)'; g.lineWidth = 2; for (let y = 0; y < h; y += 8) { g.beginPath(); g.moveTo(0, y); g.lineTo(w, y); g.stroke(); } }, true);
     const mat = sh(new T.Mesh(new T.BoxGeometry(.72, .024, 1.7), M(0xffffff, .85, { map: matTex })), false, true); mat.position.y = .05 + .012; G.add(mat); R.mat = mat;
     R.floorY = .05 + .024;
     /* back wall with an arched alcove */
-    const wallM = M(0xf7e6d8, 1), cream = M(0xfaf0e6, .95);
+    const wallM = M(0xfbf0e2, 1), cream = M(0xfdf6ec, .95);
     const outer = new T.Shape(); outer.moveTo(-3.2, 0); outer.lineTo(3.2, 0); outer.lineTo(3.2, 4.2); outer.lineTo(-3.2, 4.2); outer.closePath();
     const hole = new T.Path(); hole.moveTo(-1.35, 0); hole.lineTo(-1.35, 1.9); hole.absarc(0, 1.9, 1.35, Math.PI, 0, true); hole.lineTo(1.35, 0); hole.closePath(); outer.holes.push(hole);
     const wall = sh(new T.Mesh(new T.ExtrudeGeometry(outer, { depth: .32, bevelEnabled: false, curveSegments: 40 }), wallM), false, true); wall.position.set(0, 0, -3.35); G.add(wall);
     const side = sh(new T.Mesh(new T.PlaneGeometry(14, 4.2), wallM), false, true); side.position.set(-7.2 - 0, 2.1, -3.0); side.visible = false; G.add(side);
     const rib = new T.Mesh(new T.TorusGeometry(1.42, .07, 12, 48, Math.PI), cream); rib.position.set(0, 1.9, -3.03); G.add(rib);
-    const back = sh(new T.Mesh(new T.PlaneGeometry(2.8, 3.4), M(0xf0cdb8, 1, { emissive: 0x7a4a3a, emissiveIntensity: .12 })), false, true); back.position.set(0, 1.7, -3.5); G.add(back);
+    const back = sh(new T.Mesh(new T.PlaneGeometry(2.8, 3.4), M(0xdbe8d9, 1, { emissive: 0x4a6a5a, emissiveIntensity: .1 })), false, true); back.position.set(0, 1.7, -3.5); G.add(back);
     /* knitted white panel on the left, like the reference */
     const knit = tex(T, 128, 128, (g, w, h) => { g.fillStyle = '#f7f1e8'; g.fillRect(0, 0, w, h); for (let x = 0; x < w; x += 6) { g.fillStyle = 'rgba(150,120,90,.12)'; g.fillRect(x, 0, 2, h); } }, true); knit.repeat.set(5, 2);
     const panel = sh(new T.Mesh(new T.PlaneGeometry(3.6, 3.8), M(0xffffff, 1, { map: knit })), false, true); panel.position.set(-4.9, 1.9, -3.0); panel.rotation.y = .35; G.add(panel);
@@ -38,10 +38,10 @@
     const candleLight = new T.PointLight(0xffc98a, 1.4, 3.5, 2); candleLight.position.set(.55, 1.95, -3.1); G.add(candleLight); R.candle = candleLight;
     const bowl = lathe([[0, 0], [.08, 0], [.15, .05], [.17, .09], [.15, .09], [.08, .04], [0, .03]], vaseP); bowl.position.set(.1, 1.75, -3.28); G.add(bowl);
     /* pampas grass in a tall vase (left) and a palm plant in a pot (right) */
-    const bigVase = lathe([[0, 0], [.16, 0], [.22, .2], [.2, .5], [.12, .8], [.1, .95], [0, .95]], M(0xf0cdb9, .8)); bigVase.position.set(-2.4, 0, -2.6); G.add(bigVase);
+    const bigVase = lathe([[0, 0], [.16, 0], [.22, .2], [.2, .5], [.12, .8], [.1, .95], [0, .95]], M(0xc9dcc9, .8)); bigVase.position.set(-2.4, 0, -2.6); G.add(bigVase);
     const grassM = M(0xf2e2c8, .9);
     for (let i = 0; i < 16; i++) { const a = (i / 16) * Math.PI * 2, tilt = .12 + (i % 4) * .08, st = sh(new T.Mesh(new T.CylinderGeometry(.004, .006, .9 + (i % 3) * .15, 5), M(0xdcc9a8, 1)), false, false); st.position.set(-2.4 + Math.cos(a) * .05, 1.4, -2.6 + Math.sin(a) * .05); st.rotation.z = Math.cos(a) * tilt; st.rotation.x = Math.sin(a) * tilt; G.add(st); const tuft = sh(new T.Mesh(new T.SphereGeometry(.05, 10, 8), grassM), false, false); tuft.scale.set(.7, 2.3, .7); tuft.position.set(st.position.x + Math.cos(a) * tilt * .5, 1.9 + (i % 3) * .08, st.position.z + Math.sin(a) * tilt * .5); G.add(tuft); }
-    const pot = lathe([[0, 0], [.16, 0], [.22, .3], [.25, .42], [.22, .42], [.14, .1], [0, .08]], M(0xf2d6c4, .85)); pot.position.set(2.55, 0, -2.4); G.add(pot);
+    const pot = lathe([[0, 0], [.16, 0], [.22, .3], [.25, .42], [.22, .42], [.14, .1], [0, .08]], M(0xe6c9a6, .85)); pot.position.set(2.55, 0, -2.4); G.add(pot);
     const leafM = M(0x6f8a4a, .7, { side: T.DoubleSide });
     for (let i = 0; i < 12; i++) { const a = (i / 12) * Math.PI * 2, leaf = sh(new T.Mesh(new T.SphereGeometry(.5, 14, 10), leafM), true, false); leaf.scale.set(.07, .95, .22); const hg = new T.Group(); hg.position.set(2.55, .45, -2.4); hg.rotation.y = a; leaf.position.set(0, .55, .12); leaf.rotation.x = .75 + (i % 3) * .12; hg.add(leaf); G.add(hg); }
     /* sunrise window on the left with a rising sun */
@@ -53,7 +53,7 @@
     const sun = new T.Mesh(new T.CircleGeometry(.34, 40), new T.MeshBasicMaterial({ color: 0xfff1c0, fog: false, toneMapped: false })); sun.position.set(-5.95, .8, -1.0); sun.rotation.y = Math.PI / 2; G.add(sun); R.sun = sun;
     const halo = new T.Mesh(new T.CircleGeometry(.95, 40), new T.MeshBasicMaterial({ map: tex(T, 128, 128, (g, w, h) => { const r = g.createRadialGradient(64, 64, 0, 64, 64, 64); r.addColorStop(0, 'rgba(255,230,170,.85)'); r.addColorStop(1, 'rgba(255,200,140,0)'); g.fillStyle = r; g.fillRect(0, 0, w, h); }), transparent: true, depthWrite: false, blending: T.AdditiveBlending, fog: false })); halo.position.set(-5.9, .8, -1.0); halo.rotation.y = Math.PI / 2; G.add(halo); R.halo = halo;
     /* light: low warm sun from the window, soft fill, rim */
-    G.add(new T.HemisphereLight(0xfff3ea, 0xe9c2ae, .55));
+    G.add(new T.HemisphereLight(0xfff8ee, 0xe6d4b8, .6));
     const key = new T.DirectionalLight(0xffdcb8, 1.5); key.position.set(-5, 2.2, 1.5); key.target.position.set(0, .4, 0); key.castShadow = true; key.shadow.mapSize.set(2048, 2048); Object.assign(key.shadow.camera, { left: -2.5, right: 2.5, top: 2.5, bottom: -1.5, near: .5, far: 14 }); key.shadow.bias = -.0005; key.shadow.radius = 5; G.add(key, key.target); R.key = key;
     const fill = new T.DirectionalLight(0xffd8de, .4); fill.position.set(3, 2, 4); G.add(fill);
     /* light shafts and floating dust */
@@ -64,7 +64,7 @@
     const dm = new T.PointsMaterial({ size: .05, map: tex(T, 32, 32, (g, w, h) => { const r = g.createRadialGradient(16, 16, 0, 16, 16, 16); r.addColorStop(0, 'rgba(255,240,210,.9)'); r.addColorStop(1, 'rgba(255,230,190,0)'); g.fillStyle = r; g.fillRect(0, 0, w, h); }), transparent: true, depthWrite: false, blending: T.AdditiveBlending, color: 0xffe9c8 }); 
     const c1 = new T.Color(0xff8f78), c2 = new T.Color(0xffe3a8), tmp = new T.Color();
     /* the mat unrolls from the back of the platform towards the viewer (u 0..1) */
-    const rollG = new T.Group(), rollM = sh(new T.Mesh(new T.CylinderGeometry(.05, .05, .72, 24), M(0xe9a98f, .85)), true, false); rollM.rotation.z = Math.PI / 2; rollG.add(rollM); G.add(rollG);
+    const rollG = new T.Group(), rollM = sh(new T.Mesh(new T.CylinderGeometry(.05, .05, .72, 24), M(0x6dbdb0, .85)), true, false); rollM.rotation.z = Math.PI / 2; rollG.add(rollM); G.add(rollG);
     /* u = how much of the mat is unrolled (0..1); the rolled-up part sits at the front edge and shrinks */
     R.setMat = (u, showRoll) => { u = Math.max(.001, Math.min(1, u)); mat.scale.z = u; mat.position.z = -(1 - u) * .85; const rs = (.012 + .038 * (1 - u)) / .05; rollG.visible = !!showRoll && u < .985; rollM.scale.set(rs, 1, rs); rollG.position.set(0, R.floorY - .024 + .05 * rs, -.85 + 1.7 * u); rollG.rotation.x = u * 24; };
     /* water bottle beside the mat; it glows softly during the water and rest breaks */
@@ -72,7 +72,8 @@
     const bottle = sh(new T.Mesh(new T.CylinderGeometry(.034, .034, .2, 20), bottleM), true, false); bottle.position.set(-.62, .05 + .1, .9); G.add(bottle);
     const cap = sh(new T.Mesh(new T.CylinderGeometry(.02, .024, .035, 16), M(0xe5805f, .6)), false, false); cap.position.set(.62, .05 + .2 + .017, .62); G.add(cap);
     R.bottle = bottle; R.cap = cap;
-    const shoes = new T.Group(); for (const x of [-.05, .05]) { const sm = sh(new T.Mesh(new T.CapsuleGeometry(.035, .1, 6, 10), M(0xe5805f, .7)), true, false); sm.rotation.x = Math.PI / 2; sm.position.set(x, .03, 0); shoes.add(sm); } shoes.position.set(-.55, .05, .27); shoes.visible = false; G.add(shoes);
+    const shoes = new T.Group(); for (const x of [-.05, .05]) { const sm = sh(new T.Mesh(new T.CapsuleGeometry(.035, .1, 6, 10), M(0xe5805f, .7)), true, false); sm.rotation.x = Math.PI / 2; sm.position.set(x, .03, 0); shoes.add(sm); } shoes.position.set(-.7, .05, .42); shoes.visible = false; G.add(shoes);
+    R.shoesAt = (x, y, z) => shoes.position.set(x, y, z);
     R.setShoes = u => { shoes.visible = u > .02; shoes.scale.setScalar(Math.max(.01, u)); };
     R.setWater = (on, at) => { bottleM.emissiveIntensity = on ? .5 : 0; };
     R.update = (p, at) => {

@@ -55,28 +55,39 @@
     const fr1 = ball(.1, hairM, 1.35, .34, .7); fr1.position.set(.035, .145, .105); fr1.rotation.set(.45, 0, -.22); hd.add(fr1);
     const fr2 = ball(.075, hairM, 1.2, .3, .6); fr2.position.set(-.09, .13, .12); fr2.rotation.set(.5, 0, .3); hd.add(fr2);
     const band = ring(.188, .03, knit); band.rotation.x = Math.PI / 2 - .12; band.position.set(0, .09, 0); hd.add(band);
-    const tie = ring(.034, .013, knit2); tie.position.set(0, .13, -.2); tie.rotation.x = Math.PI / 2 - .9; hd.add(tie);
-    const pony = []; const pr = new T.Group(); pr.position.set(0, .135, -.205); hd.add(pr);
+    const tie = ring(.034, .013, knit2); tie.position.set(0, .075, -.205); tie.rotation.x = 2.79; hd.add(tie);
+    const pony = []; const pr = new T.Group(); pr.position.set(0, .075, -.208); hd.add(pr);
     for (let i = 0; i < 20; i++) {
       const seg = new T.Group(); seg.position.y = i ? -.034 : 0;
       if (i) pony[i - 1].add(seg); else pr.add(seg);
-      const m = ball(.058 - i * .0021, i % 4 === 3 ? hairD : hairM, 1, 1.3, 1); m.position.y = -.02; seg.add(m);
-      seg.rotation.x = i === 0 ? 1.25 : (i < 13 ? -.1 : -.01);
-      pony.push(seg);
+      const m = ball(.058 - i * .0021, i % 5 === 4 ? hairD : hairM, 1, 1.85, 1); m.position.y = -.025; seg.add(m);
+      seg.rotation.x = i === 0 ? .38 : (i < 12 ? -.025 : .05);
+      seg.userData.rx = seg.rotation.x; pony.push(seg);
     }
-    K.pony = pony;
+    K.pony = pony; K.ponyRoot = pr;
     const eyeOpen = [], eyeClosed = [];
     for (const sx of [-1, 1]) {
-      const eg = new T.Group(); eg.position.set(sx * .075, .0, .178);
-      const ew = ball(.038, new T.MeshStandardMaterial({ color: 0xffffff, roughness: .3 }), 1, 1.2, .5), ir = ball(.025, new T.MeshStandardMaterial({ color: 0x5a3a28, roughness: .3 }), 1, 1.2, .5), pu = ball(.013, new T.MeshStandardMaterial({ color: 0x120c0a, roughness: .3 }), 1, 1.2, .5), hl = new T.Mesh(new T.SphereGeometry(.007, 8, 6), new T.MeshBasicMaterial({ color: 0xffffff }));
-      ir.position.z = .014; pu.position.z = .02; hl.position.set(.009, .012, .027); eg.add(ew, ir, pu, hl); hd.add(eg); eyeOpen.push(eg);
+      const eg = new T.Group(); eg.position.set(sx * .075, .0, .178); eg.scale.set(1.2, 1.2, .6);
+      const ew = ball(.038, new T.MeshStandardMaterial({ color: 0xffffff, roughness: .3 }), 1, 1.2, .5), ir = ball(.025, new T.MeshStandardMaterial({ color: 0x6b4426, roughness: .25 }), 1.1, 1.25, .5), pu = ball(.013, new T.MeshStandardMaterial({ color: 0x120c0a, roughness: .3 }), 1, 1.2, .5), hl = new T.Mesh(new T.SphereGeometry(.007, 8, 6), new T.MeshBasicMaterial({ color: 0xffffff }));
+      ir.position.z = .014; pu.position.z = .02; hl.position.set(.009, .013, .028); const hl2 = new T.Mesh(new T.SphereGeometry(.0045, 8, 6), new T.MeshBasicMaterial({ color: 0xffffff })); hl2.position.set(-.009, -.011, .027); eg.add(ew, ir, pu, hl, hl2); hd.add(eg); eyeOpen.push(eg);
       const ec = new T.Mesh(new T.TorusGeometry(.03, .005, 6, 14, Math.PI), dark); ec.position.set(sx * .075, -.004, .185); ec.rotation.z = Math.PI; ec.scale.set(1, .8, 1); ec.visible = false; hd.add(ec); eyeClosed.push(ec);
-      const br = new T.Mesh(new T.CapsuleGeometry(.006, .04, 3, 6), hairD); br.rotation.z = Math.PI / 2 + sx * .06; br.position.set(sx * .075, .055, .186); hd.add(br);
-      const ch = new T.Mesh(new T.CircleGeometry(.03, 18), new T.MeshBasicMaterial({ color: 0xf08a8a, transparent: true, opacity: .4 })); ch.position.set(sx * .118, -.05, .16); ch.rotation.y = sx * .6; hd.add(ch);
+      const br = new T.Mesh(new T.TorusGeometry(.04, .0055, 6, 14, Math.PI * .55), hairD); br.rotation.z = Math.PI * .22 + (sx > 0 ? 0 : Math.PI * .23); br.position.set(sx * .078, .035, .182); br.scale.set(1, .6, 1); hd.add(br);
+      const lid = new T.Mesh(new T.TorusGeometry(.04, .0055, 6, 16, Math.PI), dark); lid.position.set(sx * .075, .014, .19); lid.scale.set(1, .6, 1); hd.add(lid);
+      const lash = new T.Mesh(new T.CapsuleGeometry(.0042, .02, 3, 6), dark); lash.position.set(sx * .112, .03, .182); lash.rotation.z = -sx * 1.0; hd.add(lash);
+      const ch = new T.Mesh(new T.CircleGeometry(.037, 18), new T.MeshBasicMaterial({ color: 0xff8f9a, transparent: true, opacity: .55 })); ch.position.set(sx * .118, -.05, .16); ch.rotation.y = sx * .6; hd.add(ch);
     }
     K.eyeOpen = eyeOpen; K.eyeClosed = eyeClosed;
     const nose = ball(.012, new T.MeshStandardMaterial({ color: 0xe5a58a, roughness: .6 })); nose.position.set(0, -.03, .194); hd.add(nose);
     const mouth = new T.Mesh(new T.TorusGeometry(.026, .006, 6, 16, Math.PI), new T.MeshStandardMaterial({ color: 0xc4605e, roughness: .5 })); mouth.rotation.z = Math.PI; mouth.position.set(0, -.072, .184); hd.add(mouth); K.mouth = mouth;
+    /* freckles across the nose, and an open happy smile (a closed smile for breathing and holds) */
+    const frM = new T.MeshBasicMaterial({ color: 0xc98d6f, transparent: true, opacity: .6 });
+    for (const [fx, fy] of [[.03, -.012], [-.03, -.012], [.055, -.03], [-.055, -.03], [.02, -.042], [-.02, -.042]]) { const fr = new T.Mesh(new T.CircleGeometry(.0045, 8), frM); fr.position.set(fx, fy, .98 * Math.sqrt(Math.max(0, .0361 - fx * fx - (fy / 1.08) * (fy / 1.08))) + .004); hd.add(fr); }
+    const mouthOpen = new T.Group(); mouthOpen.position.set(0, -.066, .18); hd.add(mouthOpen);
+    const mIn = new T.Mesh(new T.CircleGeometry(.034, 22, Math.PI, Math.PI), new T.MeshBasicMaterial({ color: 0x8c2f36, side: T.DoubleSide })); mIn.scale.set(1.15, 1, 1); mouthOpen.add(mIn);
+    const tg = new T.Mesh(new T.CircleGeometry(.019, 16, Math.PI, Math.PI), new T.MeshBasicMaterial({ color: 0xf08a9a, side: T.DoubleSide })); tg.position.set(0, -.016, .001); mouthOpen.add(tg);
+    const teeth = new T.Mesh(new T.PlaneGeometry(.04, .008), new T.MeshBasicMaterial({ color: 0xffffff })); teeth.position.set(0, -.004, .001); mouthOpen.add(teeth);
+    const dimple = new T.Mesh(new T.CircleGeometry(.0045, 8), new T.MeshBasicMaterial({ color: 0xc4605e })); const dimple2 = dimple.clone(); dimple.position.set(-.045, -.002, .0); dimple2.position.set(.045, -.002, .0); mouthOpen.add(dimple, dimple2);
+    K.setMouth = open => { mouthOpen.visible = open; mouth.visible = !open; }; K.setMouth(true); K.talk = a => { mouthOpen.scale.set(1 + .1 * a, .35 + .75 * a, 1); }; K.talk(.6);
     K.setEyes = mode => { for (const e of eyeOpen) e.visible = mode !== 'closed'; for (const e of eyeClosed) e.visible = mode === 'closed'; };
     K.setEyes(opt.eyes || 'open');
 
@@ -128,13 +139,38 @@
       const heel = sh(new T.Mesh(new T.CapsuleGeometry(.04, .07, 8, 14), sock)); heel.rotation.x = Math.PI / 2; heel.position.set(0, -.021, .04); foot.add(heel);
       const toes = new T.Group(); toes.position.set(0, -.02, .1); foot.add(toes);
       const tm2 = sh(new T.Mesh(new T.CapsuleGeometry(.036, .03, 8, 12), sock)); tm2.rotation.x = Math.PI / 2; tm2.position.set(0, -.001, .022); toes.add(tm2);
-      return { thigh, shin, foot, toes };
+      /* coral trainers that go on over the socks (hidden unless the game asks for them) */
+      const shoe = new T.Group(); shoe.visible = false;
+      const sb = sh(new T.Mesh(new T.CapsuleGeometry(.05, .11, 8, 14), new T.MeshStandardMaterial({ color: 0xe5805f, roughness: .6 }))); sb.rotation.x = Math.PI / 2; sb.position.set(0, -.012, .07);
+      const so = sh(new T.Mesh(new T.BoxGeometry(.1, .014, .22), new T.MeshStandardMaterial({ color: 0xfff6ee, roughness: .7 }))); so.position.set(0, -.064, .07); shoe.add(sb, so);   /* only attached to the foot while worn, so measurements ignore it */
+      return { thigh, shin, foot, toes, shoe };
     };
     K.legL = leg(1); K.legR = leg(-1);
+    K.setShoes = on => { for (const L of [K.legL, K.legR]) { if (on && L.shoe.parent !== L.foot) L.foot.add(L.shoe); else if (!on && L.shoe.parent) L.shoe.parent.remove(L.shoe); L.shoe.visible = on; } };
+    const sockC0 = sock.color.clone(); K.setBare = on => sock.color.copy(on ? skin.color : sockC0);
     K.idle = function (t) {
       const b = Math.sin(t * 1.8); K.chest.scale.set(1.08 * (1 + .01 * b), 1 + .014 * b, .8 * (1 + .01 * b));
-      pony.forEach((p, i) => { p.rotation.z = Math.sin(t * 1.6 - i * .5) * .07 * (i + 1) * .5; });
-      K.head.rotation.z += Math.sin(t * .55) * .025; K.head.rotation.y += Math.sin(t * .37) * .035;
+      pony.forEach((p, i) => { p.rotation.set(p.userData.rx, 0, Math.sin(t * 1.6 - i * .5) * .07 * (i + 1) * .5); });
+      /* when the head tips forward or down, swing the ponytail to the side so hair never hangs over the face */
+      { const q = K.head.getWorldQuaternion(new T.Quaternion()), up = new T.Vector3(0, 1, 0).applyQuaternion(q), fwd = new T.Vector3(0, 0, 1).applyQuaternion(q), tilt = Math.max(0, Math.min(1, (.75 - up.y) / .6)) + Math.max(0, Math.min(1, (fwd.y * -1 - .3) / .5)) * 0; K.ponyRoot.rotation.y += (tilt * 1.35 - K.ponyRoot.rotation.y) * .25;
+        /* gravity: when the head is tipped, every ponytail segment turns a little towards the floor so the hair hangs down instead of sticking out */
+        if (tilt > .02) {
+          const down = new T.Vector3(0, -1, 0), qp = new T.Quaternion(), qw = new T.Quaternion(), qd = new T.Quaternion(), cur = new T.Vector3(), id = new T.Quaternion();
+          K.ponyRoot.updateMatrixWorld(true);
+          for (let i = 0; i < K.pony.length; i++) {
+            const sg = K.pony[i]; sg.parent.getWorldQuaternion(qp); sg.getWorldQuaternion(qw); cur.set(0, -1, 0).applyQuaternion(qw);
+            const ang = cur.angleTo(down); if (ang < .01) continue;
+            qd.setFromUnitVectors(cur, down); qd.slerp(id, 1 - Math.min(1, (.55 * tilt) / ang));
+            sg.quaternion.premultiply(qp.clone().invert().multiply(qd).multiply(qp)); sg.updateMatrixWorld(true);
+            /* hair that reaches the mat lies along it instead of going through it */
+            if (sg.getWorldPosition(cur).y < (K.floorY || 0) + .045) {
+              sg.getWorldQuaternion(qw); const dn = new T.Vector3(0, -1, 0).applyQuaternion(qw), hz = new T.Vector3(dn.x, 0, dn.z); if (hz.lengthSq() < 1e-4) hz.set(0, 0, -1); hz.normalize();
+              const q2 = new T.Quaternion().setFromUnitVectors(dn, hz); sg.parent.getWorldQuaternion(qp); sg.quaternion.premultiply(qp.clone().invert().multiply(q2).multiply(qp)); sg.updateMatrixWorld(true);
+            }
+          }
+        }
+      }
+      K.head.rotation.z = Math.sin(t * .55) * .025; K.head.rotation.y = Math.sin(t * .37) * .035;
       const bl = (t % 4.5) < .12 ? .15 : 1; if (eyeOpen[0].visible) for (const e of eyeOpen) e.scale.y = bl;
     };
     return K;
